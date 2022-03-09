@@ -1,0 +1,35 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="https://kit.fontawesome.com/c0f8499eb3.js" crossorigin="anonymous"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/searchbox.css">
+    <link rel="stylesheet" href="../static/css/poem.css">
+    <link rel="stylesheet" href="../static/css/icons.css">
+    <link rel="stylesheet" href="../static/css/news.css">
+    <link rel="stylesheet" href="../static/css/weather.css">
+
+    <title>Hello, SJTUer!</title>
+</head>
+<body>
+
+<div class='container'>
+    {% block poem %} {% endblock %}
+
+    {% block search %} {% endblock %}
+
+    {% block weather %} {% endblock %}
+
+    {% block news %} {% endblock %}
+
+    {% block icons %} {% endblock %}
+</div>
+</body>
+</html>
