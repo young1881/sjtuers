@@ -128,6 +128,52 @@
     </script>
 {% endblock %}
 
+{% block tools %}
+    <div class="tools">
+        <div class="card">
+            <button class="btn active">疫情</button>
+            <button class="btn">知乎</button>
+            <div class="contentBx">
+                <div class="content show">
+                    <div class="data_box">
+                        <div class="property">累计确诊</div>
+                        <div class="data" style="color:#a31d13">{{ corona.confirmedCount }}</div>
+                        <div class="today" style="color:#a31d13">+{{ corona.confirmedIncr }}</div>
+                    </div>
+                    <div class="data_box">
+                         <div class="property">境外输入</div>
+                        <div class="data" style="color:	#D2691E">{{ corona.suspectedCount }}</div>
+                        <div class="today" style="color:	#D2691E">+{{ corona.suspectedIncr }}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">累计治愈</div>
+                        <div class="data" style="color:#34aa70">{{ corona.curedCount }}</div>
+                        <div class="today" style="color:#34aa70">+{{ corona.curedIncr }}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">现存确诊</div>
+                        <div class="data" style="color:#e44a3d">{{ corona.currentConfirmedCount }}</div>
+                        <div class="today" style="color:#e44a3d">+{{ corona.currentConfirmedIncr }}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">累计死亡</div>
+                        <div class="data" style="color:#333">{{corona.deadCount}}</div>
+                        <div class="today" style="color:#333">+{{corona.deadIncr}}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">无症状</div>
+                        <div class="data" style="color:#791618">{{corona.seriousCount}}</div>
+                        <div class="today" style="color:#791618">+{{ corona.seriousIncr }}</div>
+                    </div>
+                </div>
+
+                <div class="content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block icons %}
     <div class="icons">
