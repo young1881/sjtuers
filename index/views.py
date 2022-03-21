@@ -22,10 +22,14 @@ def index_view(request):
         #疫情数据
         corona = get_data('https://lab.isaaclin.cn//nCoV/api/overall')['results'][0]
 
+        #诗句
+        poem = get_data('https://v1.jinrishici.com/all.json')
+
         local = {
             'weibo' : weibo[:5],
             'zhihu' : zhihu[:5],
             'corona': corona,
+            'poem': poem,
         }
 
         return render(request, 'websites.html', local)

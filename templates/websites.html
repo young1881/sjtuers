@@ -3,7 +3,7 @@
 
 {% block poem %}
     <div class="poem">
-        <span id="jinrishici-sentence">正在加载今日诗词....</span>
+        <div class="sentence" title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
     </div>
 {% endblock %}
 
@@ -19,38 +19,6 @@
             这里是侧滑栏
         </div>
     </div>
-
-
-
-    <!--
-    <div id="choice"
-         style="
-        position: absolute;
-        top: 30%;
-        left: 50%;
-        width: 600px;
-        transform: translate(-50%, 0);
-        display: none;
-        border-radius: 40px;
-        background-color: white;">
-        <div class="engine-icons">
-            <div class="box">
-            <div class="img">
-                <a href="https://i.sjtu.edu.cn/">
-                    <img src="../static/img/school.png"/>
-                </a>
-            </div>
-            <p>教学信息</p>
-        </div>
-        </div>
-    </div>
-    <script>
-        $(document).ready(function () {
-            $(".engine").click(function () {
-                $("#choice").toggle("slow");
-            });
-        });
-    </script>!-->
 {% endblock %}
 
 
