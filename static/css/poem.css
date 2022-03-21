@@ -1,6 +1,6 @@
 .poem{
     position: absolute;
-    top: 32%;
+    bottom: 5%;
     left: 50%;
     transform : translate(-50%,-50%);
     height :20px;
