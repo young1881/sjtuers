@@ -15,6 +15,7 @@
 }
 
 .tools .card {
+    justify-content: space-around;
     width: 320px;
     margin: 10px;
     padding: 20px 20px;

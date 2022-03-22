@@ -3,7 +3,7 @@
     width: 40%;
     height: 40%;
     top: 35%;
-    left: 32%;
+    left: 30%;
     display: flex;
     position: absolute;
     /*居中图标*/
@@ -11,12 +11,11 @@
     /*自动换行*/
     flex-wrap: wrap;
     margin-top: 10px;
-    margin-left: 10px;
     z-index:500;
-    /*align-items: center;*/
+    align-items: center;
 }
 .icons .box{
-    /*display: flex;*/
+    display: flex;
     /*justify-content: space-around;*/
     flex-direction: column;
     align-items: center;

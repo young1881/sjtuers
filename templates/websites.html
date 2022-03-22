@@ -3,8 +3,9 @@
 
 {% block poem %}
     <div class="poem">
-        <div class="sentence" title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
-    </div>
+        <div class="sentence"
+             title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
+    </div>s
 {% endblock %}
 
 
@@ -133,8 +134,8 @@
                         <div class="data" style="color:#791618">{{corona.seriousCount}}</div>
                         <div class="today" style="color:#791618">+{{ corona.seriousIncr }}</div>
                     </div>
+                    <div class="information">数据来源自丁香医生</div>
                 </div>
-
                 <div class="content">
 
                 </div>
