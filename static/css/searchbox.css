@@ -1,12 +1,46 @@
-.search-box{
+.search-box {
     position: absolute;
-    top: 25%;
+    top: 30%;
     left: 50%;
-    transform : translate(-50%,-50%);
-    background: #406370;
+    transform: translate(-50%, -50%);
+    height: 120px;
+    z-index:700;
+}
+
+.search-form{
+    background: rgba(64, 99, 112, 0.9);
     height :40px;
     border-radius: 40px;
     padding: 10px;
+}
+
+.slide{
+    display: none; //决定是否出现
+    background: floralwhite;
+    position: absolute;
+    padding: 10px;
+    height: 70px;
+    width: 550px;
+}
+
+.engine {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    float: left;
+    transition: 0.4s;
+}
+
+.search-txt {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0 6px;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 500px;
 }
 
 .search-btn{
@@ -16,35 +50,22 @@
     border-radius: 100%;
     background: #406370;
     display: flex;
+    float: right;
     justify-content: center;
     align-items: center;
     transition: 0.4s;
 }
 
-.search-box:hover > .search-txt{
-    width: 500px;
-    padding: 0 6px;
-}
-
-.search-box:hover > .search-btn{
+.search-btn:hover{
     background: rgba(245,150,122,.7);
     box-sizing: border-box;
 }
 
-.search-box:active > .search-btn{
+.search-btn:active{
     background: white;
     box-sizing: border-box;
 }
 
-.search-txt{
-    border: none;
-    background: none;
-    outline: none;
-    float: left;
-    padding: 0px;
-    color: white;
-    font-size:16px;
-    transition: 0.4s;
-    line-height: 40px;
-    width: 0px;
+.search-box .engine:hover>.slide{
+    display: block;
 }
