@@ -1,8 +1,9 @@
 node_modules/
 .idea/
+__pycache__/
 npm-debug.log
 
-# Numerous always-ignore extensions
+*.pyc
 *.diff
 *.err
 *.orig
@@ -14,7 +15,6 @@ npm-debug.log
 *.vi
 *~
 
-# OS or Editor folders
 .DS_Store
 ._*
 Thumbs.db
