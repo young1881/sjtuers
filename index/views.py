@@ -34,14 +34,6 @@ def index_view(request):
 
         return render(request, 'websites.html', local)
 
-    elif request.method == 'POST':
-        search_msg = request.POST['search_msg']
-        if search_msg == '':
-            baidu = "http://www.baidu.com/"
-        else:
-            baidu = "http://www.baidu.com/s?word=" + search_msg
-        return HttpResponseRedirect(baidu)
-
 def get_data(url):
     import requests
     import json
