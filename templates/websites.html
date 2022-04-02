@@ -12,60 +12,6 @@
 
 {% block search %}
     <div class="search-box">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script>
-            $(function () {
-                var search = {
-                    data: [
-                        { name: '百度', img: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=' },
-                        { name: '谷歌', img: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=' },
-                        { name: '必应', img: 'https://cn.bing.com/favicon.ico', url: 'https://cn.bing.com/search?q=' },
-                        { name: '搜狗', img: 'https://www.sogou.com/favicon.ico', url: 'https://www.sogou.com/web?query=' },
-                        { name: '知乎', img: 'https://www.zhihu.com/favicon.ico', url: 'https://www.zhihu.com/search?q=' },
-                        { name: '有道', img: 'https://dict.youdao.com/favicon.ico', url: 'https://dict.youdao.com/w/eng/' },
-                        { name: 'B站', img: 'https://search.bilibili.com/favicon.ico', url: 'https://search.bilibili.com/all?keyword=' },
-                        { name: 'CSDN', img: 'https://so.csdn.net/favicon.ico', url: 'https://so.csdn.net/so/search/s.do?q=' },
-                        { name: 'Github', img: 'https://github.com/favicon.ico', url: 'https://github.com/search?q=' },
-                    ]
-                };
-                for (var i = 0; i < search.data.length; i++) {
-                    var addList = '<li><img src="' + search.data[i].img + '"/>' + search.data[i].name + '</li>';
-                    $('.search-engine-list').append(addList)
-                }
-                $('.engine, .search-engine').hover(
-                    function () {
-                        $('.search-engine').css('display', 'block')
-                    },
-                    function () {
-                        $('.search-engine').css('display', 'none')
-                    }
-                );
-                var thisSearch = 'https://www.baidu.com/s?wd=';
-                var thisImg = 'https://www.baidu.com/favicon.ico';
-                $('.search-engine-list li').click(
-                    function () {
-                        var _index = $(this).index();
-                        thisImg = $(this).children().attr('src');
-                        $('.engine').attr('src', thisImg);
-                        thisSearch = search.data[_index].url;
-                        $('.search-engine').css('display', 'none');
-                    }
-                )
-                $('#search-button').click(
-                    function () {
-                        var textValue = $('#text').val();
-                        var textValue = textValue.replace(/\%/g, "%25");
-                        var textValue = textValue.replace(/\+/g, "%2B");
-                        var textValue = textValue.replace(/\//g, "%2F");
-                        var textValue = textValue.replace(/\?/g, "%3F");
-                        var textValue = textValue.replace(/\&/g, "%26");
-                        var textValue = textValue.replace(/\=/g, "%3D");
-                        var textValue = textValue.replace(/\#/g, "%23");
-                        window.open(thisSearch + textValue, thisSearch + textValue);
-                    }
-                );
-            });
-        </script>
         <div class="search-form">
             <img class="engine" src="https://www.baidu.com/favicon.ico">
             <input class="search-txt" id="text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-button').click()">
@@ -104,29 +50,54 @@
 {% block news %}
     <div class="news">
         <div class="card">
-            <button class="btn active">微博</button>
-            <button class="btn">知乎</button>
-            <div class="contentBx">
-                <div class="content show">
+            <button class="info_btn active">通知</button>
+            <button class="info_btn">微博</button>
+            <button class="info_btn">B站</button>
+            <button class="info_btn">知乎</button>
+            <div class="infoBox">
+                <div class="info show">
+                    <ul>
+                        {% for x in jwc %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
                     <ul>
                         {% for x in weibo %}
                             <li>
                 <span style="float:left">
-                    <a href={{ x.url }}>{{ x.name }}</a>
+                    <a href={{ x.url }} target="_blank">{{ x.name }}</a>
                 </span>
                                 <span style="float:right">
                     <p>{{ x.hot }}</p>
+                </span><br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in bilibili %}
+                            <li>
+                <span style="float:left">
+                    <a href={{ x.url }} target="_blank">{{ x.title }}</a>
                 </span>
+                                <span style="float:right">
+                    <p>{{ x.view }}</p>
+                </span><br>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
 
-                <div class="content">
+                <div class="info">
                     <ul>
                         {% for x in zhihu %}
                             <li>
-                                <a href={{ x.url }}>{{ x.query }}</a>
+                                <a href={{ x.url }} target="_blank">{{ x.query }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -134,33 +105,15 @@
             </div>
         </div>
     </div>
-
-    <script>     //获取页面的每个按钮
-    var btns = document.getElementsByClassName("btn")　　　　　//获取内容盒子
-    var contents = document.getElementsByClassName("content")
-
-    //遍历每个按钮为其添加点击事件
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].index = i;
-        btns[i].onclick = function () {　　　　　　　　　　//对当前点击的按钮赋予active类名及显示当前按钮对应的内容
-            for (var j = 0; j < btns.length; j++) {
-                btns[j].className = btns[j].className.replace(' active', '').trim();
-                contents[j].className = contents[j].className.replace(' show', '').trim();
-            }
-            this.className = this.className + ' active';
-            contents[this.index].className = contents[this.index].className + ' show';
-        };
-    }
-    </script>
 {% endblock %}
 
 {% block tools %}
     <div class="tools">
         <div class="card">
-            <button class="btn active">疫情</button>
-            <button class="btn">知乎</button>
-            <div class="contentBx">
-                <div class="content show">
+            <button class="tool_btn active">疫情</button>
+            <button class="tool_btn">校车</button>
+            <div class="toolBox">
+                <div class="tool show">
                     <div class="data_box">
                         <div class="property">累计确诊</div>
                         <div class="data" style="color:#a31d13">{{ corona.confirmedCount }}</div>
@@ -193,8 +146,8 @@
                     </div>
                     <div class="information">数据来源自丁香医生</div>
                 </div>
-                <div class="content">
-
+                <div class="tool">
+                    校车信息
                 </div>
             </div>
         </div>

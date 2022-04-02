@@ -7,7 +7,7 @@
     display: flex;
     position: absolute;
     /*居中图标*/
-    /*justify-content: space-around;*/
+    justify-info: space-around;
     /*自动换行*/
     flex-wrap: wrap;
     /*align-items: center;*/
@@ -32,23 +32,23 @@
     transition: box-shadow .2s ease-out;
 }
 
-.news .card .imgBx {
+.news .card .imgBox {
     position: relative;
     text-align: center;
     transition: transform .2s ease-out;
 }
 
-.news .card .imgBx img {
+.news .card .imgBox img {
     max-width: 120px;
 }
 
-.news .card .contentBx {
+.news .card .infoBox {
     position: relative;
     transition: transform .2s ease-out;
     /*text-align: center;*/
 }
 
-.news .card .btn{
+.news .card .info_btn{
     display: inline-block;
     padding: 5px 10px;
     margin-bottom: 5px;
@@ -60,23 +60,23 @@
     border-width: 0px;
 }
 
-.news .card .btn.active{
+.news .card .info_btn.active{
     background-color: rgba(255, 255, 255, 0.2);
     opacity: 1;
 }
 
-.news .card .contentBx .content{
+.news .card .infoBox .info{
     /*background-color: purple;*/
     font-size: 9px;
     line-height: 200%;
     display: none;
 }
 
-.news .card .contentBx .content ul{
+.news .card .infoBox .info ul{
     list-style: none;
 }
 
-.news .card .contentBx .content.show{
+.news .card .infoBox .info.show{
     color: white;
     line-height: 200%;
     /*background-color: black;*/
@@ -86,18 +86,18 @@
     display: block;
 }
 
-.news .card .contentBx .content.show ul{
+.news .card .infoBox .info.show ul{
     list-style: none;
 }
 
-.news .card .contentBx a {
+.news .card .infoBox a {
     margin-top: 10px;
     color: white;
     font-size: 9px;
     text-decoration: none;
 }
 
-.news .card .contentBx button {
+.news .card .infoBox button {
     display: inline-block;
     padding: 10px 20px;
     margin-top: 5px;
@@ -112,21 +112,21 @@
     transition: box-shadow .2s ease-out;
 }
 
-.news .card .contentBx button:hover {
+.news .card .infoBox button:hover {
     box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.5),
     inset 4px 4px 10px rgba(0, 0, 0, .1);
     transition: box-shadow .2s ease-out;
 }
 
-.news .card .contentBx a:hover span {
+.news .card .infoBox a:hover span {
     display: block;
     text-decoration: none;
     transform: scale(0.98);
     transition: transform .2s ease-out;
 }
 
-.news .card:hover .imgBx,
-.news .card:hover .contentBx {
+.news .card:hover .imgBox,
+.news .card:hover .infoBox {
     transform: scale(0.98);
     transition: transform .2s ease-out;
 }
