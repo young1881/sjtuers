@@ -31,7 +31,7 @@ def get_html(url):
 def lib():
     session = requests.Session()
     session.trust_env = False
-    request = session.get(url)
+    request = session.get('https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson')
     data = json.loads(request.content[12:-2], strict=False)['numbers']
 
     return data
@@ -68,29 +68,33 @@ def bilibli():
     return bilibili
 
 
+def weibo():
+    weibo = get_json('https://tenapi.cn/resou/')['list']
+    for i in range(len(weibo)):
+        weibo[i]['name'] = str(i + 1) + ' ' + weibo[i]['name']
+        if len(weibo[i]['name']) > 18:
+            weibo[i]['name'] = weibo[i]['name'][:16] + '...'
+    return weibo[:5]
+
+
+def zhihu():
+    zhihu = get_json('https://tenapi.cn/zhihuresou/')['list']
+    for i in range(len(zhihu)):
+        zhihu[i]['query'] = str(i + 1) + ' ' + zhihu[i]['query']
+        if len(zhihu[i]['query']) > 22:
+            zhihu[i]['query'] = zhihu[i]['query'][:20] + '...'
+    return zhihu[:5]
+
+
 def index_view(request):
     if request.method == 'GET':
-
-        weibo = get_json('https://tenapi.cn/resou/')['list']
-        for i in range(len(weibo)):
-            weibo[i]['name'] = str(i+1) + ' '+ weibo[i]['name']
-            if len(weibo[i]['name']) > 18:
-                weibo[i]['name'] = weibo[i]['name'][:16] + '...'
-
-        zhihu = get_json('https://tenapi.cn/zhihuresou/')['list']
-        for i in range(len(zhihu)):
-            zhihu[i]['query'] = str(i + 1) + ' ' + zhihu[i]['query']
-            if len(zhihu[i]['query']) > 22:
-                zhihu[i]['query'] = zhihu[i]['query'][:20] + '...'
-
         corona = get_json('https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf')['data']["diseaseh5Shelf"]
         poem = get_json('https://v1.jinrishici.com/all.json')
         canteen = get_json('https://canteen.sjtu.edu.cn/CARD/Ajax/Place')
-        library = get_json('http://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson')[12:-2]
 
         locals = {
-            'weibo' : weibo[:5],
-            'zhihu' : zhihu[:5],
+            'weibo' : weibo(),
+            'zhihu' : zhihu(),
             'corona' : corona,
             'poem' : poem,
             'canteen' : canteen,
