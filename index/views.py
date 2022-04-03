@@ -3,42 +3,59 @@ from django.http import HttpResponseRedirect
 import requests
 import json
 from time import time
-from bs4 import BeautifulSoup
+from lxml import etree
 
-def get_data_by_json(url):
+
+def get_json(url):
     session = requests.Session()
     session.trust_env = False
     request = session.get(url)
-    data = json.loads(request.content)
+    data = json.loads(request.content, strict=False)
 
     return data
 
-def get_data_by_html(url):
+
+def get_html(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
     }
-    response = requests.get(url=url, headers=headers)
+
+    session = requests.Session()
+    session.trust_env = False
+    response = session.get(url=url, headers=headers)
     response.encoding = 'utf-8'
     html = response.text
     return html
 
+
+def lib():
+    session = requests.Session()
+    session.trust_env = False
+    request = session.get(url)
+    data = json.loads(request.content[12:-2], strict=False)['numbers']
+
+    return data
+
+
 def jwc():
-    html = get_data_by_html('https://jwc.sjtu.edu.cn/xwtg/tztg.htm')
-    soup = BeautifulSoup(html, 'lxml')
-    a_list = soup.select('.wz > a')
+    html = get_html('https://jwc.sjtu.edu.cn/xwtg/tztg.htm')
+    tree = etree.HTML(html)
+    a_list = tree.xpath('//div[@class="wz"]/a')
     jwc = []
     for i in range(5):
+        title = str(i + 1) + ' ' + a_list[i].xpath('./h2/text()')[0]
+        if len(title) > 25:
+            title = title[:23] + '...'
+        url = 'http://jwc.sjtu.edu.cn' + a_list[i].xpath('./@href')[0][2:]
         dic = {}
-        dic['title'] = str(i+1) + ' '+ a_list[i].h2.string
-        if len(dic['title']) > 25:
-            dic['title'] = dic['title'][:23] + '...'
-        dic['url'] = 'http://jwc.sjtu.edu.cn' + a_list[i]['href'][2:]
+        dic['title'] = title
+        dic['url'] = url
         jwc.append(dic)
     return jwc
 
 
 def bilibli():
-    json = get_data_by_json('https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1')['data']['list']
+    json = get_json('https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1')['data']['list']
     bilibili = []
     for i in range(5):
         dic = {}
@@ -54,23 +71,22 @@ def bilibli():
 def index_view(request):
     if request.method == 'GET':
 
-        weibo = get_data_by_json('https://tenapi.cn/resou/')['list']
+        weibo = get_json('https://tenapi.cn/resou/')['list']
         for i in range(len(weibo)):
             weibo[i]['name'] = str(i+1) + ' '+ weibo[i]['name']
             if len(weibo[i]['name']) > 18:
                 weibo[i]['name'] = weibo[i]['name'][:16] + '...'
 
-        zhihu = get_data_by_json('https://tenapi.cn/zhihuresou/')['list']
+        zhihu = get_json('https://tenapi.cn/zhihuresou/')['list']
         for i in range(len(zhihu)):
             zhihu[i]['query'] = str(i + 1) + ' ' + zhihu[i]['query']
             if len(zhihu[i]['query']) > 22:
                 zhihu[i]['query'] = zhihu[i]['query'][:20] + '...'
 
-
-        corona = get_data_by_json('https://lab.isaaclin.cn//nCoV/api/overall')['results'][0]
-        poem = get_data_by_json('https://v1.jinrishici.com/all.json')
-        canteen = get_data_by_json('https://canteen.sjtu.edu.cn/CARD/Ajax/Place')
-        # library = get_data_by_json('http://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson')[12:-2]
+        corona = get_json('https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf')['data']["diseaseh5Shelf"]
+        poem = get_json('https://v1.jinrishici.com/all.json')
+        canteen = get_json('https://canteen.sjtu.edu.cn/CARD/Ajax/Place')
+        library = get_json('http://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson')[12:-2]
 
         locals = {
             'weibo' : weibo[:5],
@@ -78,7 +94,7 @@ def index_view(request):
             'corona' : corona,
             'poem' : poem,
             'canteen' : canteen,
-            # 'library' : library,
+            'lib' : lib(),
             'jwc' : jwc(),
             'bilibili' : bilibli(),
         }

@@ -7,7 +7,7 @@
     display: flex;
     position: absolute;
     /*居中图标*/
-    justify-info: space-around;
+    /*justify-info: space-around;*/
     /*自动换行*/
     flex-wrap: wrap;
     /*align-items: center;*/

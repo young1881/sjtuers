@@ -1,11 +1,12 @@
 .poem{
     position: absolute;
-    bottom: 2%;
+    top: 98%;
     left: 50%;
     transform : translate(-50%,-50%);
     height :20px;
     font-size: 10px;
     color: dimgrey;
     text-align:center;
+    display: block;
 }
 

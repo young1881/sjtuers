@@ -10,17 +10,16 @@
     /*居中图标*/
     /*justify-tool: space-around;*/
     /*自动换行*/
-
     /*align-items: center;*/
 }
 
 .tools .card {
     justify-tool: space-around;
-    width: 320px;
-    margin: 10px;
-    padding: 20px 20px;
+    width: 281px;
+    padding: 20px;
     /*background: #ebf5fc;*/
     flex-wrap: wrap;
+    align-items: center;
     border-radius: 40px;
     background-color: rgba(0, 0, 0, 0.2);
     opacity: 0.9;
@@ -127,8 +126,8 @@
     flex-direction: column;
     align-items: center;
     align-tool: center;
-    width: 60px;
-    height: 100px;
+    width: 65px;
+    height: 72px;
     padding: 20px 13.8px;
 }
 
@@ -146,4 +145,10 @@
 .data_box  .today{
     font-size: 14px;
     font-weight: 700;
+}
+
+.data_box  .today_none{
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 10px;
 }

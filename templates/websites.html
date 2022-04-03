@@ -116,35 +116,47 @@
                 <div class="tool show">
                     <div class="data_box">
                         <div class="property">累计确诊</div>
-                        <div class="data" style="color:#a31d13">{{ corona.confirmedCount }}</div>
-                        <div class="today" style="color:#a31d13">+{{ corona.confirmedIncr }}</div>
+                        <div class="data" style="color:#a31d13">{{ corona.chinaTotal.confirm }}</div>
+                        {% if corona.chinaAdd.confirm == null %}
+                        <div class="today_none" style="color:#a31d13">新增待公布</div>
+                        {% else %}
+                        <div class="today" style="color:#a31d13">+{{ corona.chinaAdd.confirm }}</div>
+                        {% endif %}
                     </div>
                     <div class="data_box">
                          <div class="property">境外输入</div>
-                        <div class="data" style="color:	#D2691E">{{ corona.suspectedCount }}</div>
-                        <div class="today" style="color:	#D2691E">+{{ corona.suspectedIncr }}</div>
+                        <div class="data" style="color:	#D2691E">{{ corona.chinaTotal.importedCase }}</div>
+                        {% if corona.chinaAdd.importedCase == null %}
+                        <div class="today_none" style="color:#D2691E">新增待公布</div>
+                        {% else %}
+                        <div class="today" style="color:#D2691E">+{{ corona.chinaAdd.importedCase }}</div>
+                        {% endif %}
+
                     </div>
                     <div class="data_box">
                         <div class="property">累计治愈</div>
-                        <div class="data" style="color:#34aa70">{{ corona.curedCount }}</div>
-                        <div class="today" style="color:#34aa70">+{{ corona.curedIncr }}</div>
+                        <div class="data" style="color:#34aa70">{{ corona.chinaTotal.heal }}</div>
+                        <div class="today" style="color:#34aa70">+{{ corona.chinaAdd.heal }}</div>
                     </div>
                     <div class="data_box">
                         <div class="property">现存确诊</div>
-                        <div class="data" style="color:#e44a3d">{{ corona.currentConfirmedCount }}</div>
-                        <div class="today" style="color:#e44a3d">+{{ corona.currentConfirmedIncr }}</div>
+                        <div class="data" style="color:#e44a3d">{{ corona.chinaTotal.nowConfirm }}</div>
+                        <div class="today" style="color:#e44a3d">+{{ corona.chinaAdd.nowConfirm }}</div>
                     </div>
                     <div class="data_box">
                         <div class="property">累计死亡</div>
-                        <div class="data" style="color:#333">{{corona.deadCount}}</div>
-                        <div class="today" style="color:#333">+{{corona.deadIncr}}</div>
+                        <div class="data" style="color:#333">{{corona.chinaTotal.dead}}</div>
+                        <div class="today" style="color:#333">+{{corona.chinaAdd.dead}}</div>
                     </div>
                     <div class="data_box">
                         <div class="property">无症状</div>
-                        <div class="data" style="color:#791618">{{corona.seriousCount}}</div>
-                        <div class="today" style="color:#791618">+{{ corona.seriousIncr }}</div>
+                        <div class="data" style="color:#791618">{{corona.chinaTotal.noInfectH5}}</div>
+                        <div class="today" style="color:#791618">+{{ corona.chinaAdd.noInfectH5 }}</div>
                     </div>
-                    <div class="information">数据来源自丁香医生</div>
+                    <div class="information">
+                        <p>统计截至{{corona.lastUpdateTime}}</p>
+                        <p>数据来源自国家及各地卫健委每日信息发布</p>
+                    </div>
                 </div>
                 <div class="tool">
                     校车信息
