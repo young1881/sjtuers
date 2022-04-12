@@ -1,17 +1,42 @@
-.weather {
-    /*background-color: purple;*/
-    width: 20%;
-    height: 20%;
-    top: 38%;
-    left: 7.5%;
-    display: flex;
-    position: absolute;
-    border-radius: 40px;
-    /*居中图标*/
-    /*justify-content: space-around;*/
-    /*自动换行*/
-    flex-wrap: wrap;
-    /*align-items: center;*/
-    box-shadow: -6px -6px 20px rgba(255, 255, 255, 0.7),
-    6px 6px 20px rgba(0, 0, 0, .1);
+.body{
+    color: #111111;
+    width: 100%;
+    min-height: 100%;
+    display: block;
+    position: relative;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15)),
+    url(../img/cloud+dawn.jpg) no-repeat;
+    background-size: cover;
+    overflow:hidden;
+}
+
+.container {
+    position: relative;
+    width: 1140px;
+    margin: 0 auto;
+}
+
+.clearbox{
+    width: 720px;
+    min-height: 431px;
+    box-shadow: 0 0 40px 4px rgb(26 26 26 / 90%);
+    background-image: none;
+    margin: 183px auto 0 210px;
+    background-color: #111111;
+    opacity: 0.3;
+}
+
+.textbox{
+    padding: 0 6px 0 9px;
+    position: relative;
+    flex: 1;
+    max-width: 100%;
+    box-sizing: border-box;
+    color: #ffffff;
+    background-color: #111111;
+}
+
+div{
+    box-sizing: border-box;
 }
