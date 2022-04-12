@@ -1,4 +1,4 @@
-.body{
+.body {
     color: #111111;
     width: 100%;
     min-height: 100%;
@@ -6,37 +6,149 @@
     position: relative;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.15),
     rgba(0, 0, 0, 0.15)),
-    url(../img/cloud+dawn.jpg) no-repeat;
+    url(../img/weather_background/sunny+dawn.jpg);
+    /*url(../img/weather_background/cloud+dawn.jpg);*/
     background-size: cover;
-    overflow:hidden;
+    overflow: hidden;
 }
 
-.container {
+.main {
     position: relative;
     width: 1140px;
     margin: 0 auto;
 }
 
-.clearbox{
-    width: 720px;
-    min-height: 431px;
+.main .clear_box {
+    width: 1080px;
+    height: 430px;
     box-shadow: 0 0 40px 4px rgb(26 26 26 / 90%);
     background-image: none;
-    margin: 183px auto 0 210px;
-    background-color: #111111;
-    opacity: 0.3;
+    margin: 183px 30px;
 }
 
-.textbox{
-    padding: 0 6px 0 9px;
+.main .text_box {
+    padding: 0 9px 0 9px;
     position: relative;
     flex: 1;
     max-width: 100%;
     box-sizing: border-box;
     color: #ffffff;
-    background-color: #111111;
 }
 
-div{
+.text_box .today {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 480px;
+    height: 250px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: rgba(0, 0, 0, 50%);
+}
+
+.text_box .today .left {
+    width: 200px;
+    height: 190px;
+    float: left;
+    text-align: center;
+    justify-content: center;
+    padding-top: 21px;
+}
+
+#today_icon {
+    font-size: 40px;
+    display: inline;
+}
+
+.text_box .today .left .T_current {
+    display: inline;
+    margin-left: 20px;
+    font-size: 40px;
+}
+
+.text_box .today .left .city {
+    font-size: 18px;
+}
+
+.text_box .today .right {
+    width: 200px;
+    height: 190px;
+    float: right;
+    padding: 6px 20px;
+
+    font-size: 14px;
+}
+
+.text_box .forecast {
+    position: absolute;
+    left: 0%;
+    top: 250px;
+    width: 480px;
+    height: 180px;
+    padding: 0px 30px;
+    background-color: rgba(0, 0, 0, 50%);
+}
+
+.forecast ul {
+    list-style-type: none;
+    padding: 0px 10px;
+}
+
+.forecast ul li {
+    display: inline-block;
+    text-align: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.forecast ul li i {
+    font-size: 30px;
+}
+
+.forecast ul li p {
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+
+.text_box .index {
+    position: absolute;
+    left: 480px;
+    top: 0;
+    width: 600px;
+    height: 370px;
+    padding: 30px 30px;
+    background-color: rgba(0, 0, 0, 50%);
+}
+
+.index ul {
+    list-style-type: none;
+}
+
+.index ul li {
+    display: inline-block;
+    padding: 10px 10px;
+}
+
+.index ul li i {
+    font-size: 26px;
+    display: inline;
+}
+
+.index ul li .title {
+    display: inline;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.index ul li .detail {
+    display: block;
+    font-size: 14px;
+}
+
+div {
     box-sizing: border-box;
 }

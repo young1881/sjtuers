@@ -15,20 +15,23 @@ def get_html(url):
     html = response.text
     return html
 
+
 def weather_view(request):
-    data = get_html("http://wthrcdn.etouch.cn/WeatherApi?city=%E4%B8%8A%E6%B5%B7")
+    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + '上海'
+    data = get_html(url)
     parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)
 
     forecast_list = XML_tree.xpath('//forecast/weather')
     forecast_dic = {}
     for i in range(len(forecast_list)):
-        day_name = 'day+' + str(i)
+        day_name = 'day' + str(i)
         forecast_dic[day_name] = {}
-        forecast_dic[day_name]['date'] = forecast_list[i].xpath('./date/text()')[0]
-        forecast_dic[day_name]['high'] = forecast_list[i].xpath('./high/text()')[0]
-        forecast_dic[day_name]['low'] = forecast_list[i].xpath('./low/text()')[0]
+        forecast_dic[day_name]['date'] = '周' + forecast_list[i].xpath('./date/text()')[0][-1]
+        forecast_dic[day_name]['high'] = forecast_list[i].xpath('./high/text()')[0][-3:-1]
+        forecast_dic[day_name]['low'] = forecast_list[i].xpath('./low/text()')[0][-3:-1]
         forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
+    forecast_dic['day0']['date'] = '今天'
 
     index_list = XML_tree.xpath('//zhishus/zhishu')
     index_dic = {}
@@ -49,9 +52,10 @@ def weather_view(request):
         'sunrise': XML_tree.xpath('//sunrise_1/text()')[0],
         'sunset': XML_tree.xpath('//sunset_1/text()')[0],
         'yesterday':{
-            'date': XML_tree.xpath('//date_1/text()')[0],
-            'high': XML_tree.xpath('//high_1/text()')[0],
-            'low': XML_tree.xpath('//low/text()')[0],
+            'date': '昨天',
+            'high': XML_tree.xpath('//high_1/text()')[0][-3:-1],
+            'low': XML_tree.xpath('//low/text()')[0][-3:-1],
+            'type' : XML_tree.xpath('//type_1/text()')[0]
         },
         'forecast': forecast_dic,
         'index' : index_dic,
