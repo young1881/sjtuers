@@ -18,7 +18,7 @@
         <div class="text_box">
             <div class="today">
                 <div class="left">
-                    <i class="wi wi-night-sleet" id="today_icon"></i>
+                    <i id="today_icon"></i>
                     <p class="T_current">{{ wendu }}℃</p>
                     <p class="city">{{ city }} {{ forecast.day0.type }}</p>
                     <p class="city">{{ forecast.day0.low }} ~ {{ forecast.day0.high }}℃</p>
@@ -36,39 +36,39 @@
                 <ul>
                     <li>
                         <p class="date">{{ yesterday.date }}</p>
-                        <i class="wi wi-night-sleet" id="day-1_icon"></i>
+                        <i id="day-1_icon"></i>
                         <p class="type">{{ yesterday.low }}/{{ yesterday.high }}</p>
-                        <p class="type">{{ yesterday.type }}</p>
+                        <p class="type" id="day-1_type">{{ yesterday.type }}</p>
                     </li>
                     <li>
                         <p class="date">{{ forecast.day0.date }}</p>
-                        <i class="wi wi-night-sleet" id="day0_icon"></i>
+                        <i id="day0_icon"></i>
                         <p class="type">{{ forecast.day0.low }}/{{ forecast.day0.high }}</p>
-                        <p class="type">{{ forecast.day0.type }}</p>
+                        <p class="type" id="day0_type">{{ forecast.day0.type }}</p>
                     </li>
                     <li>
                         <p class="date">{{ forecast.day1.date }}</p>
-                        <i class="wi wi-night-sleet" id="day1_icon"></i>
+                        <i id="day1_icon"></i>
                         <p class="type">{{ forecast.day1.low }}/{{ forecast.day1.high }}</p>
-                        <p class="type">{{ forecast.day1.type }}</p>
+                        <p class="type" id="day1_type">{{ forecast.day1.type }}</p>
                     </li>
                     <li>
                         <p class="date">{{ forecast.day2.date }}</p>
-                        <i class="wi wi-night-sleet" id="day2_icon"></i>
+                        <i id="day2_icon"></i>
                         <p class="type">{{ forecast.day2.low }}/{{ forecast.day2.high }}</p>
-                        <p class="type">{{ forecast.day2.type }}</p>
+                        <p class="type" id="day2_type">{{ forecast.day2.type }}</p>
                     </li>
                     <li>
                         <p class="date">{{ forecast.day3.date }}</p>
-                        <i class="wi wi-night-sleet" id="day3_icon"></i>
+                        <i id="day3_icon"></i>
                         <p class="type">{{ forecast.day3.low }}/{{ forecast.day3.high }}</p>
-                        <p class="type">{{ forecast.day3.type }}</p>
+                        <p class="type" id="day3_type">{{ forecast.day3.type }}</p>
                     </li>
                     <li>
                         <p class="date">{{ forecast.day4.date }}</p>
-                        <i class="wi wi-night-sleet" id="day4_icon"></i>
+                        <i id="day4_icon"></i>
                         <p class="type">{{ forecast.day4.low }}/{{ forecast.day4.high }}</p>
-                        <p class="type">{{ forecast.day4.type }}</p>
+                        <p class="type" id="day4_type">{{ forecast.day4.type }}</p>
                     </li>
                 </ul>
             </div>
@@ -104,6 +104,6 @@
 </div>
 
 <script src="https://kit.fontawesome.com/80275103ba.js" crossorigin="anonymous"></script>
-
+<script type="text/javascript" src="../static/js/weather.js"></script>
 </body>
 </html>

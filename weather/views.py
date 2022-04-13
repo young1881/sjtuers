@@ -17,7 +17,7 @@ def get_html(url):
 
 
 def weather_view(request):
-    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + '上海'
+    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + '闵行'
     data = get_html(url)
     parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)

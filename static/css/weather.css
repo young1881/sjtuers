@@ -6,8 +6,7 @@
     position: relative;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.15),
     rgba(0, 0, 0, 0.15)),
-    url(../img/weather_background/sunny+dawn.jpg);
-    /*url(../img/weather_background/cloud+dawn.jpg);*/
+    url(../img/weather_background/overcast_day.jpg);
     background-size: cover;
     overflow: hidden;
 }
@@ -23,10 +22,10 @@
     height: 430px;
     box-shadow: 0 0 40px 4px rgb(26 26 26 / 90%);
     background-image: none;
-    margin: 183px 30px;
+    margin: 130px 30px;
 }
 
-.main .text_box {
+.main .clear_box .text_box {
     padding: 0 9px 0 9px;
     position: relative;
     flex: 1;
@@ -45,7 +44,7 @@
     padding-bottom: 10px;
     padding-left: 30px;
     padding-right: 30px;
-    background-color: rgba(0, 0, 0, 50%);
+    background-color: rgba(0, 0, 0, 60%);
 }
 
 .text_box .today .left {
@@ -88,7 +87,7 @@
     width: 480px;
     height: 180px;
     padding: 0px 30px;
-    background-color: rgba(0, 0, 0, 50%);
+    background-color: rgba(0, 0, 0, 60%);
 }
 
 .forecast ul {
@@ -119,9 +118,9 @@
     left: 480px;
     top: 0;
     width: 600px;
-    height: 370px;
+    height: 430px;
     padding: 30px 30px;
-    background-color: rgba(0, 0, 0, 50%);
+    background-color: rgba(0, 0, 0, 60%);
 }
 
 .index ul {
@@ -147,6 +146,8 @@
 .index ul li .detail {
     display: block;
     font-size: 14px;
+    padding: 0 0;
+    margin: 10px 0;
 }
 
 div {
