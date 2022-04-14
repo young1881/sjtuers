@@ -58,6 +58,7 @@ def index_view(request):
         asyncio.set_event_loop(loop)
         loop.run_until_complete(main())
 
+        print('数据获取结束，接下来处理数据')
         locals = {
             'jwc': jwc(responses['jwc']),
             'weather': weather(responses['weather']),
@@ -182,7 +183,7 @@ def weather(response):
 
 
 def corona(response):
-    return get_json(response)
+    return get_json(response)['data']["diseaseh5Shelf"]
 
 
 def poem(response):
