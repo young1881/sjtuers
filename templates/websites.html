@@ -138,22 +138,38 @@
                     <div class="data_box">
                         <div class="property">累计治愈</div>
                         <div class="data" style="color:#34aa70">{{ corona.chinaTotal.heal }}</div>
+                        {% if corona.chinaAdd.heal == null %}
+                        <div class="today_none" style="color:#34aa70">新增待公布</div>
+                        {% else %}
                         <div class="today" style="color:#34aa70">+{{ corona.chinaAdd.heal }}</div>
+                        {% endif %}
                     </div>
                     <div class="data_box">
                         <div class="property">现存确诊</div>
                         <div class="data" style="color:#e44a3d">{{ corona.chinaTotal.nowConfirm }}</div>
+                        {% if corona.chinaAdd.nowConfirm == null %}
+                        <div class="today_none" style="color:#e44a3d">新增待公布</div>
+                        {% else %}
                         <div class="today" style="color:#e44a3d">+{{ corona.chinaAdd.nowConfirm }}</div>
+                        {% endif %}
                     </div>
                     <div class="data_box">
                         <div class="property">累计死亡</div>
                         <div class="data" style="color:#333">{{corona.chinaTotal.dead}}</div>
+                        {% if corona.chinaAdd.dead == null %}
+                        <div class="today_none" style="color:#333">新增待公布</div>
+                        {% else %}
                         <div class="today" style="color:#333">+{{corona.chinaAdd.dead}}</div>
+                        {% endif %}
                     </div>
                     <div class="data_box">
                         <div class="property">无症状</div>
                         <div class="data" style="color:#791618">{{corona.chinaTotal.noInfectH5}}</div>
+                        {% if corona.chinaAdd.noInfectH5 == null %}
+                        <div class="today_none" style="color:#791618">新增待公布</div>
+                        {% else %}
                         <div class="today" style="color:#791618">+{{ corona.chinaAdd.noInfectH5 }}</div>
+                        {% endif %}
                     </div>
                     <div class="information">
                         <p>统计截至{{corona.lastUpdateTime}}</p>

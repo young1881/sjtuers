@@ -1,44 +1,92 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-import requests
+import asyncio
 import json
-from time import time
 from lxml import etree
+from urllib.parse import quote
+import aiohttp
+
+city = '闵行'
+names = [
+    'jwc',
+    'weather',
+    'weibo',
+    'zhihu',
+    'bilibili',
+    'corona',
+    'poem',
+    'canteen',
+    'lib',
+]
+urls = [
+    'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
+    'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
+    'https://tenapi.cn/resou/',
+    'https://tenapi.cn/zhihuresou/',
+    'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
+    'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
+    'https://v1.jinrishici.com/all.json',
+    'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
+    'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
+]
+urls_names = {}
+for i in range(len(urls)):
+    urls_names[urls[i]] = names[i]
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
+}
+responses = {}
+
+#异步编程
+async def get_page(url):
+    async with aiohttp.ClientSession() as session:
+        async with await session.get(url=url, headers=headers) as response:
+            assert response.status == 200
+            page_text = await response.text()
+            url = str(response.url)
+            name = urls_names[url]
+            responses[name] = page_text
+tasks = []
+for url in urls:
+    c = get_page(url)
+    task = asyncio.ensure_future(c)
+    tasks.append(task)
+loop = asyncio.get_event_loop()
+loop.run_until_complete(asyncio.wait(tasks))
 
 
-def get_json(url):
-    session = requests.Session()
-    session.trust_env = False
-    request = session.get(url)
-    data = json.loads(request.content, strict=False)
+def index_view(request):
+    if request.method == 'GET':
+        locals = {
+            'jwc': jwc(responses['jwc']),
+            'weather': weather(responses['weather']),
+            'weibo': weibo(responses['weibo']),
+            'zhihu': zhihu(responses['zhihu']),
+            'bilibili': bilibli(responses['bilibili']),
+            'corona': corona(responses['corona']),
+            'poem': poem(responses['poem']),
+            'canteen': canteen(responses['canteen']),
+            'lib': lib(responses['lib']),
+        }
+        return render(request, 'websites.html', locals)
 
+
+def get_json(response):
+    data = json.loads(response, strict=False)
     return data
 
 
-def get_html(url):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
-
-    session = requests.Session()
-    session.trust_env = False
-    response = session.get(url=url, headers=headers)
-    response.encoding = 'utf-8'
-    html = response.text
-    return html
+def get_html(response):
+    return response
 
 
-def lib():
-    session = requests.Session()
-    session.trust_env = False
-    request = session.get('https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson')
-    data = json.loads(request.content[12:-2], strict=False)['numbers']
-
+def lib(response):
+    data = json.loads(response[12:-2], strict=False)['numbers']
     return data
 
 
-def jwc():
-    html = get_html('https://jwc.sjtu.edu.cn/xwtg/tztg.htm')
+def jwc(response):
+    html = get_html(response)
     tree = etree.HTML(html)
     a_list = tree.xpath('//div[@class="wz"]/a')
     jwc = []
@@ -54,8 +102,8 @@ def jwc():
     return jwc
 
 
-def bilibli():
-    json = get_json('https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1')['data']['list']
+def bilibli(response):
+    json = get_json(response)['data']['list']
     bilibili = []
     for i in range(5):
         dic = {}
@@ -68,8 +116,8 @@ def bilibli():
     return bilibili
 
 
-def weibo():
-    weibo = get_json('https://tenapi.cn/resou/')['list']
+def weibo(response):
+    weibo = get_json(response)['list']
     for i in range(len(weibo)):
         weibo[i]['name'] = str(i + 1) + ' ' + weibo[i]['name']
         if len(weibo[i]['name']) > 18:
@@ -77,8 +125,8 @@ def weibo():
     return weibo[:5]
 
 
-def zhihu():
-    zhihu = get_json('https://tenapi.cn/zhihuresou/')['list']
+def zhihu(response):
+    zhihu = get_json(response)['list']
     for i in range(len(zhihu)):
         zhihu[i]['query'] = str(i + 1) + ' ' + zhihu[i]['query']
         if len(zhihu[i]['query']) > 22:
@@ -86,9 +134,8 @@ def zhihu():
     return zhihu[:5]
 
 
-def weather(city):
-    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + city
-    data = get_html(url)
+def weather(response):
+    data = get_html(response)
     parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)
 
@@ -133,22 +180,13 @@ def weather(city):
     return weather
 
 
-def index_view(request):
-    if request.method == 'GET':
-        corona = get_json('https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf')['data']["diseaseh5Shelf"]
-        poem = get_json('https://v1.jinrishici.com/all.json')
-        canteen = get_json('https://canteen.sjtu.edu.cn/CARD/Ajax/Place')
+def corona(response):
+    return get_json(response)
 
-        locals = {
-            'weibo' : weibo(),
-            'zhihu' : zhihu(),
-            'corona' : corona,
-            'poem' : poem,
-            'canteen' : canteen,
-            'lib' : lib(),
-            'jwc' : jwc(),
-            'bilibili' : bilibli(),
-            'weather' : weather('上海'),
-        }
 
-        return render(request, 'websites.html', locals)
+def poem(response):
+    return get_json(response)
+
+
+def canteen(response):
+    return get_json(response)
