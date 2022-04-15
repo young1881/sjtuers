@@ -70,7 +70,7 @@ def index_view(request):
             'canteen': canteen(responses['canteen']),
             'lib': lib(responses['lib']),
         }
-        return render(request, 'websites.html', locals)
+        return render(request, 'websites.j2', locals)
 
 
 def get_json(response):

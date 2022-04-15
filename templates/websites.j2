@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+{% extends 'base.j2' %}
+{% from '_includes/corona_data.j2' import corona_data %}
+{% from '_includes/icon_box.j2' import icon_box %}
+
+{% block poem %}
+    <div class="poem">
+        <div class="sentence"
+             title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
+    </div>
+{% endblock %}
+
+
+{% block search %}
+    <div class="search-box">
+        <div class="search-form">
+            <img class="engine" src="https://www.baidu.com/favicon.ico">
+            <input class="search-txt" id="text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-button').click()">
+            <img class="search-btn" id="search-button" src="../static/img/magnifying-glass-solid.svg">
+        </div>
+        <div class="search-engine" style="display: none;">
+            <div class="search-engine-head">
+                <div class="search-engine-tit">点击选择搜索引擎：</div>
+            </div>
+            <ul class="search-engine-list"></ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block weather %}
+    <div class="weather">
+        <div id="he-plugin-standard"></div>
+        <script>
+            WIDGET = {
+                "CONFIG": {
+                    "layout": "1",
+                    "width": "400",
+                    "height": "150",
+                    "background": "1",
+                    "dataColor": "FFFFFF",
+                    "borderRadius": "40",
+                    "key": "07f20b95a1414be7944ee81ce02bf842"
+                }
+            }
+        </script>
+        <script src="https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0"></script>
+    </div>
+{% endblock %}
+
+
+{% block news %}
+    <div class="news">
+        <div class="card">
+            <button class="info_btn active">通知</button>
+            <button class="info_btn">微博</button>
+            <button class="info_btn">B站</button>
+            <button class="info_btn">知乎</button>
+            <div class="infoBox">
+                <div class="info show">
+                    <ul>
+                        {% for x in jwc %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in weibo %}
+                            <li>
+                <span style="float:left">
+                    <a href={{ x.url }} target="_blank">{{ x.name }}</a>
+                </span>
+                                <span style="float:right">
+                    <p>{{ x.hot }}</p>
+                </span><br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in bilibili %}
+                            <li>
+                <span style="float:left">
+                    <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                </span>
+                                <span style="float:right">
+                    <p>{{ x.view }}</p>
+                </span><br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="info">
+                    <ul>
+                        {% for x in zhihu %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.query }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tools %}
+    <div class="tools">
+        <div class="card">
+            <button class="tool_btn active">疫情</button>
+            <button class="tool_btn">校车</button>
+            <button class="tool_btn">图书馆</button>
+            <button class="tool_btn">食堂</button>
+            <div class="toolBox">
+                <div class="tool show">
+                    {{ corona_data("累计确诊", corona.chinaTotal.confirm, corona.chinaAdd.confirm, '#a31d13') }}
+                    {{ corona_data("境外输入", corona.chinaTotal.importedCase, corona.chinaAdd.importedCase, '#D2691E') }}
+                    {{ corona_data("累计治愈", corona.chinaTotal.heal, corona.chinaAdd.heal, '#34aa70') }}
+                    {{ corona_data("现存确诊", corona.chinaTotal.nowConfirm, corona.chinaAdd.nowConfirm, '#e44a3d') }}
+                    {{ corona_data("累计死亡", corona.chinaTotal.dead, corona.chinaAdd.dead, '#333') }}
+                    {{ corona_data("无症状", corona.chinaTotal.noInfectH5, corona.chinaAdd.noInfectH5, '#791618') }}
+                    <div class="information">
+                        <p>统计截至{{corona.lastUpdateTime}}</p>
+                        <p>数据来源自国家及各地卫健委每日信息发布</p>
+                    </div>
+                </div>
+                <div class="tool">
+                    校车信息
+                </div>
+                <div class="tool">
+                    <div id="bar"></div>
+                </div>
+                <div class="tool">
+                    <div id="bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block icons %}
+    <div class="icons">
+        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('教务处', "https://jwc.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('创新实践', "https://uitp.sjtu.edu.cn/innovation/index.html", "../static/img/school.png") }}
+        {{ icon_box('教学楼', "https://ids.sjtu.edu.cn/", "../static/img/school.png") }}
+        {{ icon_box('图书馆', "https://www.lib.sjtu.edu.cn/f/main/index.shtml", "https://www.lib.sjtu.edu.cn/favicon.ico") }}
+        {{ icon_box('传承交大', "https://share.dyweb.sjtu.cn/", "../static/img/school.png") }}
+        {{ icon_box('选课社区', "https://course.sjtu.plus", "../static/img/school.png") }}
+        {{ icon_box('bilibili', "https://bilibili.com", "https://www.bilibili.com/favicon.ico") }}
+        {{ icon_box('知乎', "https://www.zhihu.com/hot", "https://www.zhihu.com/favicon.ico") }}
+        {{ icon_box('豆瓣', "https://www.douban.com/", "https://www.douban.com/favicon.ico") }}
+        {{ icon_box('github', "https://github.com/", "https://github.com/favicon.ico") }}
+        {{ icon_box('淘宝', "https://www.taobao.com/", "https://www.taobao.com/favicon.ico") }}
+        {{ icon_box('爱奇艺', "https://www.iqiyi.com/", "https://www.iqiyi.com/favicon.ico") }}
+        {{ icon_box('一个木函', "https://web.woobx.cn/", "https://web.woobx.cn/favicon.ico") }}
+    </div>
+{% endblock %}

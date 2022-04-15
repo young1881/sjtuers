@@ -61,4 +61,4 @@ def weather_view(request):
         'index' : index_dic,
     }
 
-    return render(request, 'weather.html', weather)
+    return render(request, 'weather.j2', weather)
