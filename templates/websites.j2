@@ -3,8 +3,41 @@
 {% from '_includes/corona_data.j2' import corona_data %}
 {% from '_includes/icon_box.j2' import icon_box %}
 
+
+{% block counter %}
+    <div class="counter" id="counter">
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+        <em class="divider">:</em>
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+        <em class="divider">:</em>
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+        <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+        </div>
+    </div>
+{% endblock %}
+
+
 {% block poem %}
-    <div class="poem">
+    <div class="poem" id="poem">
         <div class="sentence"
              title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
     </div>
@@ -12,7 +45,7 @@
 
 
 {% block search %}
-    <div class="search-box">
+    <div class="search-box" id="search-box">
         <div class="search-form">
             <img class="engine" src="https://www.baidu.com/favicon.ico">
             <input class="search-txt" id="text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-button').click()">
@@ -28,7 +61,7 @@
 {% endblock %}
 
 {% block weather %}
-    <div class="weather">
+    <div class="weather" id="weather">
         <div id="he-plugin-standard"></div>
         <script>
             WIDGET = {
@@ -49,7 +82,7 @@
 
 
 {% block news %}
-    <div class="news">
+    <div class="news" id="news">
         <div class="card">
             <button class="info_btn active">通知</button>
             <button class="info_btn">微博</button>
@@ -109,7 +142,7 @@
 {% endblock %}
 
 {% block tools %}
-    <div class="tools">
+    <div class="tools" id="tools">
         <div class="card">
             <button class="tool_btn active">疫情</button>
             <button class="tool_btn">校车</button>
@@ -143,7 +176,7 @@
 {% endblock %}
 
 {% block icons %}
-    <div class="icons">
+    <div class="icons" id="icons">
         {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
         {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
         {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
@@ -166,5 +199,65 @@
         {{ icon_box('淘宝', "https://www.taobao.com/", "https://www.taobao.com/favicon.ico") }}
         {{ icon_box('爱奇艺', "https://www.iqiyi.com/", "https://www.iqiyi.com/favicon.ico") }}
         {{ icon_box('一个木函', "https://web.woobx.cn/", "https://web.woobx.cn/favicon.ico") }}
+        {% for icon in new_icon %}
+        {{ icon_box(icon.new_icon_name, icon.new_icon_url, icon.new_icon_url + '/favicon.ico')  }}
+        {% endfor %}
     </div>
+{% endblock %}
+
+
+{% block sidebar %}
+    <div class="sidebar" id="sidebar">
+        <!-- --t是自定义属性，通过var函数可调用 -->
+        <li style="--t:20%;">
+            <a href="#">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <p> 登录 </p>
+        </li>
+        <li style="--t:30%;">
+            <a a href = "JavaScript:void(0)" onclick = "openIconDialog()">
+                <i class="fa fa-th-large" aria-hidden="true"></i>
+            </a>
+            <p>网站设置</p>
+        </li>
+        <li style="--t:40%;">
+            <a href="#">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li style="--t:50%;">
+            <a href="#">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li style="--t:60%;">
+            <a href="#">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li style="--t:70%;">
+            <a href="#">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+        </li>
+        <div class="top"></div>
+        <div class="middle"></div>
+        <div class="bottom"></div>
+</div>
+
+<div id="light" class="white_content">
+    <form action="/index/" method="POST">
+        <p>
+            网站名 <input type="text" id="new_icon_name" name="new_icon_name">
+        </p>
+        <p>
+            网址 <input type="text" id="new_icon_url" name="new_icon_url">
+        </p>
+        <p>
+            <input type="submit" value="添加">
+        </p>
+    </form>
+    <a href = "javascript:void(0)" onclick = "closeIconDialog()">点这里关闭本窗口</a>
+</div>
 {% endblock %}

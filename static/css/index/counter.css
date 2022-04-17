@@ -1,0 +1,120 @@
+.counter {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80px;
+  display: flex;
+}
+
+.counter .divider {
+  font-size: 30px;
+  line-height: 60px;
+  font-style: normal;
+  color: rgb(51, 50, 50);
+}
+
+/* 时钟的卡片 */
+.counter .flip {
+  position: relative;
+  width: 40px;
+  height: 60px;
+  margin: 2px;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 60px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  box-shadow: 0 0 6px rgba(54, 54, 54, 0.5);
+}
+
+/* 时钟上的数字 */
+.counter .flip .digital::before, .counter .flip .digital::after {
+  position: absolute;
+  content: attr(data-number);
+  left: 0;
+  right: 0;
+  color: white;
+  background: rgb(51, 50, 50);
+  overflow: hidden;
+  -webkit-perspective: 160px;
+          perspective: 160px;
+}
+
+/* 翻页前的数字 */
+.counter .flip .digital::before {
+  top: 0;
+  bottom: 50%;
+  border-bottom: 1px solid #666;
+  border-radius: 10px 10px 0 0;
+}
+
+/* 翻页后的数字 */
+.counter .flip .digital::after {
+  top: 50%;
+  bottom: 0;
+  line-height: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.counter .flip .back::before,
+.counter .flip .front::after {
+  z-index: 1;
+}
+.counter .flip .back::after {
+  z-index: 2;
+}
+.counter .flip .front::before {
+  z-index: 3;
+}
+
+.counter .flip .back::after {
+  -webkit-transform-origin: center top;
+          transform-origin: center top;
+  -webkit-transform: rotateX(0.5turn);
+          transform: rotateX(0.5turn);
+}
+
+.counter .flip.running .front::before {
+  -webkit-transform-origin: center bottom;
+          transform-origin: center bottom;
+  -webkit-animation: frontFlipDown 0.6s ease-in-out;
+          animation: frontFlipDown 0.6s ease-in-out;
+  box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.3);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.counter .flip.running .back::after {
+  -webkit-animation: backFlipDown 0.6s ease-in-out;
+          animation: backFlipDown 0.6s ease-in-out;
+}
+
+@-webkit-keyframes frontFlipDown {
+  to {
+    -webkit-transform: rotateX(0.5turn);
+            transform: rotateX(0.5turn);
+  }
+}
+
+@keyframes frontFlipDown {
+  to {
+    -webkit-transform: rotateX(0.5turn);
+            transform: rotateX(0.5turn);
+  }
+}
+
+@-webkit-keyframes backFlipDown {
+  to {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+  }
+}
+
+@keyframes backFlipDown {
+  to {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+  }
+}

@@ -6,72 +6,79 @@ from urllib.parse import quote
 import aiohttp
 
 def index_view(request):
+    city = '闵行'
+    names = [
+        'jwc',
+        'weather',
+        # 'weibo',
+        # 'zhihu',
+        'bilibili',
+        'corona',
+        'poem',
+        'canteen',
+        'lib',
+    ]
+    urls = [
+        'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
+        'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
+        # 'https://tenapi.cn/resou/',
+        # 'https://tenapi.cn/zhihuresou/',
+        'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
+        'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
+        'https://v1.jinrishici.com/all.json',
+        'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
+        'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
+    ]
+    urls_names = {}
+    for i in range(len(urls)):
+        urls_names[urls[i]] = names[i]
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
+    }
+    responses = {}
+
+    # 异步编程
+    async def fetch(session, url):
+        print("发送请求：", url)
+        async with session.get(url, headers=headers) as response:
+            assert response.status == 200
+            page_text = await response.text()
+            url = str(response.url)
+            name = urls_names[url]
+            responses[name] = page_text
+
+    async def main():
+        async with aiohttp.ClientSession() as session:
+            tasks = [asyncio.create_task(fetch(session, url)) for url in urls]
+            await asyncio.wait(tasks)
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(main())
+
+    print('数据获取结束，接下来处理数据')
+    locals = {
+        'jwc': jwc(responses['jwc']),
+        'weather': weather(responses['weather']),
+        # 'weibo': weibo(responses['weibo']),
+        # 'zhihu': zhihu(responses['zhihu']),
+        'bilibili': bilibli(responses['bilibili']),
+        'corona': corona(responses['corona']),
+        'poem': poem(responses['poem']),
+        'canteen': canteen(responses['canteen']),
+        'lib': lib(responses['lib']),
+    }
     if request.method == 'GET':
-        city = '闵行'
-        names = [
-            'jwc',
-            'weather',
-            'weibo',
-            'zhihu',
-            'bilibili',
-            'corona',
-            'poem',
-            'canteen',
-            'lib',
-        ]
-        urls = [
-            'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
-            'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
-            'https://tenapi.cn/resou/',
-            'https://tenapi.cn/zhihuresou/',
-            'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
-            'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
-            'https://v1.jinrishici.com/all.json',
-            'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
-            'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
-        ]
-        urls_names = {}
-        for i in range(len(urls)):
-            urls_names[urls[i]] = names[i]
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-        }
-        responses = {}
-
-        # 异步编程
-        async def fetch(session, url):
-            print("发送请求：", url)
-            async with session.get(url, headers=headers) as response:
-                assert response.status == 200
-                page_text = await response.text()
-                url = str(response.url)
-                name = urls_names[url]
-                responses[name] = page_text
-
-        async def main():
-            async with aiohttp.ClientSession() as session:
-                tasks = [asyncio.create_task(fetch(session, url)) for url in urls]
-                await asyncio.wait(tasks)
-
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(main())
-
-        print('数据获取结束，接下来处理数据')
-        locals = {
-            'jwc': jwc(responses['jwc']),
-            'weather': weather(responses['weather']),
-            'weibo': weibo(responses['weibo']),
-            'zhihu': zhihu(responses['zhihu']),
-            'bilibili': bilibli(responses['bilibili']),
-            'corona': corona(responses['corona']),
-            'poem': poem(responses['poem']),
-            'canteen': canteen(responses['canteen']),
-            'lib': lib(responses['lib']),
-        }
         return render(request, 'websites.j2', locals)
+    elif request.method == 'POST':
+        new_icon = []
+        new_icon_name = request.POST['new_icon_name']
+        new_icon_url = request.POST['new_icon_url']
+        new_icon.append({'new_icon_name':new_icon_name, 'new_icon_url':new_icon_url})
 
+        locals['new_icon'] = new_icon
+        return render(request, 'websites.j2', locals)
 
 def get_json(response):
     data = json.loads(response, strict=False)
