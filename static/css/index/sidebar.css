@@ -11,7 +11,7 @@
     border-radius: 15px 0 0 15px;
     overflow: hidden;
     /* 动画过渡 */
-    transition: 0.3s;
+    transition: 0.15s;
 }
 
 .sidebar:hover{
@@ -72,7 +72,7 @@
     /* 字体颜色透明 */
     color: transparent;
     /* 动画过渡 */
-    transition: 0.3s;
+    transition: 0.15s;
 }
 
 .sidebar li a i{

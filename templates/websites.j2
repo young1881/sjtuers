@@ -38,8 +38,8 @@
 
 {% block poem %}
     <div class="poem" id="poem">
-        <div class="sentence"
-             title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
+        <p class="sentence" id="sentence">「 {{ poem.content }} 」</p>
+        <p class="sentence" id="author">——《{{ poem.origin }}》 {{ poem.author }}</p>
     </div>
 {% endblock %}
 
@@ -47,9 +47,14 @@
 {% block search %}
     <div class="search-box" id="search-box">
         <div class="search-form">
-            <img class="engine" src="https://www.baidu.com/favicon.ico">
-            <input class="search-txt" id="text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-button').click()">
-            <img class="search-btn" id="search-button" src="../static/img/magnifying-glass-solid.svg">
+            <div class='engine-box'>
+                <img class="engine" src="https://files.codelife.cc/itab/search/baidu.svg">
+                <i class="fa-solid fa-caret-down" style="font-size:12px; display:flex; padding: 3px 3px;"></i>
+            </div>
+            <input class="search-txt" id="search-text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-btn').click()">
+            <div class='search-btn-box' id='search-btn'>
+                <i class="fa-solid fa-magnifying-glass" class='search-btn'></i>
+            </div>
         </div>
         <div class="search-engine" style="display: none;">
             <div class="search-engine-head">
@@ -192,10 +197,10 @@
         {{ icon_box('图书馆', "https://www.lib.sjtu.edu.cn/f/main/index.shtml", "https://www.lib.sjtu.edu.cn/favicon.ico") }}
         {{ icon_box('传承交大', "https://share.dyweb.sjtu.cn/", "../static/img/school.png") }}
         {{ icon_box('选课社区', "https://course.sjtu.plus", "../static/img/school.png") }}
-        {{ icon_box('bilibili', "https://bilibili.com", "https://www.bilibili.com/favicon.ico") }}
-        {{ icon_box('知乎', "https://www.zhihu.com/hot", "https://www.zhihu.com/favicon.ico") }}
-        {{ icon_box('豆瓣', "https://www.douban.com/", "https://www.douban.com/favicon.ico") }}
-        {{ icon_box('github', "https://github.com/", "https://github.com/favicon.ico") }}
+        {{ icon_box('bilibili', "https://bilibili.com", "https://files.codelife.cc/itab/search/bilibili.svg") }}
+        {{ icon_box('知乎', "https://www.zhihu.com/hot", "https://files.codelife.cc/itab/search/zhihu.svg") }}
+        {{ icon_box('豆瓣', "https://www.douban.com/", "https://files.codelife.cc/itab/search/douban.svg") }}
+        {{ icon_box('github', "https://github.com/", "https://files.codelife.cc/itab/search/github.svg") }}
         {{ icon_box('淘宝', "https://www.taobao.com/", "https://www.taobao.com/favicon.ico") }}
         {{ icon_box('爱奇艺', "https://www.iqiyi.com/", "https://www.iqiyi.com/favicon.ico") }}
         {{ icon_box('一个木函', "https://web.woobx.cn/", "https://web.woobx.cn/favicon.ico") }}
