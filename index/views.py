@@ -165,7 +165,7 @@ def zhihu(response):
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 60:
-            name = cut_str(name, 58)
+            name = cut_str(name, 58) + "..."
         url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         zhihu_item['name'] = name
         zhihu_item['url'] = url
