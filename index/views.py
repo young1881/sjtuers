@@ -10,8 +10,8 @@ def index_view(request):
     names = [
         'jwc',
         'weather',
-        # 'weibo',
-        # 'zhihu',
+        'weibo',
+        'zhihu',
         'bilibili',
         'corona',
         'poem',
@@ -21,8 +21,8 @@ def index_view(request):
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
         'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
-        # 'https://tenapi.cn/resou/',
-        # 'https://tenapi.cn/zhihuresou/',
+        'https://tophub.today/n/KqndgxeLl9',
+        'https://tophub.today/n/mproPpoq6O',
         'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
         'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
         'https://v1.jinrishici.com/all.json',
@@ -41,7 +41,7 @@ def index_view(request):
     # 异步编程
     async def fetch(session, url):
         print("发送请求：", url)
-        async with session.get(url, headers=headers) as response:
+        async with session.get(url=url, headers=headers) as response:
             assert response.status == 200
             page_text = await response.text()
             url = str(response.url)
@@ -49,7 +49,7 @@ def index_view(request):
             responses[name] = page_text
 
     async def main():
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=64, verify_ssl=False)) as session:
             tasks = [asyncio.create_task(fetch(session, url)) for url in urls]
             await asyncio.wait(tasks)
 
@@ -58,11 +58,12 @@ def index_view(request):
     loop.run_until_complete(main())
 
     print('数据获取结束，接下来处理数据')
+    print(responses.keys())
     locals = {
         'jwc': jwc(responses['jwc']),
         'weather': weather(responses['weather']),
-        # 'weibo': weibo(responses['weibo']),
-        # 'zhihu': zhihu(responses['zhihu']),
+        'weibo': weibo(responses['weibo']),
+        'zhihu': zhihu(responses['zhihu']),
         'bilibili': bilibli(responses['bilibili']),
         'corona': corona(responses['corona']),
         'poem': poem(responses['poem']),
@@ -79,6 +80,15 @@ def index_view(request):
 
         locals['new_icon'] = new_icon
         return render(request, 'websites.j2', locals)
+
+
+# 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
+def cut_str(str, len):
+    bytes = str.encode('utf-8')
+    cut_tmp = bytes[:len]
+    cut_res = cut_tmp.decode('utf-8', errors='ignore')  # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
+    return cut_res
+
 
 def get_json(response):
     data = json.loads(response, strict=False)
@@ -101,8 +111,8 @@ def jwc(response):
     jwc = []
     for i in range(5):
         title = str(i + 1) + ' ' + a_list[i].xpath('./h2/text()')[0]
-        if len(title) > 23:
-            title = title[:21] + '...'
+        if len(title.encode('utf-8')) > 60:
+            title = cut_str(title, 58) + '...'
         url = 'http://jwc.sjtu.edu.cn' + a_list[i].xpath('./@href')[0][2:]
         dic = {}
         dic['title'] = title
@@ -117,8 +127,8 @@ def bilibli(response):
     for i in range(5):
         dic = {}
         dic['title'] = str(i + 1) + ' ' + json[i]['title']
-        if len(dic['title']) > 18:
-            dic['title'] = dic['title'][:16] + '...'
+        if len(dic['title'].encode("utf-8")) > 50:
+            dic['title'] = cut_str(dic['title'], 48) + '...'
         dic['url'] = json[i]['short_link']
         dic['view'] = json[i]['stat']['view']
         bilibili.append(dic)
@@ -126,21 +136,41 @@ def bilibli(response):
 
 
 def weibo(response):
-    weibo = get_json(response)['list']
-    for i in range(len(weibo)):
-        weibo[i]['name'] = str(i + 1) + ' ' + weibo[i]['name']
-        if len(weibo[i]['name']) > 18:
-            weibo[i]['name'] = weibo[i]['name'][:16] + '...'
-    return weibo[:5]
+    html = get_html(response)
+    tree = etree.HTML(html)
+    tr_list = tree.xpath('//tbody/tr')[:5]
+    weibo = []
+    for i in range(len(tr_list)):
+        weibo_item = {}
+        name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
+        name = str(i + 1) + ' ' + name
+        if len(name.encode('utf-8')) > 50:
+            name = cut_str(name, 48) + '...'
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        hot = tr_list[i].xpath('./td[3]/text()')[0]
+        weibo_item['name'] = name
+        weibo_item['url'] = url
+        weibo_item['hot'] = hot
+        weibo.append(weibo_item)
+    return weibo
 
 
 def zhihu(response):
-    zhihu = get_json(response)['list']
-    for i in range(len(zhihu)):
-        zhihu[i]['query'] = str(i + 1) + ' ' + zhihu[i]['query']
-        if len(zhihu[i]['query']) > 22:
-            zhihu[i]['query'] = zhihu[i]['query'][:20] + '...'
-    return zhihu[:5]
+    html = get_html(response)
+    tree = etree.HTML(html)
+    tr_list = tree.xpath('//tbody/tr')[:5]
+    zhihu = []
+    for i in range(len(tr_list)):
+        zhihu_item = {}
+        name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
+        name = str(i + 1) + ' ' + name
+        if len(name.encode('utf-8')) > 60:
+            name = cut_str(name, 58)
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        zhihu_item['name'] = name
+        zhihu_item['url'] = url
+        zhihu.append(zhihu_item)
+    return zhihu
 
 
 def weather(response):
