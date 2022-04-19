@@ -1,7 +1,7 @@
 .tools {
     /*background-color: purple;*/
     width: 21.5%;
-    height: 50%;
+    max-height: 50%;
     top: 38%;
     right: 6.8%;
     display: flex;

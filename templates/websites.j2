@@ -90,6 +90,7 @@
     <div class="news" id="news">
         <div class="card">
             <button class="info_btn active">通知</button>
+            <button class="info_btn">要闻</button>
             <button class="info_btn">微博</button>
             <button class="info_btn">B站</button>
             <button class="info_btn">知乎</button>
@@ -97,6 +98,15 @@
                 <div class="info show">
                     <ul>
                         {% for x in jwc %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in jnews %}
                             <li>
                                 <a href={{ x.url }} target="_blank">{{ x.title }}</a>
                             </li>
