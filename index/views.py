@@ -4,11 +4,15 @@ import json
 from lxml import etree
 from urllib.parse import quote
 import aiohttp
+import time
 
 def index_view(request):
+    request_time = time.time()
+
     city = '闵行'
     names = [
         'jwc',
+        'jnews',
         'weather',
         'weibo',
         'zhihu',
@@ -20,6 +24,7 @@ def index_view(request):
     ]
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
+        'https://www.sjtu.edu.cn/',
         'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
         'https://tophub.today/n/KqndgxeLl9',
         'https://tophub.today/n/mproPpoq6O',
@@ -57,10 +62,11 @@ def index_view(request):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
 
-    print('数据获取结束，接下来处理数据')
-    print(responses.keys())
+    response_time = time.time()
+    print('数据获取结束，共用时', response_time-request_time, 's')
     locals = {
         'jwc': jwc(responses['jwc']),
+        'jnews': jnews(responses['jnews']),
         'weather': weather(responses['weather']),
         'weibo': weibo(responses['weibo']),
         'zhihu': zhihu(responses['zhihu']),
@@ -70,6 +76,9 @@ def index_view(request):
         'canteen': canteen(responses['canteen']),
         'lib': lib(responses['lib']),
     }
+    process_time = time.time()
+    print('数据处理结束，共用时', process_time - response_time, 's')
+
     if request.method == 'GET':
         return render(request, 'websites.j2', locals)
     elif request.method == 'POST':
@@ -119,6 +128,23 @@ def jwc(response):
         dic['url'] = url
         jwc.append(dic)
     return jwc
+
+
+def jnews(response):
+    html = get_html(response)
+    tree = etree.HTML(html)
+    a_list = tree.xpath('//div[@class="new-add-list  clearfix"]//ul[1]//a')
+    jnews = []
+    for i in range(5):
+        title = str(i + 1) + ' ' + a_list[i].xpath('./text()')[0]
+        if len(title.encode('utf-8')) > 60:
+            title = cut_str(title, 58) + '...'
+        url = a_list[i].xpath('./@href')[0]
+        dic = {}
+        dic['title'] = title
+        dic['url'] = url
+        jnews.append(dic)
+    return jnews
 
 
 def bilibli(response):

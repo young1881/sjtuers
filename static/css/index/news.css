@@ -96,6 +96,11 @@
     text-decoration: none;
 }
 
+.news .card .infoBox a:hover{
+    color: antiquewhite;
+    transition: 0.2s;
+}
+
 .news .card .infoBox button {
     display: inline-block;
     padding: 10px 20px;
