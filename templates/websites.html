@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+
+{% block poem %}
+    <div class="poem">
+        <div class="sentence"
+             title="——《{{ poem.origin }}》 {{ poem.author }}">「 {{ poem.content }} 」</div>
+    </div>
+{% endblock %}
+
+
+{% block search %}
+    <div class="search-box">
+        <div class="search-form">
+            <img class="engine" src="https://www.baidu.com/favicon.ico">
+            <input class="search-txt" id="text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-button').click()">
+            <img class="search-btn" id="search-button" src="../static/img/magnifying-glass-solid.svg">
+        </div>
+        <div class="search-engine" style="display: none;">
+            <div class="search-engine-head">
+                <div class="search-engine-tit">点击选择搜索引擎：</div>
+            </div>
+            <ul class="search-engine-list"></ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block weather %}
+    <div class="weather">
+        <div id="he-plugin-standard"></div>
+        <script>
+            WIDGET = {
+                "CONFIG": {
+                    "layout": "1",
+                    "width": "400",
+                    "height": "150",
+                    "background": "1",
+                    "dataColor": "FFFFFF",
+                    "borderRadius": "40",
+                    "key": "07f20b95a1414be7944ee81ce02bf842"
+                }
+            }
+        </script>
+        <script src="https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0"></script>
+    </div>
+{% endblock %}
+
+
+{% block news %}
+    <div class="news">
+        <div class="card">
+            <button class="info_btn active">通知</button>
+            <button class="info_btn">微博</button>
+            <button class="info_btn">B站</button>
+            <button class="info_btn">知乎</button>
+            <div class="infoBox">
+                <div class="info show">
+                    <ul>
+                        {% for x in jwc %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in weibo %}
+                            <li>
+                <span style="float:left">
+                    <a href={{ x.url }} target="_blank">{{ x.name }}</a>
+                </span>
+                                <span style="float:right">
+                    <p>{{ x.hot }}</p>
+                </span><br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="info">
+                    <ul>
+                        {% for x in bilibili %}
+                            <li>
+                <span style="float:left">
+                    <a href={{ x.url }} target="_blank">{{ x.title }}</a>
+                </span>
+                                <span style="float:right">
+                    <p>{{ x.view }}</p>
+                </span><br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="info">
+                    <ul>
+                        {% for x in zhihu %}
+                            <li>
+                                <a href={{ x.url }} target="_blank">{{ x.query }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tools %}
+    <div class="tools">
+        <div class="card">
+            <button class="tool_btn active">疫情</button>
+            <button class="tool_btn">校车</button>
+            <div class="toolBox">
+                <div class="tool show">
+                    <div class="data_box">
+                        <div class="property">累计确诊</div>
+                        <div class="data" style="color:#a31d13">{{ corona.chinaTotal.confirm }}</div>
+                        {% if corona.chinaAdd.confirm == null %}
+                        <div class="today_none" style="color:#a31d13">新增待公布</div>
+                        {% else %}
+                        <div class="today" style="color:#a31d13">+{{ corona.chinaAdd.confirm }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="data_box">
+                         <div class="property">境外输入</div>
+                        <div class="data" style="color:	#D2691E">{{ corona.chinaTotal.importedCase }}</div>
+                        {% if corona.chinaAdd.importedCase == null %}
+                        <div class="today_none" style="color:#D2691E">新增待公布</div>
+                        {% else %}
+                        <div class="today" style="color:#D2691E">+{{ corona.chinaAdd.importedCase }}</div>
+                        {% endif %}
+
+                    </div>
+                    <div class="data_box">
+                        <div class="property">累计治愈</div>
+                        <div class="data" style="color:#34aa70">{{ corona.chinaTotal.heal }}</div>
+                        <div class="today" style="color:#34aa70">+{{ corona.chinaAdd.heal }}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">现存确诊</div>
+                        <div class="data" style="color:#e44a3d">{{ corona.chinaTotal.nowConfirm }}</div>
+                        <div class="today" style="color:#e44a3d">+{{ corona.chinaAdd.nowConfirm }}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">累计死亡</div>
+                        <div class="data" style="color:#333">{{corona.chinaTotal.dead}}</div>
+                        <div class="today" style="color:#333">+{{corona.chinaAdd.dead}}</div>
+                    </div>
+                    <div class="data_box">
+                        <div class="property">无症状</div>
+                        <div class="data" style="color:#791618">{{corona.chinaTotal.noInfectH5}}</div>
+                        <div class="today" style="color:#791618">+{{ corona.chinaAdd.noInfectH5 }}</div>
+                    </div>
+                    <div class="information">
+                        <p>统计截至{{corona.lastUpdateTime}}</p>
+                        <p>数据来源自国家及各地卫健委每日信息发布</p>
+                    </div>
+                </div>
+                <div class="tool">
+                    校车信息
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block icons %}
+    <div class="icons">
+        <div class="box">
+            <div class="img">
+                <a href="https://i.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>教学信息</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://oc.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>在线课程</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://mail.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>交大邮箱</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://i.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>教学信息</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://oc.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>在线课程</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://mail.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>交大邮箱</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://i.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>教学信息</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://oc.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>在线课程</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://mail.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>交大邮箱</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://jwc.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>教务处</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://uitp.sjtu.edu.cn/innovation/index.html">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>创新实践</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://ids.sjtu.edu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>教学楼</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://www.lib.sjtu.edu.cn/f/main/index.shtml">
+                    <img src="https://www.lib.sjtu.edu.cn/favicon.ico"/>
+                </a>
+            </div>
+            <p>图书馆</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://share.dyweb.sjtu.cn/">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>传承交大</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://course.sjtu.plus">
+                    <img src="../static/img/school.png"/>
+                </a>
+            </div>
+            <p>选课社区</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://bilibili.com">
+                    <img src="https://www.bilibili.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>bilibili</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://www.zhihu.com/hot">
+                    <img src="https://www.zhihu.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>知乎</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://www.douban.com/">
+                    <img src="https://www.douban.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>豆瓣</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://github.com/">
+                    <img src="https://github.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>github</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://www.taobao.com/">
+                    <img src="https://www.taobao.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>淘宝</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://www.iqiyi.com/">
+                    <img src="https://www.iqiyi.com/favicon.ico"/>
+                </a>
+            </div>
+            <p>爱奇艺</p>
+        </div>
+        <div class="box">
+            <div class="img">
+                <a href="https://web.woobx.cn/">
+                    <img src="https://web.woobx.cn/favicon.ico"/>
+                </a>
+            </div>
+            <p>一个木函</p>
+        </div>
+    </div>
+{% endblock %}
