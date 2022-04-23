@@ -1,0 +1,17 @@
+.weather {
+    /*background-color: purple;*/
+    width: 20%;
+    height: 20%;
+    top: 38%;
+    left: 7.5%;
+    display: flex;
+    position: absolute;
+    border-radius: 40px;
+    /*居中图标*/
+    /*justify-content: space-around;*/
+    /*自动换行*/
+    flex-wrap: wrap;
+    /*align-items: center;*/
+    box-shadow: -6px -6px 20px rgba(255, 255, 255, 0.7),
+    6px 6px 20px rgba(0, 0, 0, .1);
+}
