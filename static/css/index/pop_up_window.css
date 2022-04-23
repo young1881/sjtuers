@@ -1,0 +1,13 @@
+.white_content {
+    display: none;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 55%;
+    height: 55%;
+    padding: 20px;
+    border: 10px solid orange;
+    background-color: white;
+    z-index:2000;
+    overflow: auto;
+}

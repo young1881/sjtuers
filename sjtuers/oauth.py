@@ -12,7 +12,7 @@ oauth.register(
     authorize_url='https://jaccount.sjtu.edu.cn/oauth2/authorize',
     api_base_url='https://api.sjtu.edu.cn/',
     client_kwargs={
-        "scope": "basic bus",
+        "scope": "basic",
         "token_endpoint_auth_method": "client_secret_basic",
         "token_placement": "header"
     }

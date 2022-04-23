@@ -1,0 +1,157 @@
+.tools {
+    /*background-color: purple;*/
+    width: 21.5%;
+    max-height: 50%;
+    top: 38%;
+    right: 6.8%;
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    /*居中图标*/
+    /*justify-tool: space-around;*/
+    /*自动换行*/
+    /*align-items: center;*/
+}
+
+.tools .card {
+    justify-content: space-around;
+    width: 281px;
+    padding: 20px;
+    /*background: #ebf5fc;*/
+    flex-wrap: wrap;
+    align-items: center;
+    border-radius: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    box-shadow: -3px -3px 20px rgba(255, 255, 255, 0.8),
+    6px 6px 20px rgba(0, 0, 0, .1);
+    transition: .2s;
+}
+
+.tools .card:hover {
+    box-shadow: inset -6px -6px 10px rgba(255, 255, 255, 0.5),
+    inset 6px 6px 20px rgba(0, 0, 0, 0.05);
+    transition: 0.2s;
+}
+
+.tools .card .tool_btn{
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    color: floralwhite;
+    font-size: 12px;
+
+    background-color: transparent;
+    border-width: 0;
+}
+
+.tools .card .tool_btn.active{
+    background-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+.tools .card .toolBox .tool{
+    /*background-color: purple;*/
+    font-size: 9px;
+    line-height: 200%;
+    display: none;
+    flex-wrap: wrap;
+}
+
+.tools .card .toolBox .tool ul{
+    list-style: none;
+}
+
+.tools .card .toolBox .tool.show{
+    color: white;
+    line-height: 200%;
+    /*background-color: black;*/
+    list-style: none;
+    font-size: 9px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tools .card .toolBox .tool.show ul{
+    list-style: none;
+}
+
+.tools .card .toolBox a {
+    margin-top: 10px;
+    color: white;
+    font-size: 9px;
+    text-decoration: none;
+}
+
+.tools .card .toolBox button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 30px;
+    color: #32a3b1;
+    font-size: 16px;
+
+    text-decoration: none;
+    box-shadow: -4px -4px 15px rgba(255, 255, 255, 0.7),
+    4px 4px 15px rgba(0, 0, 0, .1);
+    transition: 0.2s;
+}
+
+.tools .card .toolBox button:hover {
+    box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.5),
+    inset 4px 4px 10px rgba(0, 0, 0, .1);
+    transition: 0.2s;
+}
+
+.tools .card .toolBox a:hover span {
+    display: block;
+    text-decoration: none;
+    transform: scale(0.98);
+    transition: 0.2s;
+}
+
+.tools .card:hover .imgBox,
+.tools .card:hover .toolBox {
+    transform: scale(0.98);
+    transition: 0.2s;
+}
+
+.data_box{
+    /*background-color: purple;*/
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    width: 65px;
+    height: 72px;
+    padding: 20px 13.8px;
+}
+
+.data_box  .property{
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.data_box  .data{
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.data_box  .today{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.data_box  .today_none{
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.information{
+    padding: 10px 10px;
+}
