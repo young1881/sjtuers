@@ -1,14 +1,15 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import asyncio
 import json
 from lxml import etree
 from urllib.parse import quote
 import aiohttp
 import time
+from .models import Site
 
 def index_view(request):
     request_time = time.time()
-
     city = '闵行'
     names = [
         'jwc',
@@ -64,6 +65,9 @@ def index_view(request):
 
     response_time = time.time()
     print('数据获取结束，共用时', response_time-request_time, 's')
+
+    sites = Site.objects.filter(is_active=True)
+
     locals = {
         'jwc': jwc(responses['jwc']),
         'jnews': jnews(responses['jnews']),
@@ -75,21 +79,41 @@ def index_view(request):
         'poem': poem(responses['poem']),
         'canteen': canteen(responses['canteen']),
         'lib': lib(responses['lib']),
+        'sites': sites,
     }
     process_time = time.time()
     print('数据处理结束，共用时', process_time - response_time, 's')
 
     if request.method == 'GET':
-        return render(request, 'websites.j2', locals)
+        return render(request, 'websites.html', locals)
     elif request.method == 'POST':
-        new_icon = []
-        new_icon_name = request.POST['new_icon_name']
-        new_icon_url = request.POST['new_icon_url']
-        new_icon.append({'new_icon_name':new_icon_name, 'new_icon_url':new_icon_url})
+        ret = {}
+        if request.POST.get('site_name').isspace() == False:
+            site_name = request.POST.get('site_name')
+            site_url = request.POST.get('site_url')
+            if site_url.startswith("http") != True:
+                site_url = "https://" + site_url
+            if site_url[-1] == "/":
+                site_src = site_url + 'favicon.ico'
+            else:
+                site_src = site_url + '/favicon.ico'
+            Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
 
-        locals['new_icon'] = new_icon
-        return render(request, 'websites.j2', locals)
+        # if request.POST.get('refactor_site_name').isspace() == False
+        #     or request.POST.get('refactor_site_url').isspace() == False:
+        #     site_name = request.POST.get('site_name')
+        #     site_url = request.POST.get('site_url')
 
+        if request.POST.get('delete_site').isspace == False:
+            delete_site = request.POST.get('delete_site')
+            sites = Site.objects.get(site_name=delete_site)
+            for site in sites:
+                site.is_active = False
+                site.save()
+
+        sites = Site.objects.filter(is_active=True)
+        locals['sites'] = sites
+        return render(request, 'websites.html', locals)
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
 def cut_str(str, len):
@@ -120,8 +144,8 @@ def jwc(response):
     jwc = []
     for i in range(5):
         title = str(i + 1) + ' ' + a_list[i].xpath('./h2/text()')[0]
-        if len(title.encode('utf-8')) > 60:
-            title = cut_str(title, 58) + '...'
+        if len(title.encode('utf-8')) > 55:
+            title = cut_str(title, 53) + '...'
         url = 'http://jwc.sjtu.edu.cn' + a_list[i].xpath('./@href')[0][2:]
         dic = {}
         dic['title'] = title
@@ -137,8 +161,8 @@ def jnews(response):
     jnews = []
     for i in range(5):
         title = str(i + 1) + ' ' + a_list[i].xpath('./text()')[0]
-        if len(title.encode('utf-8')) > 60:
-            title = cut_str(title, 58) + '...'
+        if len(title.encode('utf-8')) > 55:
+            title = cut_str(title, 53) + '...'
         url = a_list[i].xpath('./@href')[0]
         dic = {}
         dic['title'] = title
@@ -190,8 +214,8 @@ def zhihu(response):
         zhihu_item = {}
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
         name = str(i + 1) + ' ' + name
-        if len(name.encode('utf-8')) > 60:
-            name = cut_str(name, 58) + "..."
+        if len(name.encode('utf-8')) > 55:
+            name = cut_str(name, 53) + "..."
         url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         zhihu_item['name'] = name
         zhihu_item['url'] = url

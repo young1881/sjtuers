@@ -1,4 +1,4 @@
-.icons{
+.sites{
     /*background-color: purple;*/
     width: 40%;
     height: 40%;
@@ -15,7 +15,7 @@
     align-items: center;
 }
 
-.icons .box{
+.sites .box{
     display: flex;
     /*justify-content: space-around;*/
     flex-direction: column;
@@ -28,7 +28,7 @@
     margin-bottom: 8px;
 }
 
-.icons .box .img{
+.sites .box .img{
     width: 50px;
     height: 50px;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2),
@@ -43,19 +43,19 @@
     position: relative;
 }
 
-.icons .box .img  img{
+.sites .box .img  img{
     width: 35px;
     border-radius: 10px;
     transition: width 0.2s ease-out;
 }
 
-.icons .box p{
+.sites .box p{
     margin-top: 10px;
     color: dimgrey;
     font-size: 9px;
 }
 
-.icons .box .img:hover{
+.sites .box .img:hover{
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2),
     0px 0px 0px rgba(255, 255, 255, 0.1),
     inset 4px 4px 4px rgba(0, 0, 0, 0.1),
@@ -63,7 +63,7 @@
     transition: box-shadow .2s ease-out;
 }
 
-.icons .box .img:hover img{
+.sites .box .img:hover img{
     width: 35px;
     transition: width 0.2s ease-out;
 }
