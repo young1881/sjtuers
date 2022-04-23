@@ -1,0 +1,135 @@
+.search-box {
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 120px;
+    z-index:700;
+}
+
+.search-engine {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 425px;
+    background: #FFFFFF;
+    padding: 15px 0 0 15px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 20px 0px #d8d7d7;
+    transition: all 0.3s;
+    display: none;
+    z-index: 999;
+    box-sizing: border-box;
+    opacity: 0.9;
+}
+
+.search-engine-list::after {
+    content: '';
+    width: 425px;
+    height: 50px;
+    position: absolute;
+    top: -25px;
+    left: 0px;
+}
+
+.search-engine-list li {
+    float: left;
+    width: 100px;
+    line-height: 30px;
+    font-size: 14px;
+    padding: 5px 10px 5px 10px;
+    margin: 0 15px 15px 0;
+    background: #f9f9f9;
+    color: #999999;
+    cursor: pointer;
+    list-style: none;
+}
+
+.search-engine-list li img {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    float: left;
+    margin-right: 5px;
+    margin-top: 2.5px;
+    max-width: 100%;
+    border: 0;
+}
+
+.search-engine-head {
+    overflow: hidden;
+    margin-bottom: 10px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.search-engine-tit {
+    float: left;
+    margin: 0;
+    font-size: 14px;
+    color: #999999;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+.search-form{
+    background: rgba(64, 99, 112, 0.9);
+    height :40px;
+    border-radius: 40px;
+    padding: 10px;
+}
+
+.engine {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    float: left;
+    transition: 0.4s;
+}
+
+.search-txt {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0 6px;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 500px;
+}
+
+.search-btn{
+    color: #70e1f5;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background: #406370;
+    display: flex;
+    float: right;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+
+.search-btn:hover{
+    background: rgba(245,150,122,.7);
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.search-btn:active{
+    background: white;
+    box-sizing: border-box;
+}
+
+input::-webkit-input-placeholder {
+    color: #ccc;
+  }
+  input::-moz-input-placeholder {
+    color: #ccc;
+  }
+  input::-ms-input-placeholder {
+    color: #ccc;
+  }
