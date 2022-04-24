@@ -1,0 +1,21 @@
+#sub-menu {
+    position: absolute;
+    z-index: 9999;
+    background: white;
+    display: none;
+    border-radius: 10px;
+}
+
+.sub-menu-btn{
+    width: 60px;
+    background-color: white;
+    color: #888;
+    font-size: 13px;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.sub-menu-btn:hover{
+    background-color: lightgrey;
+}

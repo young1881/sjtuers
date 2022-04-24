@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends 'base.j2' %}
 {% from '_includes/corona_data.j2' import corona_data %}
-{% from '_includes/icon_box.j2' import icon_box %}
+{% from '_includes/site_box.j2' import site_box %}
 
 
 {% block counter %}
@@ -190,32 +190,10 @@
     </div>
 {% endblock %}
 
-{% block icons %}
-    <div class="icons" id="icons">
-        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('教学信息', "https://i.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('在线课程', "https://oc.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('交大邮箱', "https://mail.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('教务处', "https://jwc.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('创新实践', "https://uitp.sjtu.edu.cn/innovation/index.html", "../static/img/school.png") }}
-        {{ icon_box('教学楼', "https://ids.sjtu.edu.cn/", "../static/img/school.png") }}
-        {{ icon_box('图书馆', "https://www.lib.sjtu.edu.cn/f/main/index.shtml", "https://www.lib.sjtu.edu.cn/favicon.ico") }}
-        {{ icon_box('传承交大', "https://share.dyweb.sjtu.cn/", "../static/img/school.png") }}
-        {{ icon_box('选课社区', "https://course.sjtu.plus", "../static/img/school.png") }}
-        {{ icon_box('bilibili', "https://bilibili.com", "https://files.codelife.cc/itab/search/bilibili.svg") }}
-        {{ icon_box('知乎', "https://www.zhihu.com/hot", "https://files.codelife.cc/itab/search/zhihu.svg") }}
-        {{ icon_box('豆瓣', "https://www.douban.com/", "https://files.codelife.cc/itab/search/douban.svg") }}
-        {{ icon_box('github', "https://github.com/", "https://files.codelife.cc/itab/search/github.svg") }}
-        {{ icon_box('淘宝', "https://www.taobao.com/", "https://www.taobao.com/favicon.ico") }}
-        {{ icon_box('爱奇艺', "https://www.iqiyi.com/", "https://www.iqiyi.com/favicon.ico") }}
-        {{ icon_box('一个木函', "https://web.woobx.cn/", "https://web.woobx.cn/favicon.ico") }}
-        {% for icon in new_icon %}
-        {{ icon_box(icon.new_icon_name, icon.new_icon_url, icon.new_icon_url + '/favicon.ico')  }}
+{% block sites %}
+    <div class="sites" id="sites">
+        {% for site in sites %}
+        {{ site_box (site.site_name, site.site_url, site.site_src)  }}
         {% endfor %}
     </div>
 {% endblock %}
@@ -231,7 +209,7 @@
             <p> 登录 </p>
         </li>
         <li style="--t:30%;">
-            <a a href = "JavaScript:void(0)" onclick = "openIconDialog()">
+            <a a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
             </a>
             <p>网站设置</p>
@@ -261,19 +239,53 @@
         <div class="middle"></div>
         <div class="bottom"></div>
 </div>
+{% endblock %}
 
-<div id="light" class="white_content">
-    <form action="/index/" method="POST">
+{% block windows %}
+<div id="add_site" class="white_content">
+    <form action="/index/" method = 'post'>
         <p>
-            网站名 <input type="text" id="new_icon_name" name="new_icon_name">
+            网站名 <input type="text" id="site_name" name="site_name" required="required">
         </p>
         <p>
-            网址 <input type="text" id="new_icon_url" name="new_icon_url">
+            网址 <input type="text" id="site_url" name="site_url" required="required">
         </p>
-        <p>
-            <input type="submit" value="添加">
-        </p>
+        <a href = "javascript:void(0)" onclick = "closeSiteDialog()">
+            <input type="submit" value="添加" id="site_submit"/>
+        </a>
+        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭<a/>
     </form>
-    <a href = "javascript:void(0)" onclick = "closeIconDialog()">点这里关闭本窗口</a>
+</div>
+
+<div id="sub-menu">
+<table cellspace="2">
+    <tr>
+        <td>
+            <a href = "JavaScript:void(0)" onclick = "openRefactorDialog()">
+               <input type="button" class="sub-menu-btn" id="site_refactor" value="修改" />
+            </a>
+        </td>
+        <td>
+            <a href = "javaScript:void(0)" onclick = "delete_site()">
+               <input type="button" class="sub-menu-btn" id="site_delete" value="删除"/>
+            </a>
+        </td>
+    </tr>
+</table>
+</div>
+
+<div id="refactor_site" class="white_content">
+    <form action="/index/" method = 'post'>
+        <p>
+            网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
+        </p>
+        <p>
+            网址 <input type="text" id="refactor_site_url" name="refactor_site_url">
+        </p>
+        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">
+            <input type="submit" value="修改" id="site_submit"/>
+        </a>
+        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">点我关闭<a/>
+    </form>
 </div>
 {% endblock %}
