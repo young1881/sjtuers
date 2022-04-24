@@ -85,10 +85,10 @@ def index_view(request):
     print('数据处理结束，共用时', process_time - response_time, 's')
 
     if request.method == 'GET':
-        return render(request, 'websites.html', locals)
+        return render(request, 'websites.j2', locals)
     elif request.method == 'POST':
         ret = {}
-        if request.POST.get('site_name').isspace() == False:
+        if request.POST.get('site_name') != None:
             site_name = request.POST.get('site_name')
             site_url = request.POST.get('site_url')
             if site_url.startswith("http") != True:
@@ -99,21 +99,29 @@ def index_view(request):
                 site_src = site_url + '/favicon.ico'
             Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
 
-        # if request.POST.get('refactor_site_name').isspace() == False
-        #     or request.POST.get('refactor_site_url').isspace() == False:
-        #     site_name = request.POST.get('site_name')
-        #     site_url = request.POST.get('site_url')
-
-        if request.POST.get('delete_site').isspace == False:
-            delete_site = request.POST.get('delete_site')
-            sites = Site.objects.get(site_name=delete_site)
-            for site in sites:
-                site.is_active = False
+        if request.POST.get('refactor_site_name') != None:
+            site_name = request.POST.get('refactor_site_name')
+            site_url = request.POST.get('refactor_site_url')
+            if Site.objects.filter(site_name=site_name):
+                site = Site.objects.filter(site_name=site_name)[0]
+                site.site_url = site_url
                 site.save()
+            if Site.objects.filter(site_url=site_url):
+                site = Site.objects.filter(site_url=site_url)[0]
+                site.site_name = site_name
+                site.save()
+
+
+        if request.POST.get('delete_site_name') != None:
+            print("收到")
+            delete_site = request.POST.get('delete_site_name')
+            site = Site.objects.get(site_name=delete_site)
+            site.is_active = False
+            site.save()
 
         sites = Site.objects.filter(is_active=True)
         locals['sites'] = sites
-        return render(request, 'websites.html', locals)
+        return render(request, 'websites.j2', locals)
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
 def cut_str(str, len):

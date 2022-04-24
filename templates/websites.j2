@@ -203,7 +203,7 @@
     <div class="sidebar" id="sidebar">
         <!-- --t是自定义属性，通过var函数可调用 -->
         <li style="--t:20%;">
-            <a href="#">
+            <a href="/login">
                 <i class="fa-solid fa-user"></i>
             </a>
             <p> 登录 </p>
@@ -220,9 +220,10 @@
             </a>
         </li>
         <li style="--t:50%;">
-            <a href="#">
+            <a href="/logout">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
+            <p> 登出 </p>
         </li>
         <li style="--t:60%;">
             <a href="#">
@@ -244,14 +245,15 @@
 <div id="add_site" class="white_content">
     <form action="/index/" method = 'post'>
         <p>
-            网站名 <input type="text" id="site_name" name="site_name">
+            网站名 <input type="text" id="site_name" name="site_name" required="required">
         </p>
         <p>
-            网址 <input type="text" id="site_url" name="site_url">
+            网址 <input type="text" id="site_url" name="site_url" required="required">
         </p>
         <a href = "javascript:void(0)" onclick = "closeSiteDialog()">
-            <input type="submit" value="添加" id="site_submit"_>
+            <input type="submit" value="添加" id="site_submit"/>
         </a>
+        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭<a/>
     </form>
 </div>
 
@@ -259,20 +261,31 @@
 <table cellspace="2">
     <tr>
         <td>
-            <a href = "JavaScript:void(0)" onclick = "">
+            <a href = "JavaScript:void(0)" onclick = "openRefactorDialog()">
                <input type="button" class="sub-menu-btn" id="site_refactor" value="修改" />
             </a>
         </td>
         <td>
-            <a href = "JavaScript:void(0)" onclick = "delete_site()">
-               <input type="button" class="sub-menu-btn" id="site_delete" value="删除" />
+            <a href = "javaScript:void(0)" onclick = "delete_site()">
+               <input type="button" class="sub-menu-btn" id="site_delete" value="删除"/>
             </a>
         </td>
     </tr>
 </table>
 </div>
+
+<div id="refactor_site" class="white_content">
+    <form action="/index/" method = 'post'>
+        <p>
+            网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
+        </p>
+        <p>
+            网址 <input type="text" id="refactor_site_url" name="refactor_site_url">
+        </p>
+        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">
+            <input type="submit" value="修改" id="site_submit"/>
+        </a>
+        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">点我关闭<a/>
+    </form>
+</div>
 {% endblock %}
-
-
-
-
