@@ -19,8 +19,11 @@ $(function () {
         var addList = '<li><img src="' + search.data[i].img + '"/><p>' + search.data[i].name + '</p></li>';
         $('.search-engine-list').append(addList)
     }
-    $('.engine-box'). click( function () {
-        $('.search-engine').toggle()
+    $('.engine-box, .search-engine').hover( function () {
+            $('.search-engine').css('display', 'block')
+        },
+        function () {
+            $('.search-engine').css('display', 'none')
     });
     var thisSearch = 'https://www.baidu.com/s?wd=';
     var thisImg = 'https://www.baidu.com/favicon.ico';
@@ -30,7 +33,7 @@ $(function () {
             thisImg = $(this).children().attr('src');
             $('.engine').attr('src', thisImg);
             thisSearch = search.data[_index].url;
-            $('.search-engine').hide();
+            $('.search-engine').css('display', 'none');
         }
     )
     $('#search-btn').click(

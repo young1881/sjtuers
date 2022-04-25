@@ -16,7 +16,7 @@ $(function () {
         $(".news").hide(200);
         $(".weather").hide(200);
         $(".tools").hide(200);
-        $(".icons").hide(200);
+        $(".sites").hide(200);
         counter_flag=0;
     }
     else {
@@ -25,7 +25,7 @@ $(function () {
         $(".news").show(200);
         $(".weather").show(200);
         $(".tools").show(200);
-        $(".icons").show(200);
+        $(".sites").show(200);
         counter_flag=1;
     }
 });
