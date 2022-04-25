@@ -91,6 +91,7 @@ def index_view(request):
         'canteen': canteen(responses['canteen']),
         'lib': lib(responses['lib']),
         'sites': sites,
+        'jac':result
     }
 
     process_time = time.time()
