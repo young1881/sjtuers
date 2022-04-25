@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Site
+from .models import Site, SimpleMode
 
 
 class SiteManager(admin.ModelAdmin):
@@ -11,3 +11,11 @@ class SiteManager(admin.ModelAdmin):
 
 
 admin.site.register(Site, SiteManager)
+
+
+class SimpleModeManager(admin.ModelAdmin):
+    list_display = ['username','is_active']
+    list_display_links = ['username']
+    search_fields = ['username']
+
+admin.site.register(SimpleMode, SimpleModeManager)

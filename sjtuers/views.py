@@ -7,13 +7,15 @@ from authlib.jose import jwt
 from authlib.oidc.core import CodeIDToken
 from urllib.parse import urlencode
 
+
 def index_view(request):
     return HttpResponseRedirect('/index/')
 
+
 def login(request):
     redirect_uri = request.build_absolute_uri('/authorize')
-
     return jaccount.authorize_redirect(request, redirect_uri)
+
 
 def authorize(request):
     token: dict = jaccount.authorize_access_token(request)
@@ -25,6 +27,7 @@ def authorize(request):
     request.session['user'] = claims
     redir_uri = request.build_absolute_uri('/index')
     return redirect(redir_uri)
+
 
 def logout(request):
     redirect_uri = request.build_absolute_uri('/index')

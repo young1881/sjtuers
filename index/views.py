@@ -8,7 +8,7 @@ from urllib.parse import quote
 import aiohttp
 import time
 import requests
-from .models import Site
+from .models import Site, SimpleMode
 
 def index_view(request):
     request_time = time.time()
@@ -69,8 +69,14 @@ def index_view(request):
     try:
         result = jac(request)
         result = result['entities'][0]['name']
+        simple_mode_flag = SimpleMode.objects.filter(username=result)
+        if not simple_mode_flag:
+            SimpleMode.objects.create(username=result)
+        simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
     except:
         result = ''
+        SimpleMode.objects.create()
+        simple_mode = {'username': 'visitor', 'is_active': False}
         print(f"Please login!")
 
 
@@ -91,7 +97,8 @@ def index_view(request):
         'canteen': canteen(responses['canteen']),
         'lib': lib(responses['lib']),
         'sites': sites,
-        'jac':result
+        'jac': result,
+        'simple_mode' : simple_mode,
     }
 
     process_time = time.time()
@@ -100,7 +107,6 @@ def index_view(request):
     if request.method == 'GET':
         return render(request, 'websites.j2', locals)
     elif request.method == 'POST':
-        ret = {}
         if request.POST.get('site_name') != None:
             site_name = request.POST.get('site_name')
             site_url = request.POST.get('site_url')
@@ -124,13 +130,24 @@ def index_view(request):
                 site.site_name = site_name
                 site.save()
 
-
         if request.POST.get('delete_site_name') != None:
             print("收到")
             delete_site = request.POST.get('delete_site_name')
             site = Site.objects.get(site_name=delete_site)
             site.is_active = False
             site.save()
+            return HttpResponse("删除成功")
+
+        if request.POST.get('simple_mode_username') != None:
+            username = request.POST.get('simple_mode_username')
+            print(username)
+            simple_mode = SimpleMode.objects.get(username=username)
+            is_active = request.POST.get('simple_mode_is_active')
+            is_active = (is_active == "true")
+            simple_mode.is_active = is_active
+            print(simple_mode.is_active)
+            simple_mode.save()
+            return HttpResponse("已保存")
 
         sites = Site.objects.filter(is_active=True)
         locals['sites'] = sites
