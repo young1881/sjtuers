@@ -21,7 +21,8 @@ def authorize(request):
     claims = jwt.decode(token.pop('id_token'),
                         jaccount.client_secret, claims_cls=CodeIDToken)
     claims.validate()
-
+    request.session['token'] = token
+    request.session['user'] = claims
     redir_uri = request.build_absolute_uri('/index')
     return redirect(redir_uri)
 
