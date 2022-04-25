@@ -47,7 +47,8 @@
 
 **4月19日**：添加交大新闻爬取内容，为网页匹配favicon.ico。
 
+### 第二轮迭代记录
+
 **4月22日**：实现了基础的jac登录登出功能
 
-**4月24日**：改动文件index.views(Line 69-91, Line 275-281), websites.j2(Line )
-
+**4月24日**：使用token获取basic的信息（包括Jac账号，姓名等），相应改动的文件为index.views，websites.j2
