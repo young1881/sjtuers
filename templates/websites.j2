@@ -202,11 +202,18 @@
 {% block sidebar %}
     <div class="sidebar" id="sidebar">
         <!-- --t是自定义属性，通过var函数可调用 -->
+        
         <li style="--t:20%;">
             <a href="/login">
                 <i class="fa-solid fa-user"></i>
             </a>
-            <p> 登录 </p>
+            <p> 
+            {% if jac == '' %}
+                登录 
+            {% else %}
+                你好，{{jac}}！
+            {% endif %}
+            </p>
         </li>
         <li style="--t:30%;">
             <a a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
@@ -220,21 +227,28 @@
             </a>
         </li>
         <li style="--t:50%;">
-            <a href="/logout">
+            <a href="#">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
-            <p> 登出 </p>
         </li>
         <li style="--t:60%;">
             <a href="#">
                 <i class="fa fa-cog" aria-hidden="true"></i>
             </a>
         </li>
+
+        {% if (jac != '') %}
+
         <li style="--t:70%;">
-            <a href="#">
+            <a href="/logout">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
             </a>
+            <p> 
+                {{jac}}-登出 
+            </p>
         </li>
+        {% endif %}
+
         <div class="top"></div>
         <div class="middle"></div>
         <div class="bottom"></div>

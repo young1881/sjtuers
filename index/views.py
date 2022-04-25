@@ -1,3 +1,4 @@
+from os import access
 from django.shortcuts import render
 from django.http import HttpResponse
 import asyncio
@@ -6,6 +7,7 @@ from lxml import etree
 from urllib.parse import quote
 import aiohttp
 import time
+import requests
 from .models import Site
 
 def index_view(request):
@@ -22,6 +24,7 @@ def index_view(request):
         'poem',
         'canteen',
         'lib',
+        # 'jac'
     ]
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
@@ -63,6 +66,14 @@ def index_view(request):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
 
+    try:
+        result = jac(request)
+        result = result['entities'][0]['name']
+    except:
+        result = ''
+        print(f"Please login!")
+
+
     response_time = time.time()
     print('数据获取结束，共用时', response_time-request_time, 's')
 
@@ -80,7 +91,9 @@ def index_view(request):
         'canteen': canteen(responses['canteen']),
         'lib': lib(responses['lib']),
         'sites': sites,
+        'jac':result
     }
+
     process_time = time.time()
     print('数据处理结束，共用时', process_time - response_time, 's')
 
@@ -287,3 +300,12 @@ def poem(response):
 
 def canteen(response):
     return get_json(response)
+
+
+def jac(request):
+    token = request.session['token']
+    access_token = token['access_token']
+    # print(f"token:{token['access_token']}")
+    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
+    print(f"result:{result.json()}")
+    return result.json()

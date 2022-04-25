@@ -14,7 +14,7 @@ oauth.register(
     client_kwargs={
         "scope": "basic",
         "token_endpoint_auth_method": "client_secret_basic",
-        "token_placement": "header"
-    }
+        "token_placement": "header",
+    },
 )
 jaccount = oauth.jaccount
