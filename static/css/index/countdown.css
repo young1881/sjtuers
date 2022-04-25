@@ -1,0 +1,26 @@
+.countdown {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 200px;
+  display:none;
+  /*居中图标*/
+  /*justify-info: space-around;*/
+  /*自动换行*/
+  flex-wrap: wrap;
+  /*align-items: center;*/
+}
+
+.countdown_number {
+    font-size: 35px;
+}
+
+
+.countdown div{
+  display: inline;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  color: #222222;
+}

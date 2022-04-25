@@ -1,39 +1,91 @@
-$(function () {
-    // 初始化
-    var counter_flag=0;
-    $("#author").hide();
-    getLunar();
-    // 诗词悬停
-    $("#sentence").hover(function () {
-        $("#author").slideToggle(500);
-    });
+$("#author").hide();
+getLunar();
+// 诗词悬停
+$("#sentence").hover(function () {
+	$("#author").slideToggle(500);
+});
+//简洁模式初始化
+var is_active_DOM = document.getElementsByClassName("date")[0]
+var username_DOM = document.getElementsByClassName("username")[0]
+var is_active = is_active_DOM.id
+var username = username_DOM.id
+is_active = is_active === 'True';
+if (is_active === true) {
+	$(".counter").css("top", "26%");
+	$(".date").css("top", "37%");
+	$(".search-box").css("top", "40%");
+	$(".news").css("display", "none");
+	$(".weather").css("display", "none");
+	$(".tools").css("display", "none");
+	$(".sites").css("display", "none");
+	$(".countdown").css("display", "flex");
+}
+else{
+	$(".counter").css("top","15%");
+	$(".date").css("top","25%");
+	$(".search-box").css("top","28%");
+	$(".news").css("display","flex");
+	$(".weather").css("display","flex");
+	$(".tools").css("display","flex");
+	$(".sites").css("display","flex");
+	$(".countdown").css("display","none");
+}
 
-  // 简洁模式
+
+$(function () {
+	// 简洁模式切换
   $(".counter").click(function () {
-    if (counter_flag===1){
-        $(".counter").animate({top:"26%"},250);
-        $(".date").animate({top:"37%"},250);
-        $(".search-box").animate({top:"40%"},250);
-        $(".news").css("display","none");
-        $(".weather").css("display","none");
-        $(".tools").css("display","none");
-        $(".sites").css("display","none");
-		$(".countdown").fadeIn(300);
-        counter_flag=0;
-    }
+    if (is_active===false){
+        showSimpleMode();
+        is_active=true;
+		postSimpleMode();
+	}
     else {
-        $(".counter").animate({top:"15%"},250);
-        $(".date").animate({top:"25%"},250);
-        $(".search-box").animate({top:"28%"},250);
-        $(".news").css("display","flex");
-        $(".weather").css("display","flex");
-        $(".tools").css("display","flex");
-        $(".sites").css("display","flex");
-		$(".countdown").fadeOut(10);
-        counter_flag=1;
+        notShowSimpleMode();
+		is_active=false;
+		postSimpleMode();
     }
 });
 });
+
+
+function showSimpleMode(){
+	$(".counter").animate({top:"26%"},250);
+	$(".date").animate({top:"37%"},250);
+	$(".search-box").animate({top:"40%"},250);
+	$(".news").css("display","none");
+	$(".weather").css("display","none");
+	$(".tools").css("display","none");
+	$(".sites").css("display","none");
+	$(".countdown").fadeIn(300);
+}
+
+
+function notShowSimpleMode(){
+	$(".counter").animate({top:"15%"},250);
+	$(".date").animate({top:"25%"},250);
+	$(".search-box").animate({top:"28%"},250);
+	$(".news").css("display","flex");
+	$(".weather").css("display","flex");
+	$(".tools").css("display","flex");
+	$(".sites").css("display","flex");
+	$(".countdown").fadeOut(10);
+}
+
+
+function postSimpleMode(){
+	$.ajax({
+	url: "/index/",
+	type: "POST",        //请求类型
+	data: {"simple_mode_is_active": is_active, 'simple_mode_username': username},
+	dataType: "html",
+	success: function () {
+
+	},
+	error: function () {
+		//当请求错误之后，自动调用
+	}})
+}
 
 function getLunar(){
 	var nyear;

@@ -14,3 +14,16 @@ class Site(models.Model):
 
     def __str__(self):
         return '网址 %s'%(self.site_name)
+
+
+class SimpleMode(models.Model):
+    username = models.CharField('用户名', max_length=30, default='visitor')
+    is_active = models.BooleanField('是否活跃', default=False)
+
+    class Meta:
+        db_table = 'simpleMode'
+        verbose_name = 'simpleMode'
+        verbose_name_plural = 'simpleMode'
+
+    def __str__(self):
+        return '%s'%(self.username)
