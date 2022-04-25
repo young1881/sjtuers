@@ -98,9 +98,8 @@ def index_view(request):
     print('数据处理结束，共用时', process_time - response_time, 's')
 
     if request.method == 'GET':
-        return render(request, 'websites.j2', locals)
+        return render(request, 'websites.html', locals)
     elif request.method == 'POST':
-        ret = {}
         if request.POST.get('site_name') != None:
             site_name = request.POST.get('site_name')
             site_url = request.POST.get('site_url')
@@ -134,7 +133,7 @@ def index_view(request):
 
         sites = Site.objects.filter(is_active=True)
         locals['sites'] = sites
-        return render(request, 'websites.j2', locals)
+        return render(request, 'websites.html', locals)
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
 def cut_str(str, len):
