@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-{% extends 'base.j2' %}
-{% from '_includes/corona_data.j2' import corona_data %}
-{% from '_includes/site_box.j2' import site_box %}
+{% extends 'base.html' %}
+{% from '_includes/corona_data.html' import corona_data %}
+{% from '_includes/site_box.html' import site_box %}
 
 
 {% block counter %}
@@ -33,7 +33,7 @@
             <div class="digital back" data-number="1"></div>
         </div>
     </div>
-    <div class="date" id={{ simple_mode.is_active }}></div>
+    <div class="long_date" id={{ simple_mode.is_active }}></div>
     <div class="username" id={{ simple_mode.username }}></div>
 {% endblock %}
 
@@ -50,7 +50,7 @@
     <div class="search-box" id="search-box">
         <div class="search-form">
             <div class='engine-box'>
-                <img class="engine" src="https://files.codelife.cc/itab/search/baidu.svg">
+                <img class="engine" src="https://files.codelife.cc/itab/search/baidu.svg" alt="加载中">
                 <i class="fa-solid fa-caret-down" style="font-size:12px; display:flex; padding: 3px 3px;"></i>
             </div>
             <input class="search-txt" id="search-text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-btn').click()">
@@ -218,7 +218,7 @@
             </p>
         </li>
         <li style="--t:30%;">
-            <a a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
+            <a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
             </a>
             <p>网站设置</p>
@@ -260,7 +260,7 @@
 
 {% block windows %}
 <div id="add_site" class="white_content">
-    <form action="/index/" method = 'post'>
+    <form action="/index/form/" method = 'post'>
         <p>
             网站名 <input type="text" id="site_name" name="site_name" required="required">
         </p>
@@ -270,7 +270,7 @@
         <a href = "javascript:void(0)" onclick = "closeSiteDialog()">
             <input type="submit" value="添加" id="site_submit"/>
         </a>
-        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭<a/>
+        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭</a>
     </form>
 </div>
 
@@ -292,7 +292,7 @@
 </div>
 
 <div id="refactor_site" class="white_content">
-    <form action="/index/" method = 'post'>
+    <form action="/index/form/" method = 'post'>
         <p>
             网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
         </p>
@@ -304,7 +304,7 @@
 </div>
 
 <div id="countdown_dialog" class="white_content">
-    <form action="/index/" method = 'post'>
+    <form action="/index/form/" method = 'post'>
         <p>
             日期名 <input type="text" id="refactor_site_name" name="refactor_site_name">
         </p>
