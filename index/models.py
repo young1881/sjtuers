@@ -27,3 +27,18 @@ class SimpleMode(models.Model):
 
     def __str__(self):
         return '%s'%(self.username)
+
+
+class Wallpaper(models.Model):
+    username = models.CharField(max_length=64, default='visitor')
+    photo = models.ImageField(upload_to='wallpaper/')
+    photo_name = models.CharField(max_length=120, default='visitor.jpg')
+
+
+    class Meta:
+        db_table = 'Wallpaper'
+        verbose_name = 'Wallpaper'
+        verbose_name_plural = 'Wallpaper'
+
+    def __str__(self):
+        return '%s'%(self.username)

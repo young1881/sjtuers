@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Site, SimpleMode
+from .models import Site, SimpleMode, Wallpaper
 
 
 class SiteManager(admin.ModelAdmin):
@@ -18,4 +18,14 @@ class SimpleModeManager(admin.ModelAdmin):
     list_display_links = ['username']
     search_fields = ['username']
 
+
 admin.site.register(SimpleMode, SimpleModeManager)
+
+
+class WallpaperManager(admin.ModelAdmin):
+    list_display = ['username', 'photo']
+    list_display_links = ['username']
+    search_fields = ['username']
+
+
+admin.site.register(Wallpaper, WallpaperManager)

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import asyncio
 import json
 from lxml import etree
@@ -7,7 +7,7 @@ from urllib.parse import quote
 import aiohttp
 import time
 import requests
-from .models import Site, SimpleMode
+from .models import Site, SimpleMode, Wallpaper
 
 
 def index_view(request):
@@ -147,9 +147,21 @@ def index_view(request):
             simple_mode.save()
             return HttpResponse("已保存")
 
+        if request.FILES.get('wallpaper') is not None:
+            wallpaper = Wallpaper(photo=request.FILES.get('photo'))
+            pic_name = wallpaper.name
+            pic_name_right = ['jpg', 'jpeg', 'bmp', 'png', 'gif']
+            if pic_name.split('.')[-1] not in pic_name_right:
+                error = '暂不支持上传此格式图片！！！'
+            wallpaper.save()  # 保存图片
+            return HttpResponse('上传成功！')
+
         sites = Site.objects.filter(is_active=True)
         locals['sites'] = sites
         return render(request, 'websites.html', locals)
+
+
+
 
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
@@ -315,3 +327,10 @@ def jac(request):
     result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
     print(f"result:{result.json()}")
     return result.json()
+
+
+def get_weather_response(city_name, headers):
+    session = requests.session()
+    url = 'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city_name)
+    response = session.get(url=url, headers=headers)
+    return response

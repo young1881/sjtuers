@@ -11,7 +11,7 @@
             <div class="digital back" data-number="1"></div>
         </div>
         <div class="flip">
-            <div class="digital front" data-number="0"></div>
+            <div class="digital front" data-number="0 "></div>
             <div class="digital back" data-number="1"></div>
         </div>
         <em class="divider">:</em>
@@ -227,12 +227,13 @@
             <a href="JavaScript:void(0)" onclick = "openCountdownDialog()">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i>
             </a>
-            <p>倒计时修改</p>
+            <p>修改倒计时</p>
         </li>
         <li style="--t:50%;">
-            <a href="#">
+            <a href="JavaScript:void(0)" onclick = "openWallpaperDialog()">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
+            <p>修改壁纸</p>
         </li>
         <li style="--t:60%;">
             <a href="#">
@@ -260,7 +261,7 @@
 
 {% block windows %}
 <div id="add_site" class="white_content">
-    <form action="/index/form/" method = 'post'>
+    <form action="/index/" method = 'post'>
         <p>
             网站名 <input type="text" id="site_name" name="site_name" required="required">
         </p>
@@ -273,6 +274,7 @@
         <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭</a>
     </form>
 </div>
+
 
 <div id="sub-menu">
 <table cellspace="2">
@@ -292,7 +294,7 @@
 </div>
 
 <div id="refactor_site" class="white_content">
-    <form action="/index/form/" method = 'post'>
+    <form action="/index/" method = 'post'>
         <p>
             网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
         </p>
@@ -304,7 +306,7 @@
 </div>
 
 <div id="countdown_dialog" class="white_content">
-    <form action="/index/form/" method = 'post'>
+    <form action="/index/" method = 'post'>
         <p>
             日期名 <input type="text" id="refactor_site_name" name="refactor_site_name">
         </p>
@@ -314,6 +316,46 @@
         <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">点我关闭</a>
     </form>
 </div>
+
+
+<div id="wallpaper" class="white_content">
+    <form id="img-form">
+    <div style="margin: 50px;">
+        <input type="file" name="img" id="img">
+    </div>
+    <div style="margin: 50px;">
+        <input onclick="upload_img()" type="button" value="提交">
+    </div>
+    </form>
+    <div class="wallpaper_preview">
+        <img src="" alt="">
+    </div>
+    <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
+</div>
+<script type="text/javascript">
+function upload_img() {
+    let formData = new FormData($("#img-form")[0]);
+    $.ajax({
+        url: "/index/upload_img/", //请求路径
+        type: 'POST', // 请求类型
+        data: formData, // 请求数据
+        dataType: "JSON", // 返回数据格式
+        contentType: false, //表示不处理数据
+        processData: false,
+        cache: false,
+        success: function (data) {
+            if (data === 1) {
+                alert("上传成功");
+            }else if (data === 0) {
+                alert("上传失败");
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
+</script>
 {% endblock %}
 
 {% block countdown %}

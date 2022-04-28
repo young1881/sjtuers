@@ -5,6 +5,7 @@
     transform : translate(-50%,-50%);
     height :20px;
     font-size: 10px;
-    color: dimgrey;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px #666666;
     text-align:center;
 }

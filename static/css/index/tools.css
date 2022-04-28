@@ -26,6 +26,7 @@
     box-shadow: -3px -3px 20px rgba(255, 255, 255, 0.8),
     6px 6px 20px rgba(0, 0, 0, .1);
     transition: .2s;
+    backdrop-filter: blur(4px);
 }
 
 .tools .card:hover {

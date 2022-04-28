@@ -12,3 +12,9 @@ function closeCountdownDialog(){
     document.getElementById('countdown_dialog').style.display='none';
 }
 
+function openWallpaperDialog(){
+    document.getElementById('wallpaper').style.display='block';
+}
+function closeWallpaperDialog(){
+    document.getElementById('wallpaper').style.display='none';
+}
