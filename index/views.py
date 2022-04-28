@@ -7,7 +7,7 @@ from urllib.parse import quote
 import aiohttp
 import time
 import requests
-from .models import Site, SimpleMode
+from .models import Site, SimpleMode, User
 
 
 def index_view(request):
@@ -67,23 +67,28 @@ def index_view(request):
     loop.run_until_complete(main())
 
     try:
-        result = jac(request)
-        result = result['entities'][0]['name']
+        result_origin = jac(request)
+        result = result_origin['entities'][0]['name']
+        jaccount = result_origin['entities'][0]['account']
         simple_mode_flag = SimpleMode.objects.filter(username=result)
         if not simple_mode_flag:
             SimpleMode.objects.create(username=result)
         simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
+        
     except:
         result = ''
+        jaccount = '0'
         SimpleMode.objects.create()
         simple_mode = {'username': 'visitor', 'is_active': False}
         print(f"Please login!")
+        print("except!")
 
     response_time = time.time()
     print('数据获取结束，共用时', response_time - request_time, 's')
 
-    sites = Site.objects.filter(is_active=True)
-
+    # sites = Site.objects.filter(is_active=True)
+    sites = Site.objects.filter(user=jaccount,is_active=True)
+    user = User.objects.filter(jaccount=jaccount)[0]
     locals = {
         'jwc': jwc(responses['jwc']),
         'jnews': jnews(responses['jnews']),
@@ -115,23 +120,26 @@ def index_view(request):
                 site_src = site_url + 'favicon.ico'
             else:
                 site_src = site_url + '/favicon.ico'
-            Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
+            Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src, user=user)
 
         if request.POST.get('refactor_site_name') is not None:
             site_name = request.POST.get('refactor_site_name')
             site_url = request.POST.get('refactor_site_url')
-            if Site.objects.filter(site_name=site_name):
-                site = Site.objects.filter(site_name=site_name)[0]
+            if Site.objects.filter(site_name=site_name, user=user):
+                site = Site.objects.filter(site_name=site_name, user=user)[0]
                 site.site_url = site_url
                 site.save()
-            if Site.objects.filter(site_url=site_url):
-                site = Site.objects.filter(site_url=site_url)[0]
+            if Site.objects.filter(site_url=site_url, user=user):
+                site = Site.objects.filter(site_url=site_url, user=user)[0]
                 site.site_name = site_name
                 site.save()
+            # site = Site.objects.filter(site_url=site_url, user=user)[0]
+            # site.site_name = site_name
+            # site.save()
 
         if request.POST.get('delete_site_name') is not None:
             delete_site = request.POST.get('delete_site_name')
-            site = Site.objects.filter(site_name=delete_site)[0]
+            site = Site.objects.filter(site_name=delete_site, user=user)[0]
             site.is_active = False
             site.save()
             return HttpResponse("删除成功")
@@ -147,7 +155,7 @@ def index_view(request):
             simple_mode.save()
             return HttpResponse("已保存")
 
-        sites = Site.objects.filter(is_active=True)
+        sites = Site.objects.filter(is_active=True, user=user)
         locals['sites'] = sites
         return render(request, 'websites.html', locals)
 
