@@ -259,18 +259,23 @@
 {% endblock %}
 
 {% block windows %}
-<div id="add_site" class="white_content">
-    <form action="/index/form/" method = 'post'>
-        <p>
-            网站名 <input type="text" id="site_name" name="site_name" required="required">
-        </p>
-        <p>
-            网址 <input type="text" id="site_url" name="site_url" required="required">
-        </p>
-        <a href = "javascript:void(0)" onclick = "closeSiteDialog()">
-            <input type="submit" value="添加" id="site_submit"/>
-        </a>
-        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭</a>
+<div id="add_site" class="content_box">
+    <h1>添加网站收藏</h1>
+    <form  action="/index/form/" method = 'post'>
+        <div class = "box_form">
+            <div class = "item">
+                <input type="text" placeholder="网站名称" id="site_name" name="site_name" required="required">
+            </div>
+            <div class = "item">
+                <input type="text" placeholder="网址" id="网址" name="site_url" required="required" >
+            </div>
+            <a class = "button1" href = "javascript:void(0)" onclick = "closeSiteDialog()">
+                <input type="submit" value="完 成" id="site_submit"/>
+            </a>
+            <div class = "button2">
+                <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
+            </div>
+        </div>
     </form>
 </div>
 
@@ -291,7 +296,7 @@
 </table>
 </div>
 
-<div id="refactor_site" class="white_content">
+<div id="refactor_site" class="content_box">
     <form action="/index/form/" method = 'post'>
         <p>
             网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
@@ -299,11 +304,11 @@
         <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">
             <input type="submit" value="修改" id="site_submit"/>
         </a>
-        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">点我关闭</a>
+        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">取 消</a>
     </form>
 </div>
 
-<div id="countdown_dialog" class="white_content">
+<div id="countdown_dialog" class="content_box">
     <form action="/index/form/" method = 'post'>
         <p>
             日期名 <input type="text" id="refactor_site_name" name="refactor_site_name">
@@ -311,7 +316,7 @@
         <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">
             <input type="submit" value="修改" id="site_submit"/>
         </a>
-        <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">点我关闭</a>
+        <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">取 消</a>
     </form>
 </div>
 {% endblock %}
