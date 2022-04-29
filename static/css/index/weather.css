@@ -3,15 +3,91 @@
     width: 20%;
     height: 20%;
     top: 38%;
-    left: 7.5%;
+    left: 6.8%;
     display: flex;
     position: absolute;
-    border-radius: 40px;
     /*居中图标*/
-    /*justify-content: space-around;*/
+    /*justify-info: space-around;*/
     /*自动换行*/
     flex-wrap: wrap;
     /*align-items: center;*/
-    box-shadow: -6px -6px 20px rgba(255, 255, 255, 0.7),
+}
+
+.weather .card {
+    width: 320px;
+    margin: 10px;
+    padding: 20px 10px;
+    /*background: #ebf5fc;*/
+    border-radius: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    box-shadow: -6px -6px 20px rgba(255, 255, 255, 1),
     6px 6px 20px rgba(0, 0, 0, .1);
+    transition: box-shadow .2s ease-out;
+}
+
+.weather .card:hover {
+    box-shadow: inset -6px -6px 10px rgba(255, 255, 255, 0.5),
+    inset 6px 6px 20px rgba(0, 0, 0, 0.05);
+    transition: box-shadow .2s ease-out;
+}
+
+.weather .weather-box {
+    position: relative;
+    margin: 10px;
+    padding: 0 2px 0 2px;
+    position: relative;
+    flex: 1;
+    max-width: 100%;
+    box-sizing: border-box;
+    color: #fffaf0;
+}
+
+.weather-box .today {
+    position: absolute;
+    left: 50%;
+    top: 10%;
+}
+
+#today_icon {
+    font-size: 40px;
+    display: inline;
+}
+
+.weather-box .forecast {
+    position: absolute;
+    top: 10%;
+    left: 0%;
+    height: auto;
+}
+
+.forecast ul {
+    list-style-type: none;
+    margin: 5px;
+    text-align: justify;
+}
+
+.forecast ul li {
+    display: inline-block;
+    text-align: center;
+    justify-content: center;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
+}
+
+.forecast ul li i {
+    font-size: 20px;
+}
+
+.forecast ul li p {
+    font-size: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+div {
+    box-sizing: border-box;
 }

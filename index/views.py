@@ -9,10 +9,11 @@ import aiohttp
 import time
 import requests
 from .models import Site, SimpleMode
+import urllib.request
 
 def index_view(request):
     request_time = time.time()
-    city = '闵行'
+    city = get_city(request)
     names = [
         'jwc',
         'jnews',
@@ -277,32 +278,10 @@ def weather(response):
         forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
     forecast_dic['day0']['date'] = '今天'
 
-    index_list = XML_tree.xpath('//zhishus/zhishu')
-    index_dic = {}
-    for i in range(len(index_list)):
-        index_name = 'index' + str(i + 1)
-        index_dic[index_name] = {}
-        index_dic[index_name]['name'] = index_list[i].xpath('./name/text()')[0]
-        index_dic[index_name]['value'] = index_list[i].xpath('./value/text()')[0]
-        index_dic[index_name]['detail'] = index_list[i].xpath('./detail/text()')[0]
-
     weather = {
         'city': XML_tree.xpath('//city/text()')[0],
-        'updatetime': XML_tree.xpath('//updatetime/text()')[0],
-        'fengli': XML_tree.xpath('//fengli/text()')[0],
         'wendu': XML_tree.xpath('//wendu/text()')[0],
-        'shidu': XML_tree.xpath('//shidu/text()')[0],
-        'fengxiang': XML_tree.xpath('//fengxiang/text()')[0],
-        'sunrise': XML_tree.xpath('//sunrise_1/text()')[0],
-        'sunset': XML_tree.xpath('//sunset_1/text()')[0],
-        'yesterday': {
-            'date': '昨天',
-            'high': XML_tree.xpath('//high_1/text()')[0][-3:-1],
-            'low': XML_tree.xpath('//low/text()')[0][-3:-1],
-            'type': XML_tree.xpath('//type_1/text()')[0]
-        },
         'forecast': forecast_dic,
-        'index': index_dic,
     }
     return weather
 
@@ -326,3 +305,18 @@ def jac(request):
     result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
     print(f"result:{result.json()}")
     return result.json()
+
+
+def get_city(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META: 
+        user_ip = request.META.get('HTTP_X_FORWARDED_FOR') 
+    else:
+        user_ip = request.META.get('REMOTE_ADDR')
+    url = 'http://ip-api.com/json/' + user_ip + '?lang=zh-CN&fields=city'
+    response = urllib.request.urlopen(url)
+    html = json.loads(response.read())
+    try:
+        city = html["city"]
+    except Exception as e:
+        city = '闵行'
+    return city

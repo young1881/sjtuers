@@ -68,23 +68,54 @@
 {% endblock %}
 
 {% block weather %}
+{% from '_includes/forecast_list.j2' import forecast_list %}
     <div class="weather" id="weather">
-        <div id="he-plugin-standard"></div>
-        <script>
-            WIDGET = {
-                "CONFIG": {
-                    "layout": "1",
-                    "width": "400",
-                    "height": "150",
-                    "background": "1",
-                    "dataColor": "FFFFFF",
-                    "borderRadius": "40",
-                    "key": "07f20b95a1414be7944ee81ce02bf842"
-                }
-            }
-        </script>
-        <script src="https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0"></script>
+        <div class="card">
+            <div class="today">
+                <p class="city">{{ weather.city }}</p>
+
+
+    <link rel="stylesheet" type="text/css" href="../static/css/index/city-selector.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../static/js/city-selector.data.js"></script>
+    <script type="text/javascript" src="../static/js/city-selector.js"></script>
+    <div>
+        <div style="width: 320px;height: 32px;" id="city" data-role="cityselector">上海市 上海市 闵行区</div>
     </div>
+    <div style="margin: 35px 0px">
+        <div id="msg"></div>
+        <button id="getVal">确定</button>
+    </div>
+    <script type="text/javascript">
+        $('[data-role="cityselector"]').citySelector({callback: function(item,index){
+        }});
+        $('#getVal').click(function(){
+            var api = $('#city').data('lx.citySelector');
+            $('#msg').html(api.getVal(' '));
+            alert(api.getVal(' '));
+        });
+    </script>
+
+
+                <i id="day0_icon"></i>
+                <p class="T_current">{{ weather.wendu }}℃ </p>
+                <p class="type" id="day0_type">{{ weather.forecast.day0.type }}</p>
+            </div>
+            <div class="forecast">
+                <ul>
+                    <li>
+                        {% for day in weather.forecast %}
+                            {% if loop.first == false and loop.last == false %}
+                                {{ forecast_list(day, weather.forecast[day]) }}
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/80275103ba.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/js/weather-widget.js"></script>
 {% endblock %}
 
 
