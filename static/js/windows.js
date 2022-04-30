@@ -12,3 +12,5 @@ function closeCountdownDialog(){
     document.getElementById('countdown_dialog').style.display='none';
 }
 
+
+

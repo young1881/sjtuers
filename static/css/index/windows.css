@@ -6,8 +6,7 @@
     width: 28%;
     height: 300px;
     padding-top: 30px;
-    background: #000000;
-    opacity: 0.75;
+    background: rgba(0, 0, 0, 0.75);
     z-index:2000;
     overflow: auto;
     text-align: center;
@@ -65,5 +64,15 @@
 
 .content_box .box_form .button2 a{
     color:#ffffff99;
+}
+
+.content_box .box_form .date_list{
+    margin-top: 20px;
+    opacity: 1;
+}
+
+.content_box .box_form .date_list select{
+    background: #fff;
+    opacity: 1;
 }
 
