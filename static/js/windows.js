@@ -17,7 +17,7 @@ var layer=document.createElement("div");
 layer.id="layer";
 function noPermissions(date){
     var style={
-        background:"RGB(105,105,105,0.9)",
+        background:"RGB(92,92,92,0.9)",
         color:"#fff",
         position:"absolute",
         zIndex:"1000",
@@ -39,7 +39,7 @@ function noPermissions(date){
         layer.style.lineHeight="40px";
         layer.style.letterSpacing="5px";
         layer.style.fontWeight="border";
-        layer.style.fontSize="18px";
+        layer.style.fontSize="19px";
         setTimeout("document.body.removeChild(layer)",2000)
     }
 }
