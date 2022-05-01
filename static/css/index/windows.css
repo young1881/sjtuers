@@ -1,13 +1,78 @@
-.white_content {
+.content_box {
     display: none;
     position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 55%;
-    height: 55%;
-    padding: 20px;
-    border: 10px solid orange;
-    background-color: white;
+    top: 30%;
+    left: 35%;
+    width: 28%;
+    height: 300px;
+    padding-top: 30px;
+    background: rgba(0, 0, 0, 0.75);
     z-index:2000;
     overflow: auto;
+    text-align: center;
+    border-radius: 20px;
 }
+
+.content_box h1{
+    font-size: 32px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei;
+    color: #ebedee;
+}
+
+.content_box h4{
+    color: #fff;
+}
+
+.content_box .box_form{
+    margin-top: 30px;
+}
+
+.content_box .box_form .item{
+    margin-top: 15px;
+}
+
+.content_box .box_form .item input{
+    width: 200 px;
+    font-size: 18px;
+    border: 0;
+    border-bottom: 4px solid #fff;
+    padding: 5px 10px;
+    background: #ffffff00;
+    color: #fff;
+}
+
+.content_box .box_form .item input::placeholder{
+    color: #ffffff99;
+}
+
+.content_box .box_form .button1 input{
+    margin: 0px auto;
+    margin-top: 35px;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 600;
+    border: 0;
+    border-radius: 5px;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+
+.content_box .box_form .button2{
+    margin: 15px auto;
+}
+
+.content_box .box_form .button2 a{
+    color:#ffffff99;
+}
+
+.content_box .box_form .date_list{
+    margin-top: 20px;
+    opacity: 1;
+}
+
+.content_box .box_form .date_list select{
+    background: #fff;
+    opacity: 1;
+}
+
