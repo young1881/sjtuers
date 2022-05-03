@@ -41,18 +41,19 @@
     /*background-color: #efeeee;*/
     transition: box-shadow .2s ease-out;
     position: relative;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(10px);
 }
 
 .sites .box .img  img{
-    width: 50px;
+    width: 35px;
     border-radius: 10px;
     transition: width 0.2s ease-out;
 }
 
 .sites .box p{
     margin-top: 10px;
-  color: rgba(199, 199, 199);
+  color: dimgrey;
+  text-shadow: 1px 1px lightgrey;
     font-size: 9px;
 }
 

@@ -73,6 +73,7 @@
     color: transparent;
     /* 动画过渡 */
     transition: 0.15s;
+    text-decoration: none;
 }
 
 .sidebar li a i{

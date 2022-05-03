@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% from '_includes/corona_data.html' import corona_data %}
 {% from '_includes/site_box.html' import site_box %}
-
+{% from '_includes/wallpaper.html' import color_wallpaper, img_wallpaper %}
 
 {% block counter %}
     <div class="counter" id="counter">
@@ -208,7 +208,6 @@
         <li style="--t:20%;">
             <a href="/login">
                 <i class="fa-solid fa-user"></i>
-            </a>
             <p> 
             {% if jac == '' %}
                 登录 
@@ -216,20 +215,21 @@
                 你好，{{jac}}！
             {% endif %}
             </p>
+            </a>
         </li>
 
         {% if jac == '' %}
         <li style="--t:30%;">
             <a href = "JavaScript:void(0)" onclick = "noPermissions('请登陆后使用该功能')">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
+                <p>网站设置</p>
             </a>
-            <p>网站设置</p>
         </li>
         <li style="--t:40%;">
             <a href="JavaScript:void(0)" onclick = "noPermissions('请登陆后使用该功能')">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <p>倒计时修改</p>
             </a>
-            <p>倒计时修改</p>
         </li>
         <li style="--t:50%;">
             <a href="#">
@@ -246,20 +246,20 @@
         <li style="--t:30%;">
             <a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
-            </a>
             <p>网站设置</p>
+            </a>
         </li>
         <li style="--t:40%;">
             <a href="JavaScript:void(0)" onclick = "openCountdownDialog()">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <p>倒计时修改</p>
             </a>
-            <p>倒计时修改</p>
         </li>
         <li style="--t:50%;">
-            <a href="#">
+            <a href="JavaScript:void(0)" onclick = "openWallpaperDialog()">
                 <i class="fa fa-user" aria-hidden="true"></i>
+                <p>修改壁纸</p>
             </a>
-            <p>修改壁纸</p>
         </li>
         <li style="--t:60%;">
             <a href="#">
@@ -309,31 +309,29 @@
 
     <div id="add_site" class="content_box">
         <h1>添加网站收藏</h1>
-        <form  action="/index/form/" method = 'post'>
-            <div class = "box_form">
-                <div class = "item">
-                    <input type="text" placeholder="网站名称" id="site_name" name="site_name" required="required">
-                </div>
-                <div class = "item">
-                    <input type="text" placeholder="网址" id="网址" name="site_url" required="required" >
-                </div>
-                <a class = "button1" href = "javascript:void(0)" onclick = "closeSiteDialog()">
-                    <input type="submit" value="完 成" id="site_submit"/>
-                </a>
-                <div class = "button2">
-                    <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
-                </div>
+        <div class = "box_form">
+            <div class = "item">
+                <input type="text" placeholder="网站名称" id="site_name" name="site_name" required="required">
             </div>
-        </form>
+            <div class = "item">
+                <input type="text" placeholder="网址" id="site_url" name="site_url" required="required" >
+            </div>
+            <a class = "button1" href = "javascript:void(0)" onclick = "add_site()">
+                <input type="submit" value="完 成" id="site_submit"/>
+            </a>
+            <div class = "button2">
+                <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
+            </div>
+        </div>
     </div>
 
     <div id="refactor_site" class="content_box">
         <h1>修改网页名称</h1>
-        <form action="/index/form/" method = 'post' class = "box_form">
+        <form class = "box_form">
             <div class = "item">
                  <input type="text" placeholder="网站名" id="refactor_site_name" name="refactor_site_name">
             </div>
-            <a class = "button1" href = "javascript:void(0)" onclick = "closeRefactorDialog()">
+            <a class = "button1" href = "javascript:void(0)" onclick = "refactor_site()">
                 <input type="submit" value="修 改" id="site_submit"/>
             </a>
             <div class = "button2">
@@ -374,44 +372,34 @@
     </div>
 {% endif %}
 
-<div id="wallpaper" class="white_content">
-    <form id="img-form">
-    <div style="margin: 50px;">
-        <input type="file" name="img" id="img">
-    </div>
-    <div style="margin: 50px;">
-        <input onclick="upload_img()" type="button" value="提交">
-    </div>
-    </form>
-    <div class="wallpaper_preview">
-        <img src="" alt="">
-    </div>
-    <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
+<div class="wallpapers" id="wallpapers">
+        <div class="card">
+            <button class="wallpaper_btn active">预设壁纸</button>
+            <button class="wallpaper_btn">自主上传</button>
+            <div class="wallpaperBox">
+                <div class="wallpaper show">
+                    <div class="color_wallpaper_all">
+                        {{ color_wallpaper("DustyGrass", "Dusty Grass", "background: linear-gradient(90deg, #70e1f5 0%, #ffd194 100%);") }}
+                        {{ color_wallpaper("NightFade", "Night Fade", "background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)") }}
+                        {{ color_wallpaper("WinterNeva", "Winter Neva", "background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)") }}
+                        {{ color_wallpaper("MalibuBeach", "Malibu Beach", "background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%)") }}
+                        {{ color_wallpaper("RareWind", "Rare Wind", "background: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);") }}
+                    </div>
+                </div>
+                <div class="wallpaper">
+                    <form id="img-form">
+                        <div style="margin: 50px;">
+                            <input type="file" name="img" id="img">
+                        </div>
+                        <div style="margin: 50px;">
+                            <input onclick="upload_img()" type="button" value="提交">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+<a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
 </div>
-<script type="text/javascript">
-function upload_img() {
-    let formData = new FormData($("#img-form")[0]);
-    $.ajax({
-        url: "/index/upload_img/", //请求路径
-        type: 'POST', // 请求类型
-        data: formData, // 请求数据
-        dataType: "JSON", // 返回数据格式
-        contentType: false, //表示不处理数据
-        processData: false,
-        cache: false,
-        success: function (data) {
-            if (data === 1) {
-                alert("上传成功");
-            }else if (data === 0) {
-                alert("上传失败");
-            }
-        },
-        error: function (data) {
-            console.log(data);
-        }
-    });
-}
-</script>
 {% endblock %}
 
 {% block countdown %}

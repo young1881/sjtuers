@@ -33,7 +33,7 @@ class Wallpaper(models.Model):
     username = models.CharField(max_length=64, default='visitor')
     photo = models.ImageField(upload_to='wallpaper/')
     photo_name = models.CharField(max_length=120, default='visitor.jpg')
-
+    css = models.CharField(max_length=120, default="")
 
     class Meta:
         db_table = 'Wallpaper'

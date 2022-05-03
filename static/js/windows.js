@@ -13,10 +13,10 @@ function closeCountdownDialog(){
 }
 
 function openWallpaperDialog(){
-    document.getElementById('wallpaper').style.display='block';
+    document.getElementById('wallpapers').style.display='block';
 }
 function closeWallpaperDialog(){
-    document.getElementById('wallpaper').style.display='none';
+    document.getElementById('wallpapers').style.display='none';
 }
 
 var layer=document.createElement("div");

@@ -75,7 +75,7 @@ function notShowSimpleMode(){
 
 function postSimpleMode(){
 	$.ajax({
-	url: "/index/",
+	url: "/index/simple_mode/",
 	type: "POST",        //请求类型
 	data: {"simple_mode_is_active": is_active, 'simple_mode_username': username},
 	dataType: "html",

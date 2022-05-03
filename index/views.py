@@ -93,8 +93,6 @@ def index_view(request):
         'bilibili': bilibli(responses['bilibili']),
         'corona': corona(responses['corona']),
         'poem': poem(responses['poem']),
-        'canteen': canteen(responses['canteen']),
-        'lib': lib(responses['lib']),
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
@@ -104,60 +102,6 @@ def index_view(request):
     print('数据处理结束，共用时', process_time - response_time, 's')
 
     if request.method == 'GET':
-        return render(request, 'websites.html', locals)
-    elif request.method == 'POST':
-        if request.POST.get('site_name') is not None:
-            site_name = request.POST.get('site_name')
-            site_url = request.POST.get('site_url')
-            if not site_url.startswith("http"):
-                site_url = "https://" + site_url
-            if site_url[-1] == "/":
-                site_src = site_url + 'favicon.ico'
-            else:
-                site_src = site_url + '/favicon.ico'
-            Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
-
-        if request.POST.get('refactor_site_name') is not None:
-            site_name = request.POST.get('refactor_site_name')
-            site_url = request.POST.get('refactor_site_url')
-            if Site.objects.filter(site_name=site_name):
-                site = Site.objects.filter(site_name=site_name)[0]
-                site.site_url = site_url
-                site.save()
-            if Site.objects.filter(site_url=site_url):
-                site = Site.objects.filter(site_url=site_url)[0]
-                site.site_name = site_name
-                site.save()
-
-        if request.POST.get('delete_site_name') is not None:
-            delete_site = request.POST.get('delete_site_name')
-            site = Site.objects.filter(site_name=delete_site)[0]
-            site.is_active = False
-            site.save()
-            return HttpResponse("删除成功")
-
-        if request.POST.get('simple_mode_username') is not None:
-            username = request.POST.get('simple_mode_username')
-            print(username)
-            simple_mode = SimpleMode.objects.get(username=username)
-            is_active = request.POST.get('simple_mode_is_active')
-            is_active = (is_active == "true")
-            simple_mode.is_active = is_active
-            print(simple_mode.is_active)
-            simple_mode.save()
-            return HttpResponse("已保存")
-
-        if request.FILES.get('wallpaper') is not None:
-            wallpaper = Wallpaper(photo=request.FILES.get('photo'))
-            pic_name = wallpaper.name
-            pic_name_right = ['jpg', 'jpeg', 'bmp', 'png', 'gif']
-            if pic_name.split('.')[-1] not in pic_name_right:
-                error = '暂不支持上传此格式图片！！！'
-            wallpaper.save()  # 保存图片
-            return HttpResponse('上传成功！')
-
-        sites = Site.objects.filter(is_active=True)
-        locals['sites'] = sites
         return render(request, 'websites.html', locals)
 
 
@@ -313,10 +257,6 @@ def corona(response):
 
 
 def poem(response):
-    return get_json(response)
-
-
-def canteen(response):
     return get_json(response)
 
 

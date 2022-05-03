@@ -23,7 +23,7 @@ admin.site.register(SimpleMode, SimpleModeManager)
 
 
 class WallpaperManager(admin.ModelAdmin):
-    list_display = ['username', 'photo']
+    list_display = ['username', 'photo', 'photo_name', 'css']
     list_display_links = ['username']
     search_fields = ['username']
 
