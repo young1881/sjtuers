@@ -56,8 +56,8 @@ def simple_mode(request):
 
 
 def color_wallpaper(request):
-    username = request.POST.get('simple_mode_username')
-    wallpaper = Wallpaper.objects.get(username=username)
+    username = request.POST.get('color_wallpaper_username')
+    wallpaper = Wallpaper.objects.filter(username=username)[0]
     css = request.POST.get('css')
     wallpaper.css = css
     wallpaper.save()

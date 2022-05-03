@@ -31,7 +31,7 @@ class SimpleMode(models.Model):
 
 class Wallpaper(models.Model):
     username = models.CharField(max_length=64, default='visitor')
-    photo = models.ImageField(upload_to='wallpaper/')
+    photo = models.ImageField(upload_to='wallpaper/', default="#")
     photo_name = models.CharField(max_length=120, default='visitor.jpg')
     css = models.CharField(max_length=120, default="")
 

@@ -1,3 +1,7 @@
+if (wallpaper_photo_name === 'visitor.jpg') {
+    $("#base_all").css("background", wallpaper_css);
+}
+
 function upload_img() {
     let formData = new FormData($("#img-form")[0]);
     $.ajax({
@@ -25,12 +29,12 @@ function change_color_wallpaper(obj){
     var name = obj.getAttribute('id');
     var css = name_to_css(name)
     $("#base_all").css("background", css);
-    closeWallpaperDialog();
     $.ajax({
-        url: "/index/color_wallpaper",
+        url: "/index/color_wallpaper/",
         type: "POST",        //请求类型
         data: {"css": css, "color_wallpaper_username": username},
     })
+    closeWallpaperDialog();
 }
 
 function name_to_css(name){

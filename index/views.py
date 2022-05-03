@@ -73,10 +73,22 @@ def index_view(request):
         if not simple_mode_flag:
             SimpleMode.objects.create(username=result)
         simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
+        wallpaper_flag = Wallpaper.objects.filter(username=result)
+        if not wallpaper_flag:
+            Wallpaper.objects.create(username=result)
+        wallpaper = {'username': result,
+                     'photo_url': 'media/wallpaper/' + wallpaper_flag[0].photo_name,
+                     'photo_name': wallpaper_flag[0].photo_name,
+                     'css': wallpaper_flag[0].css}
     except:
         result = ''
         SimpleMode.objects.create()
         simple_mode = {'username': 'visitor', 'is_active': False}
+        Wallpaper.objects.create()
+        wallpaper = {'username': "visitor",
+                     'photo_url': '../media/wallpaper/visitor.jpg',
+                     'photo_name': 'visitor.jpg',
+                     "css": "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"}
         print(f"Please login!")
 
     response_time = time.time()
@@ -96,6 +108,7 @@ def index_view(request):
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
+        "wallpaper" : wallpaper,
     }
 
     process_time = time.time()

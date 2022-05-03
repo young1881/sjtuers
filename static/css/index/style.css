@@ -15,8 +15,5 @@ html {
 .container {
     height: 100%;
     width: 100%;
-    background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    background: url("https://w.wallhaven.cc/full/j5/wallhaven-j5q72q.png");
-    background-size: cover;
-    overflow: hidden;
+    background: linear-gradient(90deg, #70e1f5 0%, #ffd194 100%);
 }
