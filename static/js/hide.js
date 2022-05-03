@@ -5,14 +5,14 @@ $("#sentence").hover(function () {
 	$("#author").slideToggle(500);
 });
 //简洁模式初始化
-var is_active_DOM = document.getElementsByClassName("date")[0]
+var is_active_DOM = document.getElementsByClassName("long_date")[0]
 var username_DOM = document.getElementsByClassName("username")[0]
 var is_active = is_active_DOM.id
 var username = username_DOM.id
 is_active = is_active === 'True';
 if (is_active === true) {
 	$(".counter").css("top", "26%");
-	$(".date").css("top", "37%");
+	$(".long_date").css("top", "37%");
 	$(".search-box").css("top", "40%");
 	$(".news").css("display", "none");
 	$(".weather").css("display", "none");
@@ -22,7 +22,7 @@ if (is_active === true) {
 }
 else{
 	$(".counter").css("top","15%");
-	$(".date").css("top","25%");
+	$(".long_date").css("top","25%");
 	$(".search-box").css("top","28%");
 	$(".news").css("display","flex");
 	$(".weather").css("display","flex");
@@ -51,7 +51,7 @@ $(function () {
 
 function showSimpleMode(){
 	$(".counter").animate({top:"26%"},250);
-	$(".date").animate({top:"37%"},250);
+	$(".long_date").animate({top:"37%"},250);
 	$(".search-box").animate({top:"40%"},250);
 	$(".news").css("display","none");
 	$(".weather").css("display","none");
@@ -63,7 +63,7 @@ function showSimpleMode(){
 
 function notShowSimpleMode(){
 	$(".counter").animate({top:"15%"},250);
-	$(".date").animate({top:"25%"},250);
+	$(".long_date").animate({top:"25%"},250);
 	$(".search-box").animate({top:"28%"},250);
 	$(".news").css("display","flex");
 	$(".weather").css("display","flex");
@@ -100,7 +100,7 @@ function getLunar(){
 	    //显示时间
 	    var s = nyear + '年' + nmonth + '月' + nday + '日' + '\xa0\xa0\xa0'+ '星期' + cweekday(nwday) + '\xa0\xa0\xa0';
 	    s += lmonth + "月" + lday; //农历
-	    $(".date").text(s);
+	    $(".long_date").text(s);
 	}
 
 

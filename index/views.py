@@ -1,6 +1,5 @@
-from os import access
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import asyncio
 import json
 from lxml import etree
@@ -10,6 +9,7 @@ import time
 import requests
 from .models import Site, SimpleMode
 import urllib.request
+
 
 def index_view(request):
     request_time = time.time()
@@ -80,9 +80,8 @@ def index_view(request):
         simple_mode = {'username': 'visitor', 'is_active': False}
         print(f"Please login!")
 
-
     response_time = time.time()
-    print('数据获取结束，共用时', response_time-request_time, 's')
+    print('数据获取结束，共用时', response_time - request_time, 's')
 
     sites = Site.objects.filter(is_active=True)
 
@@ -99,19 +98,19 @@ def index_view(request):
         'lib': lib(responses['lib']),
         'sites': sites,
         'jac': result,
-        'simple_mode' : simple_mode,
+        'simple_mode': simple_mode,
     }
 
     process_time = time.time()
     print('数据处理结束，共用时', process_time - response_time, 's')
 
     if request.method == 'GET':
-        return render(request, 'websites.j2', locals)
+        return render(request, 'websites.html', locals)
     elif request.method == 'POST':
-        if request.POST.get('site_name') != None:
+        if request.POST.get('site_name') is not None:
             site_name = request.POST.get('site_name')
             site_url = request.POST.get('site_url')
-            if site_url.startswith("http") != True:
+            if not site_url.startswith("http"):
                 site_url = "https://" + site_url
             if site_url[-1] == "/":
                 site_src = site_url + 'favicon.ico'
@@ -119,7 +118,7 @@ def index_view(request):
                 site_src = site_url + '/favicon.ico'
             Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
 
-        if request.POST.get('refactor_site_name') != None:
+        if request.POST.get('refactor_site_name') is not None:
             site_name = request.POST.get('refactor_site_name')
             site_url = request.POST.get('refactor_site_url')
             if Site.objects.filter(site_name=site_name):
@@ -131,15 +130,14 @@ def index_view(request):
                 site.site_name = site_name
                 site.save()
 
-        if request.POST.get('delete_site_name') != None:
-            print("收到")
+        if request.POST.get('delete_site_name') is not None:
             delete_site = request.POST.get('delete_site_name')
-            site = Site.objects.get(site_name=delete_site)
+            site = Site.objects.filter(site_name=delete_site)[0]
             site.is_active = False
             site.save()
             return HttpResponse("删除成功")
 
-        if request.POST.get('simple_mode_username') != None:
+        if request.POST.get('simple_mode_username') is not None:
             username = request.POST.get('simple_mode_username')
             print(username)
             simple_mode = SimpleMode.objects.get(username=username)
@@ -152,12 +150,13 @@ def index_view(request):
 
         sites = Site.objects.filter(is_active=True)
         locals['sites'] = sites
-        return render(request, 'websites.j2', locals)
+        return render(request, 'websites.html', locals)
+
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
-def cut_str(str, len):
-    bytes = str.encode('utf-8')
-    cut_tmp = bytes[:len]
+def cut_str(str_before, len_cut):
+    to_bytes = str_before.encode('utf-8')
+    cut_tmp = to_bytes[:len_cut]
     cut_res = cut_tmp.decode('utf-8', errors='ignore')  # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
     return cut_res
 
@@ -180,46 +179,41 @@ def jwc(response):
     html = get_html(response)
     tree = etree.HTML(html)
     a_list = tree.xpath('//div[@class="wz"]/a')
-    jwc = []
+    jwc_dic = []
     for i in range(5):
         title = str(i + 1) + ' ' + a_list[i].xpath('./h2/text()')[0]
         if len(title.encode('utf-8')) > 55:
             title = cut_str(title, 53) + '...'
-        url = 'http://jwc.sjtu.edu.cn' + a_list[i].xpath('./@href')[0][2:]
-        dic = {}
-        dic['title'] = title
-        dic['url'] = url
-        jwc.append(dic)
-    return jwc
+        url = 'https://jwc.sjtu.edu.cn' + a_list[i].xpath('./@href')[0][2:]
+        dic = {'title': title, 'url': url}
+        jwc_dic.append(dic)
+    return jwc_dic
 
 
 def jnews(response):
     html = get_html(response)
     tree = etree.HTML(html)
     a_list = tree.xpath('//div[@class="new-add-list  clearfix"]//ul[1]//a')
-    jnews = []
+    jnews_dic = []
     for i in range(5):
         title = str(i + 1) + ' ' + a_list[i].xpath('./text()')[0]
         if len(title.encode('utf-8')) > 55:
             title = cut_str(title, 53) + '...'
         url = a_list[i].xpath('./@href')[0]
-        dic = {}
-        dic['title'] = title
-        dic['url'] = url
-        jnews.append(dic)
-    return jnews
+        dic = {'title': title, 'url': url}
+        jnews_dic.append(dic)
+    return jnews_dic
 
 
 def bilibli(response):
-    json = get_json(response)['data']['list']
+    bilibili_json = get_json(response)['data']['list']
     bilibili = []
     for i in range(5):
-        dic = {}
-        dic['title'] = str(i + 1) + ' ' + json[i]['title']
+        dic = {'title': str(i + 1) + ' ' + bilibili_json[i]['title']}
         if len(dic['title'].encode("utf-8")) > 50:
             dic['title'] = cut_str(dic['title'], 48) + '...'
-        dic['url'] = json[i]['short_link']
-        dic['view'] = json[i]['stat']['view']
+        dic['url'] = bilibili_json[i]['short_link']
+        dic['view'] = bilibili_json[i]['stat']['view']
         bilibili.append(dic)
     return bilibili
 
@@ -228,38 +222,33 @@ def weibo(response):
     html = get_html(response)
     tree = etree.HTML(html)
     tr_list = tree.xpath('//tbody/tr')[:5]
-    weibo = []
+    weibo_dict = []
     for i in range(len(tr_list)):
-        weibo_item = {}
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 50:
             name = cut_str(name, 48) + '...'
         url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
-        weibo_item['name'] = name
-        weibo_item['url'] = url
-        weibo_item['hot'] = hot
-        weibo.append(weibo_item)
-    return weibo
+        weibo_item = {'name': name, 'url': url, 'hot': hot}
+        weibo_dict.append(weibo_item)
+    return weibo_dict
 
 
 def zhihu(response):
     html = get_html(response)
     tree = etree.HTML(html)
     tr_list = tree.xpath('//tbody/tr')[:5]
-    zhihu = []
+    zhihu_dict = []
     for i in range(len(tr_list)):
-        zhihu_item = {}
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 55:
             name = cut_str(name, 53) + "..."
         url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
-        zhihu_item['name'] = name
-        zhihu_item['url'] = url
-        zhihu.append(zhihu_item)
-    return zhihu
+        zhihu_item = {'name': name, 'url': url}
+        zhihu_dict.append(zhihu_item)
+    return zhihu_dict
 
 
 def weather(response):
@@ -278,12 +267,12 @@ def weather(response):
         forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
     forecast_dic['day0']['date'] = '今天'
 
-    weather = {
+    weather_dict = {
         'city': XML_tree.xpath('//city/text()')[0],
         'wendu': XML_tree.xpath('//wendu/text()')[0],
         'forecast': forecast_dic,
     }
-    return weather
+    return weather_dict
 
 
 def corona(response):
