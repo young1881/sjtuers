@@ -41,6 +41,7 @@
     /*background-color: #efeeee;*/
     transition: box-shadow .2s ease-out;
     position: relative;
+    backdrop-filter: blur(10px);
 }
 
 .sites .box .img  img{
@@ -51,7 +52,8 @@
 
 .sites .box p{
     margin-top: 10px;
-    color: dimgrey;
+  color: dimgrey;
+  text-shadow: 1px 1px lightgrey;
     font-size: 9px;
 }
 

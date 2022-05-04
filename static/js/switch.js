@@ -27,3 +27,18 @@ for (var i = 0; i < tool_btns.length; i++) {
         tools[this.index].className = tools[this.index].className + ' show';
     };
 }
+
+var wallpaper_btns = document.getElementsByClassName("wallpaper_btn")
+var wallpapers = document.getElementsByClassName("wallpaper")
+
+for (var i = 0; i < wallpaper_btns.length; i++) {
+    wallpaper_btns[i].index = i;
+    wallpaper_btns[i].onclick = function () {
+        for (var j = 0; j < wallpaper_btns.length; j++) {
+            wallpaper_btns[j].className = wallpaper_btns[j].className.replace(' active', '').trim();
+            wallpapers[j].className = wallpapers[j].className.replace(' show', '').trim();
+        }
+        this.className = this.className + ' active';
+        wallpapers[this.index].className = wallpapers[this.index].className + ' show';
+    };
+}

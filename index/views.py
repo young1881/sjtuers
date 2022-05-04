@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
 import asyncio
 import json
 from lxml import etree
@@ -7,8 +6,8 @@ from urllib.parse import quote
 import aiohttp
 import time
 import requests
-from .models import Site, SimpleMode
 import urllib.request
+from .models import Site, SimpleMode, Wallpaper
 
 
 def index_view(request):
@@ -73,11 +72,24 @@ def index_view(request):
         simple_mode_flag = SimpleMode.objects.filter(username=result)
         if not simple_mode_flag:
             SimpleMode.objects.create(username=result)
-        simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
+        simple_mode = {'username': result,
+                       'is_active': simple_mode_flag[0].is_active}
+        wallpaper_flag = Wallpaper.objects.filter(username=result)
+        if not wallpaper_flag:
+            Wallpaper.objects.create(username=result)
+        wallpaper = {'username': result,
+                     'photo_url': '../media/wallpaper/' + wallpaper_flag[0].photo_name,
+                     'photo_name': wallpaper_flag[0].photo_name,
+                     'css': wallpaper_flag[0].css}
     except:
         result = ''
         SimpleMode.objects.create()
         simple_mode = {'username': 'visitor', 'is_active': False}
+        Wallpaper.objects.create()
+        wallpaper = {'username': "visitor",
+                     'photo_url': '../media/wallpaper/visitor.jpg',
+                     'photo_name': 'visitor.jpg',
+                     "css": "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"}
         print(f"Please login!")
 
     response_time = time.time()
@@ -94,11 +106,10 @@ def index_view(request):
         'bilibili': bilibli(responses['bilibili']),
         'corona': corona(responses['corona']),
         'poem': poem(responses['poem']),
-        'canteen': canteen(responses['canteen']),
-        'lib': lib(responses['lib']),
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
+        "wallpaper": wallpaper,
     }
 
     process_time = time.time()
@@ -106,58 +117,14 @@ def index_view(request):
 
     if request.method == 'GET':
         return render(request, 'websites.html', locals)
-    elif request.method == 'POST':
-        if request.POST.get('site_name') is not None:
-            site_name = request.POST.get('site_name')
-            site_url = request.POST.get('site_url')
-            if not site_url.startswith("http"):
-                site_url = "https://" + site_url
-            if site_url[-1] == "/":
-                site_src = site_url + 'favicon.ico'
-            else:
-                site_src = site_url + '/favicon.ico'
-            Site.objects.create(site_name=site_name, site_url=site_url, site_src=site_src)
-
-        if request.POST.get('refactor_site_name') is not None:
-            site_name = request.POST.get('refactor_site_name')
-            site_url = request.POST.get('refactor_site_url')
-            if Site.objects.filter(site_name=site_name):
-                site = Site.objects.filter(site_name=site_name)[0]
-                site.site_url = site_url
-                site.save()
-            if Site.objects.filter(site_url=site_url):
-                site = Site.objects.filter(site_url=site_url)[0]
-                site.site_name = site_name
-                site.save()
-
-        if request.POST.get('delete_site_name') is not None:
-            delete_site = request.POST.get('delete_site_name')
-            site = Site.objects.filter(site_name=delete_site)[0]
-            site.is_active = False
-            site.save()
-            return HttpResponse("删除成功")
-
-        if request.POST.get('simple_mode_username') is not None:
-            username = request.POST.get('simple_mode_username')
-            print(username)
-            simple_mode = SimpleMode.objects.get(username=username)
-            is_active = request.POST.get('simple_mode_is_active')
-            is_active = (is_active == "true")
-            simple_mode.is_active = is_active
-            print(simple_mode.is_active)
-            simple_mode.save()
-            return HttpResponse("已保存")
-
-        sites = Site.objects.filter(is_active=True)
-        locals['sites'] = sites
-        return render(request, 'websites.html', locals)
 
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
 def cut_str(str_before, len_cut):
     to_bytes = str_before.encode('utf-8')
     cut_tmp = to_bytes[:len_cut]
-    cut_res = cut_tmp.decode('utf-8', errors='ignore')  # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
+    # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
+    cut_res = cut_tmp.decode('utf-8', errors='ignore')
     return cut_res
 
 
@@ -228,7 +195,8 @@ def weibo(response):
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 50:
             name = cut_str(name, 48) + '...'
-        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        url = 'https://tophub.today' + \
+            tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
         weibo_item = {'name': name, 'url': url, 'hot': hot}
         weibo_dict.append(weibo_item)
@@ -245,7 +213,8 @@ def zhihu(response):
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 55:
             name = cut_str(name, 53) + "..."
-        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        url = 'https://tophub.today' + \
+            tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         zhihu_item = {'name': name, 'url': url}
         zhihu_dict.append(zhihu_item)
     return zhihu_dict
@@ -253,7 +222,8 @@ def zhihu(response):
 
 def weather(response):
     data = get_html(response)
-    parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
+    parser = etree.XMLParser(resolve_entities=False,
+                             strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)
 
     forecast_list = XML_tree.xpath('//forecast/weather')
@@ -261,10 +231,14 @@ def weather(response):
     for i in range(len(forecast_list)):
         day_name = 'day' + str(i)
         forecast_dic[day_name] = {}
-        forecast_dic[day_name]['date'] = '周' + forecast_list[i].xpath('./date/text()')[0][-1]
-        forecast_dic[day_name]['high'] = forecast_list[i].xpath('./high/text()')[0][-3:-1]
-        forecast_dic[day_name]['low'] = forecast_list[i].xpath('./low/text()')[0][-3:-1]
-        forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
+        forecast_dic[day_name]['date'] = '周' + \
+            forecast_list[i].xpath('./date/text()')[0][-1]
+        forecast_dic[day_name]['high'] = forecast_list[i].xpath(
+            './high/text()')[0][-3:-1]
+        forecast_dic[day_name]['low'] = forecast_list[i].xpath(
+            './low/text()')[0][-3:-1]
+        forecast_dic[day_name]['type'] = forecast_list[i].xpath(
+            './/type/text()')[0]
     forecast_dic['day0']['date'] = '今天'
 
     weather_dict = {
@@ -283,22 +257,19 @@ def poem(response):
     return get_json(response)
 
 
-def canteen(response):
-    return get_json(response)
-
-
 def jac(request):
     token = request.session['token']
     access_token = token['access_token']
     # print(f"token:{token['access_token']}")
-    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
+    result = requests.get(
+        f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
     print(f"result:{result.json()}")
     return result.json()
 
 
 def get_city(request):
-    if 'HTTP_X_FORWARDED_FOR' in request.META: 
-        user_ip = request.META.get('HTTP_X_FORWARDED_FOR') 
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        user_ip = request.META.get('HTTP_X_FORWARDED_FOR')
     else:
         user_ip = request.META.get('REMOTE_ADDR')
     url = 'http://ip-api.com/json/' + user_ip + '?lang=zh-CN&fields=city'
@@ -309,3 +280,10 @@ def get_city(request):
     except Exception as e:
         city = '闵行'
     return city
+
+
+def get_weather_response(city_name, headers):
+    session = requests.session()
+    url = 'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city_name)
+    response = session.get(url=url, headers=headers)
+    return response
