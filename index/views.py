@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import asyncio
 import json
 from lxml import etree
@@ -77,7 +76,7 @@ def index_view(request):
         if not wallpaper_flag:
             Wallpaper.objects.create(username=result)
         wallpaper = {'username': result,
-                     'photo_url': '../../../media/wallpaper/' + wallpaper_flag[0].photo_name,
+                     'photo_url': '../media/wallpaper/' + wallpaper_flag[0].photo_name,
                      'photo_name': wallpaper_flag[0].photo_name,
                      'css': wallpaper_flag[0].css}
     except:
