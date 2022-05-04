@@ -334,11 +334,11 @@
 
             switch(index){
                 case 0:
-                    return address.replace(/省|市|自治区|[壮回]族|维吾尔/g, '');
+                    return address.replace(/省|市|自治区|[壮回]族|维吾尔|特别行政区/g, '');
                 case 1:
-                    return address.replace(/自治[州县]|[地林]区|[市盟县]|(?:回|藏|土家|苗|黎|布依|侗|蒙古|羌|彝|哈尼|白|傣|景颇|傈僳|朝鲜|壮)族|蒙古|哈萨克/g, '');
+                    return address.replace(/自治[州县]|[地林]区|[市盟县]|(?:回|藏|土家|苗|黎|布依|侗|蒙古|羌|彝|哈尼|白|傣|景颇|傈僳|朝鲜|壮)族|蒙古|哈萨克|特别行政区/g, '');
                 case 2: // 伊宁、临夏 有问题
-                    return address.length > 2 ? address.substring(0, 2) + address.substring(2).replace(/自治[县旗]|新区|[市县旗区]|(?:满|蒙古|回|达斡尔|哈萨克|克|朝鲜|畲|土家|苗|瑶|侗|壮|各|仫佬|毛南|羌|彝|藏|仡佬|布依|水|傣|哈尼|纳西|拉祜|佤|布朗|独龙|普米|白|怒|傈僳|裕固|保安|东乡|撒拉|土)族|群岛|行政委员会|塔吉克|锡伯|哈萨克|蒙古/g, '') : address;
+                    return address.length > 2 ? address.substring(0, 2) + address.substring(2).replace(/自治[县旗]|新区|[市县旗区]|(?:满|蒙古|回|达斡尔|哈萨克|克|朝鲜|畲|土家|苗|瑶|侗|壮|各|仫佬|毛南|羌|彝|藏|仡佬|布依|水|傣|哈尼|纳西|拉祜|佤|布朗|独龙|普米|白|怒|傈僳|裕固|保安|东乡|撒拉|土)族|群岛|行政委员会|塔吉克|锡伯|哈萨克|蒙古|特别行政区/g, '') : address;
                 case 3:
                     return address.replace(/办事处|地区/g, '');
                 default:
