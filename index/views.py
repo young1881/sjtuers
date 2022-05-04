@@ -71,6 +71,15 @@ def index_view(request):
         result = result_origin['entities'][0]['name']
         jaccount = result_origin['entities'][0]['account']
         simple_mode_flag = SimpleMode.objects.filter(username=result)
+        jaccount_flag = User.objects.filter(jaccount=jaccount)
+        
+        if not jaccount_flag:
+            User.objects.create(user_name=result, jaccount=jaccount)
+            user = User.objects.filter(jaccount=jaccount)[0]
+            user_site_flag = Site.objects.filter(user='0')
+            for site in user_site_flag:
+                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user)
+
         if not simple_mode_flag:
             SimpleMode.objects.create(username=result)
         simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
