@@ -77,7 +77,7 @@ def index_view(request):
         if not wallpaper_flag:
             Wallpaper.objects.create(username=result)
         wallpaper = {'username': result,
-                     'photo_url': 'media/wallpaper/' + wallpaper_flag[0].photo_name,
+                     'photo_url': '../../../media/wallpaper/' + wallpaper_flag[0].photo_name,
                      'photo_name': wallpaper_flag[0].photo_name,
                      'css': wallpaper_flag[0].css}
     except:
@@ -116,9 +116,6 @@ def index_view(request):
 
     if request.method == 'GET':
         return render(request, 'websites.html', locals)
-
-
-
 
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1

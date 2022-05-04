@@ -1,9 +1,13 @@
-if (wallpaper_photo_name === 'visitor.jpg') {
+if (wallpaper_photo_name === 'visitor.jpg' || wallpaper_css !== "") {
     $("#base_all").css("background", wallpaper_css);
+} else{
+    let value = 'url("' + wallpaper_photo + '")'
+    $("#base_all").css("background", value);
 }
 
 function upload_img() {
-    let formData = new FormData($("#img-form")[0]);
+    let formData = new FormData($("#upload_img_form")[0]);
+    formData.append("img_upload_username", username)
     $.ajax({
         url: "/index/upload_img/", //请求路径
         type: 'POST', // 请求类型
@@ -14,7 +18,7 @@ function upload_img() {
         cache: false,
         success: function (data) {
             if (data === 1) {
-                alert("上传成功");
+                alert("上传成功，刷新后即可使用");
             }else if (data === 0) {
                 alert("上传失败");
             }

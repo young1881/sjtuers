@@ -1,6 +1,7 @@
 node_modules/
 .idea/
 /static-files/
+media/wallpaper/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

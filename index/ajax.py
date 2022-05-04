@@ -4,11 +4,19 @@ from .models import Site, SimpleMode, Wallpaper
 
 
 def img_upload(request):
-    file_img = request.FILES['img']  # 获取文件对象
-    image = Wallpaper()
-    image.photo = file_img
+    file_img = request.FILES['upload_file']  # 获取文件对象
+    file_name = request.FILES['upload_file'].name
+    print(file_name)
+    username = request.POST.get('img_upload_username')
+    if not Wallpaper.objects.filter(username=username):
+        Wallpaper.objects.create(username=username, photo=file_img, photo_name=file_name)
+    else:
+        wallpaper = Wallpaper.objects.filter(username=username)[0]
+        wallpaper.photo = file_img
+        wallpaper.photo_name = file_name
+        wallpaper.css = ""
+        wallpaper.save()
     try:
-        image.save()  # 保存数据
         return JsonResponse(1, safe=False)
     except Exception as e:
         print(e)

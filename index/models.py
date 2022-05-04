@@ -42,3 +42,19 @@ class Wallpaper(models.Model):
 
     def __str__(self):
         return '%s'%(self.username)
+
+
+class Countdown(models.Model):
+    username = models.CharField(max_length=64, default='visitor')
+    date_name = models.CharField(max_length=64)
+    year = models.IntegerField()
+    month = models.IntegerField()
+    day = models.IntegerField()
+
+    class Meta:
+        db_table = 'countdown'
+        verbose_name = 'countdown'
+        verbose_name_plural = 'countdown'
+
+    def __str__(self):
+        return '%s'%(self.username)
