@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from . import views
+from django.urls import path, re_path, include
+from django.views.static import serve
+from . import views, settings
 
 urlpatterns = [
     path('', views.index_view),
@@ -26,6 +27,6 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('logged_out', views.logged_out, name='logged_out'),
     path('authorize/', views.authorize, name='authorize'),
+    re_path(r'media/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
 ]
-
 

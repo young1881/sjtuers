@@ -20,12 +20,20 @@
     <link rel="stylesheet" href="../static/css/index/counter.css">
     <link rel="stylesheet" href="../static/css/index/submenu.css">
     <link rel="stylesheet" href="../static/css/index/countdown.css">
-
+    <link rel="stylesheet" href="../static/css/index/wallpaper.css">
+    <script type="text/javascript">
+        var wallpaper_username = "{{ wallpaper.username }}";
+        var wallpaper_photo = '{{ wallpaper.photo_url }}';
+        var wallpaper_photo_name = '{{ wallpaper.photo_name }}';
+        var wallpaper_css = '{{ wallpaper.css }}';
+        console.log(wallpaper_username);
+        console.log(wallpaper_photo)
+    </script>
     <title>Hello, SJTUer!</title>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="base_all">
     {% block counter %} {% endblock %}
 
     {% block poem %} {% endblock %}
@@ -46,8 +54,9 @@
 
     {% block countdown %} {% endblock %}
 
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://kit.fontawesome.com/80275103ba.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/js/fontawesome.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="../static/js/switch.js"></script>
     <script type="text/javascript" src="../static/js/search.js"></script>
     <script type="text/javascript" src="../static/js/counter.js"></script>
@@ -55,6 +64,8 @@
     <script type="text/javascript" src="../static/js/windows.js"></script>
     <script type="text/javascript" src="../static/js/submenu.js"></script>
     <script type="text/javascript" src="../static/js/datelist.js"></script>
+    <script type="text/javascript" src="../static/js/wallpaper.js"></script>
+
 </div>
 </body>
 </html>
