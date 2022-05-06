@@ -385,31 +385,43 @@
                         {{ color_wallpaper("MalibuBeach", "Malibu Beach", "background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%)") }}
                         {{ color_wallpaper("RareWind", "Rare Wind", "background: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);") }}
                     </div>
+                    <div class = "button4">
+                            <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
+                    </div>
                 </div>
                 <div class="wallpaper">
                     <form id="upload_img_form">
-                        <div style="margin: 50px;">
+                        <div class="upload">
                             <input type="file" name="upload_file" id="upload_file">
                         </div>
-                        <div style="margin: 50px;">
-                            <input onclick="upload_img()" type="button" value="提交">
+                        <div class="button3">
+
+                            <a href = "javascript:void(0)" onclick = "upload_img()">
+                                <input type="submit" value="提 交">
+                            </a>
+                        </div>
+                        <div class = "button5">
+                            <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-<a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
 </div>
 {% endblock %}
 
 {% block countdown %}
 <div class="countdown" id="countdown">
     <div class="countdown_card">
-        <div>离除夕还有</div>
+        <div class="font">
+            离除夕还有
+        </div>
         <div class="count_number">
             2
         </div>
-        <div>天</div>
+        <div class="font">
+            天
+        </div>
     </div>
 </div>
 {% endblock %}
