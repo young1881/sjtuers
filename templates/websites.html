@@ -83,15 +83,28 @@
         <div style="width: 320px;height: 32px;" id="cityselect" data-role="cityselector">上海市 上海市 闵行区</div>
     </div>
     <div style="margin: 35px 0px">
-        <div id="msg"></div>
         <button id="getVal">确定</button>
     </div>
     <script type="text/javascript">
-        $('[data-role="cityselector"]').citySelector({callback: function(item,index){
-        }});
+        $('[data-role="cityselector"]').citySelector({callback: function(item,index){}});
         $('#getVal').click(function(){
-            var api = $('#cityselect').data('lx.citySelector');
-            $('#msg').html(api.getVal(' '));
+            var currentVal = document.getElementById('cityselect').innerHTML;
+            var currentArr = currentVal.split(' ');
+            if (typeof (currentArr[2]) !== "undefined")
+                var currentCity = currentArr[2];
+            else if (typeof (currentArr[1]) !== "undefined")
+                var currentCity = currentArr[1];
+            else alert("请选择查询天气的城市！");
+            console.log(currentCity);
+            if (typeof (currentCity) !== "undefined") update_weather();
+            function update_weather() {
+                console.log("成功调用");
+                $.ajax({
+                    url: '/index/update_weather/',
+                    method: 'POST',
+                    data: {"city_name": currentCity},
+                })
+            }
         });
     </script>
 

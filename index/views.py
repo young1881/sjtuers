@@ -7,6 +7,7 @@ import aiohttp
 import time
 import requests
 import urllib.request
+from django.http import HttpResponse
 from .models import Site, SimpleMode, Wallpaper
 
 
@@ -72,8 +73,7 @@ def index_view(request):
         simple_mode_flag = SimpleMode.objects.filter(username=result)
         if not simple_mode_flag:
             SimpleMode.objects.create(username=result)
-        simple_mode = {'username': result,
-                       'is_active': simple_mode_flag[0].is_active}
+        simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
         wallpaper_flag = Wallpaper.objects.filter(username=result)
         if not wallpaper_flag:
             Wallpaper.objects.create(username=result)
@@ -109,7 +109,7 @@ def index_view(request):
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
-        "wallpaper": wallpaper,
+        "wallpaper" : wallpaper,
     }
 
     process_time = time.time()
@@ -123,8 +123,7 @@ def index_view(request):
 def cut_str(str_before, len_cut):
     to_bytes = str_before.encode('utf-8')
     cut_tmp = to_bytes[:len_cut]
-    # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
-    cut_res = cut_tmp.decode('utf-8', errors='ignore')
+    cut_res = cut_tmp.decode('utf-8', errors='ignore')  # 按bytes截取时有小部分无效的字节，传入errors='ignore'忽略错误
     return cut_res
 
 
@@ -195,8 +194,7 @@ def weibo(response):
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 50:
             name = cut_str(name, 48) + '...'
-        url = 'https://tophub.today' + \
-            tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
         weibo_item = {'name': name, 'url': url, 'hot': hot}
         weibo_dict.append(weibo_item)
@@ -213,8 +211,7 @@ def zhihu(response):
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 55:
             name = cut_str(name, 53) + "..."
-        url = 'https://tophub.today' + \
-            tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         zhihu_item = {'name': name, 'url': url}
         zhihu_dict.append(zhihu_item)
     return zhihu_dict
@@ -222,8 +219,7 @@ def zhihu(response):
 
 def weather(response):
     data = get_html(response)
-    parser = etree.XMLParser(resolve_entities=False,
-                             strip_cdata=False, recover=True, ns_clean=True)
+    parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)
 
     forecast_list = XML_tree.xpath('//forecast/weather')
@@ -231,14 +227,10 @@ def weather(response):
     for i in range(len(forecast_list)):
         day_name = 'day' + str(i)
         forecast_dic[day_name] = {}
-        forecast_dic[day_name]['date'] = '周' + \
-            forecast_list[i].xpath('./date/text()')[0][-1]
-        forecast_dic[day_name]['high'] = forecast_list[i].xpath(
-            './high/text()')[0][-3:-1]
-        forecast_dic[day_name]['low'] = forecast_list[i].xpath(
-            './low/text()')[0][-3:-1]
-        forecast_dic[day_name]['type'] = forecast_list[i].xpath(
-            './/type/text()')[0]
+        forecast_dic[day_name]['date'] = '周' + forecast_list[i].xpath('./date/text()')[0][-1]
+        forecast_dic[day_name]['high'] = forecast_list[i].xpath('./high/text()')[0][-3:-1]
+        forecast_dic[day_name]['low'] = forecast_list[i].xpath('./low/text()')[0][-3:-1]
+        forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
     forecast_dic['day0']['date'] = '今天'
 
     weather_dict = {
@@ -261,8 +253,7 @@ def jac(request):
     token = request.session['token']
     access_token = token['access_token']
     # print(f"token:{token['access_token']}")
-    result = requests.get(
-        f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
+    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
     print(f"result:{result.json()}")
     return result.json()
 
@@ -280,6 +271,11 @@ def get_city(request):
     except Exception as e:
         city = '闵行'
     return city
+
+
+def update_weather(request):
+    city_name = request.POST.get('city_name')
+    return 
 
 
 def get_weather_response(city_name, headers):
