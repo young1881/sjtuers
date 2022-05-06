@@ -29,13 +29,23 @@ def add_site(request):
     user = User.objects.filter(jaccount=jaccount)[0]
     site_name = request.POST.get('site_name')
     site_url = request.POST.get('site_url')
+    site = Site.objects.filter(site_url=site_url, user=jaccount)
     if not site_url.startswith("http"):
         site_url = "https://" + site_url
     if site_url[-1] == "/":
-        site_src = site_url + 'favicon.ico'
+        pass
     else:
-        site_src = site_url + '/favicon.ico'
-    Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
+        site_url = site_url + '/'
+
+    if site:
+        site[0].is_active = True
+        site[0].save()
+    elif ('sjtu' in site_url):
+        site_src = '../static/img/school.png'
+        Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
+    else:
+        site_src = site_url + 'favicon.ico'
+        Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     return HttpResponse("已保存")
 
 

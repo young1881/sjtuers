@@ -13,20 +13,6 @@ class User(models.Model):
     def __str__(self):
         return '%s'%(self.user_name)
 
-class User(models.Model):
-    user_name = models.CharField('用户名', max_length=30, default="visitor")
-    jaccount = models.CharField('Jaccount', max_length=30, unique=True, default="visitor")
-
-    # is_active = models.BooleanField('是否活跃', default=True)
-
-    class Meta:
-        db_table = 'User'
-        verbose_name = 'User'
-        verbose_name_plural = 'User'
-
-    def __str__(self):
-        return '%s' % (self.user_name)
-
 
 class Site(models.Model):
     user = models.ForeignKey(User, to_field='jaccount',on_delete=models.CASCADE, default='000')

@@ -287,20 +287,7 @@
 {% endblock %}
 
 {% block windows %}
-<!-- <div id="add_site" class="white_content">
-    <form action="/index/" method = 'post'>
-        <p>
-            网站名 <input type="text" id="site_name" name="site_name" required="required">
-        </p>
-        <p>
-            网址 <input type="text" id="site_url" name="site_url" required="required">
-        </p>
-        <a href = "javascript:void(0)" onclick = "closeSiteDialog()">
-            <input type="submit" value="添加" id="site_submit"/>
-        </a>
-        <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 点我关闭</a>
-    </form>
-</div> -->
+
 {% if jac == '' %}
 
 {% else %}
@@ -354,29 +341,6 @@
         </form>
     </div>
 
-<!-- <div id="refactor_site" class="white_content">
-    <form action="/index/" method = 'post'>
-        <p>
-            网站名 <input type="text" id="refactor_site_name" name="refactor_site_name">
-        </p>
-        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">
-            <input type="submit" value="修改" id="site_submit"/>
-        </a>
-        <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">点我关闭</a>
-    </form>
-</div> -->
-
-<!-- <div id="countdown_dialog" class="white_content">
-    <form action="/index/" method = 'post'>
-        <p>
-            日期名 <input type="text" id="refactor_site_name" name="refactor_site_name">
-        </p>
-        <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">
-            <input type="submit" value="修改" id="site_submit"/>
-        </a>
-        <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">点我关闭</a>
-    </form>
-</div> -->
     <div id="countdown_dialog" class="content_box">
         <h1>自定义倒计时</h1>
         <form name="reg_testdate" action="/index/" method = 'post' class = "box_form">

@@ -7,7 +7,7 @@ import aiohttp
 import time
 import requests
 from .models import Site, SimpleMode, User, Wallpaper
-
+from .initialize_site import initialize_site
 def index_view(request):
     request_time = time.time()
     city = '闵行'
@@ -71,9 +71,7 @@ def index_view(request):
         user = User.objects.filter(jaccount='000')[0]
         SimpleMode.objects.create(user=user)
         Wallpaper.objects.create(user=user)
-        Site.objects.create(site_name='github', site_url='https://github.com/', site_src='https://files.codelife.cc/itab/search/github.svg', user=user)
-        Site.objects.create(site_name='bilibili', site_url='https://bilibili.com', site_src='https://files.codelife.cc/itab/search/bilibili.svg', user=user)
-        Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/school.png', user=user)
+        initialize_site(user)
     
     try:
         result_origin = jac(request)
