@@ -49,8 +49,9 @@ function delete_site(){
     type: "POST",        //请求类型
     data: {"delete_site_name": site_name},
     dataType: "html",
-    success: function () {
-        console.log("已删除");
+    success: function (response) {
+        // console.log("已删除");
+        console.log(response);
     },
     error: function () {
         //当请求错误之后，自动调用
