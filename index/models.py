@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Site(models.Model):
-    user = models.ForeignKey(User, to_field='jaccount',on_delete=models.CASCADE, default='000')
+    user = models.ForeignKey(User, to_field='jaccount', on_delete=models.CASCADE, default='000')
     site_name = models.CharField('网站名', max_length=30)
     site_url = models.CharField('网址', max_length=120)
     site_src = models.CharField('图标地址', max_length=120)

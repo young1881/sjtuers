@@ -1,5 +1,5 @@
 from django.http import JsonResponse,HttpResponse
-
+from urllib.parse import urlparse
 from .models import Site, SimpleMode, Wallpaper, User, Countdown
 
 
@@ -27,26 +27,29 @@ def img_upload(request):
 def add_site(request):
     jaccount = request.session['jaccount']
     user = User.objects.filter(jaccount=jaccount)[0]
+    site_count = len(Site.objects.filter(user=jaccount, is_active=True))
+    if site_count >= 28:
+        return JsonResponse(0, safe=False)
+
     site_name = request.POST.get('site_name')
     site_url = request.POST.get('site_url')
     site = Site.objects.filter(site_url=site_url, user=jaccount)
-    if not site_url.startswith("http"):
-        site_url = "https://" + site_url
-    if site_url[-1] == "/":
-        pass
-    else:
-        site_url = site_url + '/'
+    # 取主域名
+    res = urlparse(site_url)
+    site_url = "https://" + str(res.netloc)
 
     if site:
+        site[0].site_name = site_name
         site[0].is_active = True
         site[0].save()
+        return JsonResponse(2, safe=False)
     elif ('sjtu' in site_url):
         site_src = '../static/img/school.png'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     else:
-        site_src = site_url + 'favicon.ico'
+        site_src = site_url + '/favicon.ico'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
-    return HttpResponse("已保存")
+    return JsonResponse(1, safe=False)
 
 
 def refactor_site(request):

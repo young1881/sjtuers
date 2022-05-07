@@ -1,4 +1,5 @@
-from .models import Site, User
+from .models import Site
+
 
 def initialize_site(user):
     Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/教学信息.png', user=user)

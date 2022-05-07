@@ -7,6 +7,16 @@ function refactor_countdown(){
             "year": $("#YYYY").val(),
             "month": $("#MM").val(),
             "day": $("#DD").val(),
+        },
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function (response) {
+            console.log(response);
+            location.reload();
+        },
+        error: function () {
+            alert("请求失败，请联系管理员！")
         }
     })
     location.reload();

@@ -18,7 +18,7 @@ function upload_img() {
         cache: false,
         success: function (data) {
             if (data === 1) {
-                alert("上传成功，刷新后即可使用");
+                location.reload();
             }else if (data === 0) {
                 alert("上传失败");
             }
