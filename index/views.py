@@ -4,10 +4,12 @@ import json
 from lxml import etree
 from urllib.parse import quote
 import aiohttp
-import time, datetime
+import time
+import datetime
 import requests
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
 from .initialize_site import initialize_site
+
 
 def index_view(request):
     request_time = time.time()
@@ -88,7 +90,8 @@ def index_view(request):
             Countdown.objects.create(user=user, username=result)
             user_site_flag = Site.objects.filter(user='000')
             for site in user_site_flag:
-                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user, is_active=site.is_active)
+                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user,
+                                    is_active=site.is_active)
 
         user = User.objects.filter(jaccount=jaccount)[0]
         simple_mode_flag = SimpleMode.objects.filter(user=jaccount)[0]
@@ -102,7 +105,6 @@ def index_view(request):
         countdown_flag = Countdown.objects.filter(user=jaccount)[0]
         countdown = compute_countdown(countdown_flag.date_name, countdown_flag.year,
                                       countdown_flag.month, countdown_flag.day)
-
     except:
         result = ''
         jaccount = '000'
@@ -300,9 +302,8 @@ def poem(response):
 def jac(request):
     token = request.session['token']
     access_token = token['access_token']
-    # print(f"token:{token['access_token']}")
+
     result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
-    print(f"result:{result.json()}")
     return result.json()
 
 
