@@ -1,6 +1,6 @@
 from django.http import JsonResponse,HttpResponse
 
-from .models import Site, SimpleMode, Wallpaper, User
+from .models import Site, SimpleMode, Wallpaper, User, Countdown
 
 
 def img_upload(request):
@@ -87,4 +87,23 @@ def color_wallpaper(request):
     css = request.POST.get('css')
     wallpaper.css = css
     wallpaper.save()
+    return HttpResponse("已保存")
+
+
+def refactor_countdown(request):
+    jaccount = request.session['jaccount']
+    date_name = request.POST.get('refactor_date_name')
+    year = request.POST.get('year')
+    month = request.POST.get('month')
+    day = request.POST.get('day')
+    countdown = Countdown.objects.filter(user=jaccount)[0]
+    countdown.date_name = date_name
+    countdown.year = int(year)
+    countdown.month = int(month)
+    countdown.day = int(day)
+    countdown.save()
+
+    this_simple_mode = SimpleMode.objects.get(user=jaccount)
+    this_simple_mode.is_active = True
+    this_simple_mode.save()
     return HttpResponse("已保存")

@@ -343,24 +343,24 @@
 
     <div id="countdown_dialog" class="content_box">
         <h1>自定义倒计时</h1>
-        <form name="reg_testdate" action="/index/" method = 'post' class = "box_form">
+        <form name="reg_testdate" class = "box_form">
             <div class = "item">
-                    <input type="text" placeholder="日期名" id="refactor_site_name" name="refactor_site_name">
+                    <input type="text" placeholder="日期名" id="refactor_date_name" name="refactor_date_name">
             </div>
             <div class="date_list">
-                <select name="YYYY" onchange="YYYYDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="YYYY" id="YYYY" onchange="YYYYDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">请选择 年</option>
                 </select>
-                <select name="MM" onchange="MMDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="MM" id="MM" onchange="MMDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">选择 月</option>
                 </select>
-                <select name="DD" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="DD" id="DD" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">选择 日</option>
                 </select>
             </div>
 
             <div class = "button1">
-                <a  href = "javascript:void(0)" onclick = "closeCountdownDialog()">
+                <a  href = "javascript:void(0)" onclick = "refactor_countdown()">
                     <input type="submit" value="修 改" id="site_submit"/>
                 </a>
             </div>
@@ -368,7 +368,6 @@
             <div class = "button2">
                     <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">取 消</a>
             </div>
-
         </form>
     </div>
 {% endif %}
@@ -406,9 +405,9 @@
 {% block countdown %}
 <div class="countdown" id="countdown">
     <div class="countdown_card">
-        <div>离除夕还有</div>
+        <div>离{{ countdown.date_name }}还有</div>
         <div class="count_number">
-            2
+            {{ countdown.interval }}
         </div>
         <div>天</div>
     </div>

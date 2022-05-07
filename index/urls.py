@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete_site/', ajax.delete_site),
     path('color_wallpaper/', ajax.color_wallpaper),
     path('simple_mode/', ajax.simple_mode),
+    path('refactor_countdown/', ajax.refactor_countdown),
 ]
