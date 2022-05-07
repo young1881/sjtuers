@@ -7,6 +7,7 @@ function refactor_countdown(){
             "year": $("#YYYY").val(),
             "month": $("#MM").val(),
             "day": $("#DD").val(),
+            'csrfmiddlewaretoken': csrf_token,
         },
         contentType: false,
         processData: false,

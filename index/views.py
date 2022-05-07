@@ -88,7 +88,7 @@ def index_view(request):
             Countdown.objects.create(user=user, username=result)
             user_site_flag = Site.objects.filter(user='000')
             for site in user_site_flag:
-                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user)
+                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user, is_active=site.is_active)
 
         user = User.objects.filter(jaccount=jaccount)[0]
         simple_mode_flag = SimpleMode.objects.filter(user=jaccount)[0]

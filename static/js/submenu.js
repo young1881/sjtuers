@@ -1,5 +1,5 @@
 $("#sub-menu").hide();
-
+var csrf_token = $("[name='csrfmiddlewaretoken']").val();
 $(".box").on("contextmenu", function(event){undefined
     event.preventDefault();//取消默认的浏览器自带右键
     site_name = this.id;
@@ -26,7 +26,9 @@ function add_site() {
         url:'/index/add_site/',
         method:'post',
         data:{"site_name":$("#site_name").val(),
-            "site_url":$("#site_url").val()},
+            "site_url":$("#site_url").val(),
+            'csrfmiddlewaretoken': csrf_token,
+        },
         dataType: "JSON",
         success: function (response) {
             if (response === 1) {
@@ -49,10 +51,9 @@ function refactor_site(){
         url:'/index/refactor_site/',
         method:'post',
         data:{"refactor_site_name":$("#refactor_site_name").val(),
-            "refactor_site_url": site_url},
-        contentType: false,
-        processData: false,
-        cache: false,
+            "refactor_site_url": site_url,
+            'csrfmiddlewaretoken': csrf_token,
+        },
         success: function (response) {
             console.log(response);
             location.reload();
@@ -67,11 +68,8 @@ function delete_site(){
     $.ajax({
         url: "/index/delete_site/",
         type: "POST",        //请求类型
-        data: {"delete_site_name": site_name},
+        data: {"delete_site_name": site_name,'csrfmiddlewaretoken': csrf_token,},
         dataType: "html",
-        contentType: false,
-        processData: false,
-        cache: false,
         success: function (response) {
             console.log(response);
             delete_site_name=document.getElementById(site_name).style.display='none';
