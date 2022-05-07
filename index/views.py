@@ -6,9 +6,8 @@ from urllib.parse import quote
 import aiohttp
 import time
 import requests
-from .models import Site, SimpleMode, Wallpaper
-
-
+from .models import Site, SimpleMode, User, Wallpaper
+from .initialize_site import initialize_site
 def index_view(request):
     request_time = time.time()
     city = '闵行'
@@ -65,36 +64,65 @@ def index_view(request):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
 
+    # 初始化default用户
+    jaccount_default_flag = User.objects.filter(jaccount='000')
+    if not jaccount_default_flag:
+        User.objects.create(jaccount='000')
+        user = User.objects.filter(jaccount='000')[0]
+        SimpleMode.objects.create(user=user)
+        Wallpaper.objects.create(user=user)
+        initialize_site(user)
+    
     try:
-        result = jac(request)
-        result = result['entities'][0]['name']
-        simple_mode_flag = SimpleMode.objects.filter(username=result)
-        if not simple_mode_flag:
-            SimpleMode.objects.create(username=result)
-        simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
-        wallpaper_flag = Wallpaper.objects.filter(username=result)
-        if not wallpaper_flag:
-            Wallpaper.objects.create(username=result)
-        wallpaper = {'username': result,
+        result_origin = jac(request)
+        result = result_origin['entities'][0]['name']
+        jaccount = result_origin['entities'][0]['account']
+        jaccount_flag = User.objects.filter(jaccount=jaccount)
+        
+        # 如果这个Jac用户第一次登录，则在数据库的User表中新建一条记录
+        # 并且复制default用户的所有网站，作为初始设置
+        if not jaccount_flag:
+            User.objects.create(user_name=result, jaccount=jaccount)
+            user = User.objects.filter(jaccount=jaccount)[0]
+            SimpleMode.objects.create(user=user, username=result, is_active=False)
+            Wallpaper.objects.create(user=user,username=result)
+            user_site_flag = Site.objects.filter(user='000')
+            for site in user_site_flag:
+                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user)
+        
+        user = User.objects.filter(jaccount=jaccount)[0]
+        simple_mode_flag = SimpleMode.objects.filter(user=jaccount)
+        # if not simple_mode_flag:
+        #     SimpleMode.objects.create(user=user, username=result, is_active=False)
+        simple_mode = {'user':user, 'username': result, 'is_active': simple_mode_flag[0].is_active}
+        
+        wallpaper_flag = Wallpaper.objects.filter(user=jaccount)
+        # if not wallpaper_flag:
+        #     Wallpaper.objects.create(user=user,username=result)
+        wallpaper = {'user':user,
+                     'username': result,
                      'photo_url': '../media/wallpaper/' + wallpaper_flag[0].photo_name,
                      'photo_name': wallpaper_flag[0].photo_name,
                      'css': wallpaper_flag[0].css}
     except:
         result = ''
-        SimpleMode.objects.create()
-        simple_mode = {'username': 'visitor', 'is_active': False}
-        Wallpaper.objects.create()
-        wallpaper = {'username': "visitor",
+        jaccount = '000'
+        user = User.objects.filter(jaccount='000')[0]
+        simple_mode = {'user': user,'username': 'visitor', 'is_active': False}
+        wallpaper = {'user': user,
+                     'username': "visitor",
                      'photo_url': '../media/wallpaper/visitor.jpg',
                      'photo_name': 'visitor.jpg',
                      "css": "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"}
         print(f"Please login!")
-
+        print("except!")
+    request.session['jaccount']=jaccount
     response_time = time.time()
     print('数据获取结束，共用时', response_time - request_time, 's')
 
-    sites = Site.objects.filter(is_active=True)
-
+    # sites = Site.objects.filter(is_active=True)
+    sites = Site.objects.filter(user=jaccount,is_active=True)
+    user = User.objects.filter(jaccount=jaccount)[0]
     locals = {
         'jwc': jwc(responses['jwc']),
         'jnews': jnews(responses['jnews']),
@@ -112,7 +140,6 @@ def index_view(request):
 
     process_time = time.time()
     print('数据处理结束，共用时', process_time - response_time, 's')
-
     if request.method == 'GET':
         return render(request, 'websites.html', locals)
 
