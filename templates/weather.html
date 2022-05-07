@@ -15,7 +15,7 @@
 
     <title>天气详情</title>
 </head>
-<body class="body">
+<body class="body" id="body" onload="change_background()">
 <div class="main">
     <div class="clear_box">
         <div class="text_box">
@@ -23,7 +23,7 @@
                 <div class="left">
                     <i id="today_icon"></i>
                     <p class="T_current">{{ wendu }}℃</p>
-                    <p class="city">{{ city }} {{ forecast.day0.type }}</p>
+                    <p class="city" id="currentWeather">{{ city }} {{ forecast.day0.type }}</p>
                     <p class="city">{{ forecast.day0.low }} ~ {{ forecast.day0.high }}℃</p>
                 </div>
                 <div class="right">
@@ -60,5 +60,6 @@
 
 <script src="https://kit.fontawesome.com/80275103ba.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="../static/js/weather.js"></script>
+<script type="text/javascript" src="../static/js/weatherbackground.js"></script>
 </body>
 </html>
