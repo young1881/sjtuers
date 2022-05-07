@@ -13,12 +13,9 @@ function upload_img() {
         type: 'POST', // 请求类型
         data: formData, // 请求数据
         dataType: "JSON", // 返回数据格式
-        contentType: false, //表示不处理数据
-        processData: false,
-        cache: false,
         success: function (data) {
             if (data === 1) {
-                alert("上传成功，刷新后即可使用");
+                location.reload();
             }else if (data === 0) {
                 alert("上传失败");
             }
@@ -36,7 +33,7 @@ function change_color_wallpaper(obj){
     $.ajax({
         url: "/index/color_wallpaper/",
         type: "POST",        //请求类型
-        data: {"css": css, "color_wallpaper_username": username},
+        data: {"css": css, "color_wallpaper_username": username, 'csrfmiddlewaretoken': csrf_token,},
     })
     closeWallpaperDialog();
 }
@@ -50,6 +47,7 @@ function name_to_css(name){
         return "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)"
     } else if (name === "RareWind"){
         return "linear-gradient(to top, #a8edea 0%, #fed6e3 100%)"
+    } else if (name === "SunnyDay") {
+        return "linear-gradient(120deg, #f6d365 0%, #fda085 100%);"
     }
-        return "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"
 }

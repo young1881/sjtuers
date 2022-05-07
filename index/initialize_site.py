@@ -1,4 +1,5 @@
-from .models import Site, User
+from .models import Site
+
 
 def initialize_site(user):
     Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/教学信息.png', user=user)
@@ -20,5 +21,5 @@ def initialize_site(user):
     Site.objects.create(site_name='淘宝', site_url='https://www.taobao.com/', site_src='https://www.taobao.com/favicon.ico', user=user)
     Site.objects.create(site_name='爱奇艺', site_url='https://www.iqiyi.com/', site_src='https://www.iqiyi.com/favicon.ico', user=user)
     Site.objects.create(site_name='一个木函', site_url='https://web.woobx.cn/', site_src='https://web.woobx.cn/favicon.ico', user=user)
-    Site.objects.create(site_name='百度', site_url='https://www.baidu.com/', site_src='https://www.baidu.com/favicon.ico', user=user)
-    Site.objects.create(site_name='搜狗', site_url='https://www.sogou.com/', site_src='https://www.sogou.com/favicon.ico', user=user)
+    Site.objects.create(site_name='百度', site_url='https://www.baidu.com/', site_src='https://www.baidu.com/favicon.ico', user=user, is_active=False)
+    Site.objects.create(site_name='搜狗', site_url='https://www.sogou.com/', site_src='https://www.sogou.com/favicon.ico', user=user, is_active=False)
