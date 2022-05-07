@@ -9,9 +9,6 @@ function refactor_countdown(){
             "day": $("#DD").val(),
             'csrfmiddlewaretoken': csrf_token,
         },
-        contentType: false,
-        processData: false,
-        cache: false,
         success: function (response) {
             console.log(response);
             location.reload();
@@ -20,5 +17,4 @@ function refactor_countdown(){
             alert("请求失败，请联系管理员！")
         }
     })
-    location.reload();
 }
