@@ -13,6 +13,9 @@ function upload_img() {
         type: 'POST', // 请求类型
         data: formData, // 请求数据
         dataType: "JSON", // 返回数据格式
+        contentType: false, //表示不处理数据
+        processData: false,
+        cache: false,
         success: function (data) {
             if (data === 1) {
                 location.reload();
