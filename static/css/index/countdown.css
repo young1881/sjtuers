@@ -24,7 +24,7 @@ display: inline-block;
 }
 
 
-.countdown .countdown_card .font{
+.countdown .countdown_card .count_font{
   font-family: KaiTi;
   font-size: 32px;
   font-weight: 600;
