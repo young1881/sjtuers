@@ -309,21 +309,24 @@
     </div>
 
     <div id="add_site" class="content_box">
-        <h1>添加网站收藏</h1>
-        <div class = "box_form">
-            <div class = "item">
-                <input type="text" placeholder="网站名称" id="site_name" name="site_name" required="required">
+        <form>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <h1>添加网站收藏</h1>
+            <div class = "box_form">
+                <div class = "item">
+                    <input type="text" placeholder="网站名称" id="site_name" name="site_name" required="required">
+                </div>
+                <div class = "item">
+                    <input type="text" placeholder="网址" id="site_url" name="site_url" required="required" >
+                </div>
+                <a class = "button1" href = "javascript:void(0)" onclick = "add_site()">
+                    <input type="submit" value="完 成" id="site_submit"/>
+                </a>
+                <div class = "button2">
+                    <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
+                </div>
             </div>
-            <div class = "item">
-                <input type="text" placeholder="网址" id="site_url" name="site_url" required="required" >
-            </div>
-            <a class = "button1" href = "javascript:void(0)" onclick = "add_site()">
-                <input type="submit" value="完 成" id="site_submit"/>
-            </a>
-            <div class = "button2">
-                <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div id="refactor_site" class="content_box">
@@ -343,24 +346,24 @@
 
     <div id="countdown_dialog" class="content_box">
         <h1>自定义倒计时</h1>
-        <form name="reg_testdate" action="/index/" method = 'post' class = "box_form">
+        <form name="reg_testdate" class = "box_form">
             <div class = "item">
-                    <input type="text" placeholder="日期名" id="refactor_site_name" name="refactor_site_name">
+                    <input type="text" placeholder="日期名" id="refactor_date_name" name="refactor_date_name">
             </div>
             <div class="date_list">
-                <select name="YYYY" onchange="YYYYDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="YYYY" id="YYYY" onchange="YYYYDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">请选择 年</option>
                 </select>
-                <select name="MM" onchange="MMDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="MM" id="MM" onchange="MMDD(this.value)" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">选择 月</option>
                 </select>
-                <select name="DD" style="width:80px;font-size:16px;margin-left:10px">
+                <select name="DD" id="DD" style="width:80px;font-size:16px;margin-left:10px">
                     <option value="">选择 日</option>
                 </select>
             </div>
 
             <div class = "button1">
-                <a  href = "javascript:void(0)" onclick = "closeCountdownDialog()">
+                <a  href = "javascript:void(0)" onclick = "refactor_countdown()">
                     <input type="submit" value="修 改" id="site_submit"/>
                 </a>
             </div>
@@ -368,7 +371,6 @@
             <div class = "button2">
                     <a href = "javascript:void(0)" onclick = "closeCountdownDialog()">取 消</a>
             </div>
-
         </form>
     </div>
 {% endif %}
@@ -381,36 +383,48 @@
                 <div class="wallpaper show">
                     <div class="color_wallpaper_all">
                         {{ color_wallpaper("DustyGrass", "Dusty Grass", "background: linear-gradient(90deg, #70e1f5 0%, #ffd194 100%);") }}
-                        {{ color_wallpaper("NightFade", "Night Fade", "background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)") }}
+                        {{ color_wallpaper("NightFade", "Night Fade", "background: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);") }}
                         {{ color_wallpaper("WinterNeva", "Winter Neva", "background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)") }}
-                        {{ color_wallpaper("MalibuBeach", "Malibu Beach", "background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%)") }}
+                        {{ color_wallpaper("SunnyDay", "Sunny Day", "background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);") }}
                         {{ color_wallpaper("RareWind", "Rare Wind", "background: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);") }}
+                    </div>
+                    <div class = "button4">
+                            <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
                     </div>
                 </div>
                 <div class="wallpaper">
                     <form id="upload_img_form">
-                        <div style="margin: 50px;">
+                        <div class="upload">
                             <input type="file" name="upload_file" id="upload_file">
                         </div>
-                        <div style="margin: 50px;">
-                            <input onclick="upload_img()" type="button" value="提交">
+                        <div class="button3">
+
+                            <a href = "javascript:void(0)" onclick = "upload_img()">
+                                <input type="submit" value="提 交">
+                            </a>
+                        </div>
+                        <div class = "button5">
+                            <a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-<a href = "javascript:void(0)" onclick = "closeWallpaperDialog()">点我关闭</a>
 </div>
 {% endblock %}
 
 {% block countdown %}
 <div class="countdown" id="countdown">
     <div class="countdown_card">
-        <div>离除夕还有</div>
-        <div class="count_number">
-            2
+        <div class="count_font">
+            离{{ countdown.date_name }}还有
         </div>
-        <div>天</div>
+        <div class="count_number">
+            {{ countdown.interval }}
+        </div>
+        <div class="count_font">
+            天
+        </div>
     </div>
 </div>
 {% endblock %}

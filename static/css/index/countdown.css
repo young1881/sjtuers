@@ -12,15 +12,22 @@
   /*align-items: center;*/
 }
 
-.countdown_number {
-    font-size: 35px;
+.countdown div{
+display: inline-block;
+}
+
+.countdown .countdown_card .count_number {
+    display: inline-block;
+    font-family: Fantasy;
+    font-size: 60px;
+    margin: 0 5px;
 }
 
 
-.countdown div{
-  display: inline;
-  font-size: 30px;
-  font-weight: 400;
+.countdown .countdown_card .count_font{
+  font-family: KaiTi;
+  font-size: 32px;
+  font-weight: 600;
   letter-spacing: 5px;
   color: #222222;
 }

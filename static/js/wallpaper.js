@@ -18,7 +18,7 @@ function upload_img() {
         cache: false,
         success: function (data) {
             if (data === 1) {
-                alert("上传成功，刷新后即可使用");
+                location.reload();
             }else if (data === 0) {
                 alert("上传失败");
             }
@@ -36,20 +36,21 @@ function change_color_wallpaper(obj){
     $.ajax({
         url: "/index/color_wallpaper/",
         type: "POST",        //请求类型
-        data: {"css": css, "color_wallpaper_username": username},
+        data: {"css": css, "color_wallpaper_username": username, 'csrfmiddlewaretoken': csrf_token,},
     })
     closeWallpaperDialog();
 }
 
 function name_to_css(name){
-    if (name === 'NightFade'){
-        return "linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)"
+    if (name === "NightFade"){
+        return "linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)"
     } else if (name === "WinterNeva"){
         return "linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)"
-    } else if (name === "MalibuBeach"){
-        return "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)"
+    } else if (name === "SunnyDay"){
+        return "linear-gradient(120deg, #f6d365 0%, #fda085 100%)"
     } else if (name === "RareWind"){
         return "linear-gradient(to top, #a8edea 0%, #fed6e3 100%)"
-    }
+    } else{
         return "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"
+    }
 }

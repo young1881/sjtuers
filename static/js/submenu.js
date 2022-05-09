@@ -1,5 +1,5 @@
 $("#sub-menu").hide();
-
+var csrf_token = $("[name='csrfmiddlewaretoken']").val();
 $(".box").on("contextmenu", function(event){undefined
     event.preventDefault();//取消默认的浏览器自带右键
     site_name = this.id;
@@ -26,9 +26,23 @@ function add_site() {
         url:'/index/add_site/',
         method:'post',
         data:{"site_name":$("#site_name").val(),
-            "site_url":$("#site_url").val()},
+            "site_url":$("#site_url").val(),
+            'csrfmiddlewaretoken': csrf_token,
+        },
+        dataType: "JSON",
+        success: function (response) {
+            if (response === 1) {
+                location.reload();
+            }else if (response === 0) {
+                alert("超出添加上限，请删除不需要的网址后再添加！");
+            } else if (response === 2){
+                alert("该网址已存在，将其重命名！")
+            }
+        },
+        error: function () {
+            alert("请求失败，请联系管理员！")
+        }
     })
-    location.reload();
 }
 
 function refactor_site(){
@@ -37,25 +51,32 @@ function refactor_site(){
         url:'/index/refactor_site/',
         method:'post',
         data:{"refactor_site_name":$("#refactor_site_name").val(),
-            "refactor_site_url": site_url},
+            "refactor_site_url": site_url,
+            'csrfmiddlewaretoken': csrf_token,
+        },
+        success: function (response) {
+            console.log(response);
+            location.reload();
+        },
+        error: function () {
+            alert("请求失败，请联系管理员！")
+        }
     })
-    location.reload();
 }
 
 function delete_site(){
-    delete_site_name=document.getElementById(site_name).style.display='none';
     $.ajax({
-    url: "/index/delete_site/",
-    type: "POST",        //请求类型
-    data: {"delete_site_name": site_name},
-    dataType: "html",
-    success: function (response) {
-        // console.log("已删除");
-        console.log(response);
-    },
-    error: function () {
-        //当请求错误之后，自动调用
-    }
+        url: "/index/delete_site/",
+        type: "POST",        //请求类型
+        data: {"delete_site_name": site_name,'csrfmiddlewaretoken': csrf_token,},
+        dataType: "html",
+        success: function (response) {
+            console.log(response);
+            delete_site_name=document.getElementById(site_name).style.display='none';
+        },
+        error: function () {
+            alert("请求失败，请联系管理员！")
+        }
 })}
 
 function openRefactorDialog(){
