@@ -5,10 +5,12 @@ from lxml import etree
 from urllib.parse import quote
 import aiohttp
 import time
+import datetime
 import requests
 import urllib.request
 from django.http import HttpResponse
-from .models import Site, SimpleMode, Wallpaper
+from .models import Site, SimpleMode, User, Wallpaper, Countdown
+from .initialize_site import initialize_site
 
 
 def index_view(request):
@@ -25,7 +27,6 @@ def index_view(request):
         'poem',
         'canteen',
         'lib',
-        # 'jac'
     ]
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
@@ -39,9 +40,7 @@ def index_view(request):
         'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
         'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
     ]
-    urls_names = {}
-    for i in range(len(urls)):
-        urls_names[urls[i]] = names[i]
+    urls_names = dict(zip(urls, names))
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
@@ -67,36 +66,67 @@ def index_view(request):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
 
+    # 初始化default用户
+    jaccount_default_flag = User.objects.filter(jaccount='000')
+    if not jaccount_default_flag:
+        User.objects.create(jaccount='000')
+        user = User.objects.filter(jaccount='000')[0]
+        SimpleMode.objects.create(user=user)
+        Wallpaper.objects.create(user=user)
+        Countdown.objects.create(user=user)
+        initialize_site(user)
+
     try:
-        result = jac(request)
-        result = result['entities'][0]['name']
-        simple_mode_flag = SimpleMode.objects.filter(username=result)
-        if not simple_mode_flag:
-            SimpleMode.objects.create(username=result)
-        simple_mode = {'username': result, 'is_active': simple_mode_flag[0].is_active}
-        wallpaper_flag = Wallpaper.objects.filter(username=result)
-        if not wallpaper_flag:
-            Wallpaper.objects.create(username=result)
-        wallpaper = {'username': result,
-                     'photo_url': '../media/wallpaper/' + wallpaper_flag[0].photo_name,
-                     'photo_name': wallpaper_flag[0].photo_name,
-                     'css': wallpaper_flag[0].css}
+        result_origin = jac(request)
+        result = result_origin['entities'][0]['name']
+        jaccount = result_origin['entities'][0]['account']
+        jaccount_flag = User.objects.filter(jaccount=jaccount)
+
+        # 如果这个Jac用户第一次登录，则在数据库的User表中新建一条记录
+        # 并且复制default用户的所有网站，作为初始设置
+        if not jaccount_flag:
+            User.objects.create(user_name=result, jaccount=jaccount)
+            user = User.objects.filter(jaccount=jaccount)[0]
+            SimpleMode.objects.create(user=user, username=result, is_active=False)
+            Wallpaper.objects.create(user=user, username=result)
+            Countdown.objects.create(user=user, username=result)
+            user_site_flag = Site.objects.filter(user='000')
+            for site in user_site_flag:
+                Site.objects.create(site_name=site.site_name, site_url=site.site_url, site_src=site.site_src, user=user,
+                                    is_active=site.is_active)
+
+        user = User.objects.filter(jaccount=jaccount)[0]
+        simple_mode_flag = SimpleMode.objects.filter(user=jaccount)[0]
+        simple_mode = {'user': user, 'username': result, 'is_active': simple_mode_flag.is_active}
+        wallpaper_flag = Wallpaper.objects.filter(user=jaccount)[0]
+        wallpaper = {'user': user,
+                     'username': result,
+                     'photo_url': '../media/wallpaper/' + wallpaper_flag.photo_name,
+                     'photo_name': wallpaper_flag.photo_name,
+                     'css': wallpaper_flag.css}
+        countdown_flag = Countdown.objects.filter(user=jaccount)[0]
+        countdown = compute_countdown(countdown_flag.date_name, countdown_flag.year,
+                                      countdown_flag.month, countdown_flag.day)
     except:
         result = ''
-        SimpleMode.objects.create()
-        simple_mode = {'username': 'visitor', 'is_active': False}
-        Wallpaper.objects.create()
-        wallpaper = {'username': "visitor",
+        jaccount = '000'
+        user = User.objects.filter(jaccount='000')[0]
+        simple_mode = {'user': user, 'username': 'visitor', 'is_active': False}
+        wallpaper = {'user': user,
+                     'username': "visitor",
                      'photo_url': '../media/wallpaper/visitor.jpg',
                      'photo_name': 'visitor.jpg',
                      "css": "linear-gradient(90deg, #70e1f5 0%, #ffd194 100%)"}
+        countdown = compute_countdown("元旦", 2023, 1, 1)
         print(f"Please login!")
+        print("except!")
+
+    request.session['jaccount'] = jaccount
 
     response_time = time.time()
     print('数据获取结束，共用时', response_time - request_time, 's')
 
-    sites = Site.objects.filter(is_active=True)
-
+    sites = Site.objects.filter(user=jaccount, is_active=True)
     locals = {
         'jwc': jwc(responses['jwc']),
         'jnews': jnews(responses['jnews']),
@@ -109,12 +139,12 @@ def index_view(request):
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
-        "wallpaper" : wallpaper,
+        "wallpaper": wallpaper,
+        'countdown': countdown,
     }
 
     process_time = time.time()
     print('数据处理结束，共用时', process_time - response_time, 's')
-
     if request.method == 'GET':
         return render(request, 'websites.html', locals)
 
@@ -192,8 +222,8 @@ def weibo(response):
     for i in range(len(tr_list)):
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
         name = str(i + 1) + ' ' + name
-        if len(name.encode('utf-8')) > 50:
-            name = cut_str(name, 48) + '...'
+        if len(name.encode('utf-8')) > 46:
+            name = cut_str(name, 44) + '...'
         url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
         weibo_item = {'name': name, 'url': url, 'hot': hot}
@@ -252,10 +282,17 @@ def poem(response):
 def jac(request):
     token = request.session['token']
     access_token = token['access_token']
-    # print(f"token:{token['access_token']}")
+
     result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
-    print(f"result:{result.json()}")
     return result.json()
+
+
+def compute_countdown(date_name, year, month, day):
+    d1 = datetime.date.today()
+    d2 = datetime.date(year, month, day)
+    interval = d2 - d1
+    countdown = {'date_name': date_name, "interval": interval.days}
+    return countdown
 
 
 def get_city(request):

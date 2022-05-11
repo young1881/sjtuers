@@ -14,7 +14,7 @@ admin.site.register(User, UserManager)
 
 
 class SiteManager(admin.ModelAdmin):
-    list_display = ['id', 'site_name','site_url','site_src','is_active']
+    list_display = ['id', 'user', 'site_name','site_url','site_src','is_active']
     list_display_links = ['site_name']
     search_fields = ['site_name']
 
@@ -23,16 +23,15 @@ admin.site.register(Site, SiteManager)
 
 
 class SimpleModeManager(admin.ModelAdmin):
-    list_display = ['id','username','is_active']
+    list_display = ['id', 'user','username','is_active']
     list_display_links = ['username']
     search_fields = ['username']
-
 
 admin.site.register(SimpleMode, SimpleModeManager)
 
 
 class WallpaperManager(admin.ModelAdmin):
-    list_display = ['id', 'username', 'photo', 'photo_name', 'css']
+    list_display = ['id', 'user','username', 'photo', 'photo_name', 'css']
     list_display_links = ['username']
     search_fields = ['username']
 
@@ -41,7 +40,7 @@ admin.site.register(Wallpaper, WallpaperManager)
 
 
 class CountdownManager(admin.ModelAdmin):
-    list_display = ['id', 'username', 'date_name', 'year', 'month', 'day']
+    list_display = ['id', 'user', 'username', 'date_name', 'year', 'month', 'day']
     list_display_links = ['username']
     search_fields = ['username']
 

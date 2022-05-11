@@ -1,0 +1,59 @@
+*{
+    /* 初始化 */
+    margin: 0;
+    padding: 0px;
+}
+
+.about_body{
+    /* 100%窗口高度 */
+    height: 100vh;
+    /* 弹性布局 居中 */
+    display: flex;
+    justify-content: center;
+    background-image: url(../../img/about_background/about.png);
+    background-size: 100% 100%;
+
+}
+
+.about_card {
+    width: 1080px;
+    height: 480px;
+    box-shadow: 0 0 40px 4px rgb(255 255 255 / 80%);
+    background: rgba(255, 255, 255, 0.5);
+    margin: 100px auto;
+    padding: 20px;
+}
+
+span.about_text{
+    background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-top: 20px;
+    margin-left: 40px
+
+}
+
+.about_line{
+    margin: 10px;
+    width: 500px;
+    border: 2px solid #1d3e5c;
+}
+
+.about_box{
+    margin: 20px 25px;
+    font-size: 16px;
+}
+
+.about_box h1{
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+
+.about_box p{
+    margin-top: 8px;
+}
