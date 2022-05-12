@@ -212,7 +212,7 @@
             {% if jac == '' %}
                 登录 
             {% else %}
-                你好，{{jac}}！
+                {{jac}}
             {% endif %}
             </p>
             </a>
@@ -238,7 +238,7 @@
             </a>
         </li>
         <li style="--t:60%;">
-            <a href="/about/">
+            <a href="/about/" target="_blank">
                 <i class="fa fa-cog" aria-hidden="true"></i>
                 <p>关于</p>
             </a>
@@ -264,7 +264,7 @@
             </a>
         </li>
         <li style="--t:60%;">
-            <a href="/about/">
+            <a href="/about/" target="_blank">
                 <i class="fa fa-cog" aria-hidden="true"></i>
                 <p>关于</p>
             </a>
@@ -278,7 +278,7 @@
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
             </a>
             <p> 
-                {{jac}}-登出 
+                登出 
             </p>
         </li>
         {% endif %}
