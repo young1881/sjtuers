@@ -9,6 +9,8 @@ import datetime
 import requests
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
 from .initialize_site import initialize_site
+from functools import wraps
+from asyncio.proactor_events import _ProactorBasePipeTransport
 
 
 def index_view(request):
@@ -245,17 +247,18 @@ def bilibli(response):
 #         zhihu_dict.append(zhihu_item)
 #     return zhihu_dict
 
+# 代理网站爬取的函数
 def weibo(response):
     html = get_html(response)
     tree = etree.HTML(html)
-    tr_list = tree.xpath('//tbody/tr')[:5]
+    tr_list = tree.xpath('//table/tbody/tr')[:5]
     weibo_dict = []
     for i in range(len(tr_list)):
-        name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
+        name = tr_list[i].xpath('./td[2]/a/text()')[0]
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 46:
             name = cut_str(name, 44) + '...'
-        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[2]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
         weibo_item = {'name': name, 'url': url, 'hot': hot}
         weibo_dict.append(weibo_item)
@@ -276,6 +279,34 @@ def zhihu(response):
         zhihu_item = {'name': name, 'url': url}
         zhihu_dict.append(zhihu_item)
     return zhihu_dict
+
+# def weibo(response):
+#     data = get_json(response)['list']
+#     weibo_dict = []
+#     for i in range(5):
+#         name = data[i]['name']
+#         name = str(i + 1) + ' ' + name
+#         if len(name.encode('utf-8')) > 46:
+#             name = cut_str(name, 44) + '...'
+#         url = data[i]['url']
+#         hot = data[i]['hot']
+#         weibo_item = {'name': name, 'url': url, 'hot': hot}
+#         weibo_dict.append(weibo_item)
+#     return weibo_dict
+#
+#
+# def zhihu(response):
+#     data = get_json(response)['list']
+#     zhihu_dict = []
+#     for i in range(5):
+#         name = data[i]['query']
+#         name = str(i + 1) + ' ' + name
+#         if len(name.encode('utf-8')) > 55:
+#             name = cut_str(name, 53) + "..."
+#         url = data[i]['url']
+#         zhihu_item = {'name': name, 'url': url}
+#         zhihu_dict.append(zhihu_item)
+#     return zhihu_dict
 
 
 def weather(response):
@@ -336,7 +367,7 @@ def jac(request):
     token = request.session['token']
     access_token = token['access_token']
 
-    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}')
+    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}', verify=False)
     return result.json()
 
 
@@ -346,3 +377,17 @@ def compute_countdown(date_name, year, month, day):
     interval = d2 - d1
     countdown = {'date_name': date_name, "interval": interval.days}
     return countdown
+
+
+def silence_event_loop_closed(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except RuntimeError as e:
+            if str(e) != 'Event loop is closed':
+                raise
+    return wrapper
+
+
+_ProactorBasePipeTransport.__del__ = silence_event_loop_closed(_ProactorBasePipeTransport.__del__)
