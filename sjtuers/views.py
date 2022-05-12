@@ -1,8 +1,7 @@
 from django.http import HttpResponseRedirect
 from sjtuers.oauth import jaccount
 from sjtuers.settings import JACCOUNT_CLIENT_ID
-from django.shortcuts import redirect, reverse
-import requests
+from django.shortcuts import redirect
 from authlib.jose import jwt
 from authlib.oidc.core import CodeIDToken
 from urllib.parse import urlencode
@@ -19,7 +18,6 @@ def login(request):
 
 def authorize(request):
     token: dict = jaccount.authorize_access_token(request)
-    print(f"token:{token}")
     claims = jwt.decode(token.pop('id_token'),
                         jaccount.client_secret, claims_cls=CodeIDToken)
     claims.validate()
@@ -30,7 +28,6 @@ def authorize(request):
 
 
 def logout(request):
-    redirect_uri = request.build_absolute_uri('/index')
     response = HttpResponseRedirect(
         'https://jaccount.sjtu.edu.cn/oauth2/logout?' +
         urlencode({

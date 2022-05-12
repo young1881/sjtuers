@@ -27,6 +27,7 @@ class SimpleModeManager(admin.ModelAdmin):
     list_display_links = ['username']
     search_fields = ['username']
 
+
 admin.site.register(SimpleMode, SimpleModeManager)
 
 

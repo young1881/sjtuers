@@ -2,7 +2,7 @@ from django.shortcuts import render
 import requests
 from lxml import etree
 
-# Create your views here.
+
 def get_html(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
@@ -51,7 +51,7 @@ def weather_view(request):
         'fengxiang': XML_tree.xpath('//fengxiang/text()')[0],
         'sunrise': XML_tree.xpath('//sunrise_1/text()')[0],
         'sunset': XML_tree.xpath('//sunset_1/text()')[0],
-        'yesterday':{
+        'yesterday': {
             'date': '昨天',
             'high': XML_tree.xpath('//high_1/text()')[0][-3:-1],
             'low': XML_tree.xpath('//low/text()')[0][-3:-1],
