@@ -12,7 +12,7 @@ class User(models.Model):
         verbose_name_plural = 'User'
 
     def __str__(self):
-        return '%s'%(self.user_name)
+        return '%s' % self.user_name
 
 
 class Site(models.Model):
@@ -28,10 +28,11 @@ class Site(models.Model):
         verbose_name_plural = 'site'
 
     def __str__(self):
-        return '网址 %s'%(self.site_name)
+        return '网址 %s' % self.site_name
+
 
 class SimpleMode(models.Model):
-    user = models.ForeignKey(User, to_field='jaccount',on_delete=models.CASCADE, default='000')
+    user = models.ForeignKey(User, to_field='jaccount', on_delete=models.CASCADE, default='000')
     username = models.CharField('用户名', max_length=30, default='visitor')
     is_active = models.BooleanField('是否活跃', default=False)
 
@@ -41,11 +42,11 @@ class SimpleMode(models.Model):
         verbose_name_plural = 'simpleMode'
 
     def __str__(self):
-        return '%s'%(self.username)
+        return '%s' % self.username
 
 
 class Wallpaper(models.Model):
-    user = models.ForeignKey(User, to_field='jaccount',on_delete=models.CASCADE, default='000')
+    user = models.ForeignKey(User, to_field='jaccount', on_delete=models.CASCADE, default='000')
     username = models.CharField(max_length=64, default='visitor')
     photo = models.ImageField(upload_to='wallpaper/', default="#")
     photo_name = models.CharField(max_length=120, default='visitor.jpg')
@@ -57,11 +58,11 @@ class Wallpaper(models.Model):
         verbose_name_plural = 'Wallpaper'
 
     def __str__(self):
-        return '%s'%(self.username)
+        return '%s' % self.username
 
 
 class Countdown(models.Model):
-    user = models.ForeignKey(User, to_field='jaccount',on_delete=models.CASCADE, default='000')
+    user = models.ForeignKey(User, to_field='jaccount', on_delete=models.CASCADE, default='000')
     username = models.CharField(max_length=64, default='visitor')
     date_name = models.CharField(max_length=64, default="元旦")
     year = models.IntegerField(default=2023)
@@ -74,4 +75,4 @@ class Countdown(models.Model):
         verbose_name_plural = 'countdown'
 
     def __str__(self):
-        return '%s'%(self.username)
+        return '%s' % self.username
