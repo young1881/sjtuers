@@ -2,17 +2,17 @@ from .models import Site
 
 
 def initialize_site(user):
-    Site.objects.create(site_name='canvas', site_url='https://oc.sjtu.edu.cn/', site_src='../static/img/在线课程.png', user=user)
+    Site.objects.create(site_name='Canvas', site_url='https://oc.sjtu.edu.cn/', site_src='../static/img/在线课程.png', user=user)
     Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/教学信息.png', user=user)
-    Site.objects.create(site_name='学生事务', site_url='https://affairs.sjtu.edu.cn/', site_src='../static/img/school.png', user=user)
-    Site.objects.create(site_name='交我办', site_url='https://my.sjtu.edu.cn/', site_src='../static/img/school.png', user=user)
+    Site.objects.create(site_name='学生事务', site_url='https://affairs.sjtu.edu.cn/', site_src='../static/img/学生事务.png', user=user)
+    Site.objects.create(site_name='交我办', site_url='https://my.sjtu.edu.cn/', site_src='../static/img/交我办.png', user=user)
 
     Site.objects.create(site_name='交大官网', site_url='https://www.sjtu.edu.cn/', site_src='../static/img/官网.png', user=user)
     Site.objects.create(site_name='研究生院', site_url='https://www.gs.sjtu.edu.cn/', site_src='../static/img/研究生网.png', user=user)
     Site.objects.create(site_name='交大邮箱', site_url='https://mail.sjtu.edu.cn/', site_src='../static/img/邮箱.png', user=user)
-    Site.objects.create(site_name='交大jbox', site_url='https://jbox.sjtu.edu.cn/', site_src='../static/img/邮箱.png', user=user)
+    Site.objects.create(site_name='交大云盘', site_url='https://jbox.sjtu.edu.cn/', site_src='../static/img/交大云盘.png', user=user)
     Site.objects.create(site_name='水源社区', site_url='https://shuiyuan.sjtu.edu.cn/', site_src='../static/img/水源.png', user=user)
-    Site.objects.create(site_name='正版软件', site_url='http://lic.si.sjtu.edu.cn/Default/index/', site_src='../static/img/正版软件.png', user=user)
+    # Site.objects.create(site_name='正版软件', site_url='http://lic.si.sjtu.edu.cn/Default/index/', site_src='../static/img/正版软件.png', user=user)
     Site.objects.create(site_name='䇹政项目', site_url='https://chuntsung.sjtu.edu.cn/', site_src='../static/img/䇹政.png', user=user)
     Site.objects.create(site_name='创新实践', site_url='https://uitp.sjtu.edu.cn/', site_src='../static/img/大创.png', user=user)
     Site.objects.create(site_name='教学楼', site_url='https://ids.sjtu.edu.cn/', site_src='../static/img/教学楼.png', user=user)

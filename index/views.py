@@ -30,6 +30,8 @@ def index_view(request):
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
         'https://www.sjtu.edu.cn/',
         'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city),
+        # 'https://tenapi.cn/resou/',
+        # 'https://tenapi.cn/zhihuresou/',
         'https://tophub.today/n/KqndgxeLl9',
         'https://tophub.today/n/mproPpoq6O',
         'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
@@ -215,6 +217,33 @@ def bilibli(response):
         bilibili.append(dic)
     return bilibili
 
+# def weibo(response):
+#     data = get_json(response)['list']
+#     weibo_dict = []
+#     for i in range(5):
+#         name = data[i]['name']
+#         name = str(i + 1) + ' ' + name
+#         if len(name.encode('utf-8')) > 46:
+#             name = cut_str(name, 44) + '...'
+#         url = data[i]['url']
+#         hot = data[i]['hot']
+#         weibo_item = {'name': name, 'url': url, 'hot': hot}
+#         weibo_dict.append(weibo_item)
+#     return weibo_dict
+
+
+# def zhihu(response):
+#     data = get_json(response)['list']
+#     zhihu_dict = []
+#     for i in range(5):
+#         name = data[i]['query']
+#         name = str(i + 1) + ' ' + name
+#         if len(name.encode('utf-8')) > 55:
+#             name = cut_str(name, 53) + "..."
+#         url = data[i]['url']
+#         zhihu_item = {'name': name, 'url': url}
+#         zhihu_dict.append(zhihu_item)
+#     return zhihu_dict
 
 def weibo(response):
     html = get_html(response)
