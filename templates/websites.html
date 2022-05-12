@@ -221,25 +221,25 @@
         {% if jac == '' %}
         <li style="--t:30%;">
             <a href = "JavaScript:void(0)" onclick = "noPermissions('请登陆后使用该功能')">
-                <i class="fa fa-th-large" aria-hidden="true"></i>
-                <p>网站设置</p>
+                <i class="fa-solid fa-splotch"></i>
+                <p>网站收藏</p>
             </a>
         </li>
         <li style="--t:40%;">
             <a href="JavaScript:void(0)" onclick = "noPermissions('请登陆后使用该功能')">
-                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <i class="fa-solid fa-clock"></i>
                 <p>倒计时修改</p>
             </a>
         </li>
         <li style="--t:50%;">
             <a href="JavaScript:void(0)" onclick = "noPermissions('请登陆后使用该功能')">
-                <i class="fa fa-user" aria-hidden="true"></i>
+                <i class="fa-solid fa-palette"></i>
                 <p>修改壁纸</p>
             </a>
         </li>
         <li style="--t:60%;">
             <a href="/about/" target="_blank">
-                <i class="fa fa-cog" aria-hidden="true"></i>
+                <i class="fa-solid fa-house"></i>
                 <p>关于</p>
             </a>
         </li>
@@ -247,25 +247,25 @@
         {% else %}
         <li style="--t:30%;">
             <a href = "JavaScript:void(0)" onclick = "openSiteDialog()">
-                <i class="fa fa-th-large" aria-hidden="true"></i>
-            <p>网站设置</p>
+                <i class="fa-solid fa-splotch"></i>
+            <p>网站收藏</p>
             </a>
         </li>
         <li style="--t:40%;">
             <a href="JavaScript:void(0)" onclick = "openCountdownDialog()">
-                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <i class="fa-solid fa-clock"></i>
                 <p>倒计时修改</p>
             </a>
         </li>
         <li style="--t:50%;">
             <a href="JavaScript:void(0)" onclick = "openWallpaperDialog()">
-                <i class="fa fa-user" aria-hidden="true"></i>
+                <i class="fa-solid fa-palette"></i>
                 <p>修改壁纸</p>
             </a>
         </li>
         <li style="--t:60%;">
             <a href="/about/" target="_blank">
-                <i class="fa fa-cog" aria-hidden="true"></i>
+                <i class="fa-solid fa-house"></i>
                 <p>关于</p>
             </a>
         </li>
@@ -422,8 +422,10 @@
         <div class="count_font">
             离{{ countdown.date_name }}还有
         </div>
-        <div class="count_number">
-            {{ countdown.interval }}
+        <div class="number_box">
+            <div class="count_number">
+                {{ countdown.interval }}
+            </div>
         </div>
         <div class="count_font">
             天
