@@ -15,6 +15,7 @@
 
 .weather .card {
     width: 320px;
+    height: 160px;
     margin: 10px;
     padding: 20px 10px;
     /*background: #ebf5fc;*/
@@ -24,6 +25,8 @@
     box-shadow: -6px -6px 20px rgba(255, 255, 255, 1),
     6px 6px 20px rgba(0, 0, 0, .1);
     transition: box-shadow .2s ease-out;
+    color: #ffffff;
+    z-index: 1;
 }
 
 .weather .card:hover {
@@ -32,21 +35,12 @@
     transition: box-shadow .2s ease-out;
 }
 
-.weather .weather-box {
+.today {
     position: relative;
-    margin: 10px;
-    padding: 0 2px 0 2px;
-    position: relative;
-    flex: 1;
-    max-width: 100%;
-    box-sizing: border-box;
-    color: #fffaf0;
-}
-
-.weather-box .today {
-    position: absolute;
-    left: 50%;
-    top: 10%;
+    float: left;
+    text-align: center;
+    justify-content: center;
+    left: 8%;
 }
 
 #today_icon {
@@ -54,17 +48,30 @@
     display: inline;
 }
 
-.weather-box .forecast {
-    position: absolute;
-    top: 10%;
-    left: 0%;
-    height: auto;
+.weather .card .forecast {
+    position: relative;
+    left: 46%;
+}
+
+#day0_icon {
+    font-size: 32px;
+    display: inline-block;
+    margin-top: 12px;
+}
+
+.type {
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: super;
+    margin-left: 10px;
 }
 
 .forecast ul {
     list-style-type: none;
     margin: 5px;
     text-align: justify;
+    position: absolute;
+    width: max-content;
 }
 
 .forecast ul li {
@@ -75,7 +82,16 @@
     padding-right: 6px;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    
+    position: relative;
+    min-width: 34px;
+}
+
+.forecast ul li:hover {
+    background-color: rgba(0, 0, 0, 0.18);
+    transform: scale(0.95);
+    transition: 0.2s;
+    cursor: pointer;
+    color: antiquewhite;
 }
 
 .forecast ul li i {
@@ -86,6 +102,56 @@
     font-size: 12px;
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+.edit {
+    width: 20px;
+    height: 20px;
+    background: url("../../img/edit.png") no-repeat;
+    display: inline-block;
+    opacity: 0.9;
+    vertical-align: middle;
+}
+
+.edit:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.1s ease-in 0s;
+}
+
+.city {
+    font-size: 20px;
+    display: inline;
+}
+
+.T_current {
+    font-size: 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.city:hover,
+#day0_icon:hover,
+.type:hover,
+.T_current:hover {
+    cursor: pointer;
+    color: antiquewhite;
+    transition: 0.2s;
+}
+
+#getVal {
+    margin-left: 110px;
+    font-size: 10px;
+    position: absolute;
+}
+
+.today_info {
+    float: left;
+    margin-top: -5px
+}
+
+.today_city {
+    min-height: 27.2px;
 }
 
 div {

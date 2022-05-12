@@ -8,7 +8,6 @@ import time
 import datetime
 import requests
 import urllib.request
-from django.http import HttpResponse
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
 from .initialize_site import initialize_site
 
@@ -308,15 +307,3 @@ def get_city(request):
     except Exception as e:
         city = '闵行'
     return city
-
-
-def update_weather(request):
-    city_name = request.POST.get('city_name')
-    return 
-
-
-def get_weather_response(city_name, headers):
-    session = requests.session()
-    url = 'http://wthrcdn.etouch.cn/WeatherApi?city=' + quote(city_name)
-    response = session.get(url=url, headers=headers)
-    return response

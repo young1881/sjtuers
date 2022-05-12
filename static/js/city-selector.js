@@ -15,11 +15,11 @@
     };
 
     CitySelector.DEFAULTS = {
-        country: '86',                           // Country code
-        simple: true,                            // Simplified address
-        val: '',                                 // Default val
-        placeholder: '请选择省市区',               // Placeholder prompt character
-        callback: $.noop                        // Callback function with two parameters: selected item, address index
+        country: '86',
+        simple: true,
+        val: '',
+        placeholder: '请选择省市区',
+        callback: $.noop
     };
 
     CitySelector.TEMPLATES = '<div class="city-title"></div>' +
@@ -31,9 +31,6 @@
 
     $.extend(CitySelector.prototype, {
 
-        /**
-         * Initializes the object
-         */
         init: function(){
             var self    = this;
             self.items  = [];
@@ -41,15 +38,10 @@
             self.bind().reset();
         },
 
-        /**
-         * Bind event
-         * @return  {CitySelector}
-         */
         bind: function(){
             var self    = this;
             var DOM     = self.DOM;
 
-            // Click outside the range
             $(document).on('click.cityselector', function(e){
                 var $el = $(e.target).closest('.city-selector');
                 if(!$el.length){
@@ -57,12 +49,10 @@
                 }
             });
 
-            // Selector toggle class
             $(DOM.selector).on('click', '.city-title,.city-dropdown',function(){
                 $(this).closest('.city-selector').toggleClass('open');
             });
 
-            // Tbas toggle
             $(DOM.tabs).on('click', 'a', function(){
                 var $el   = $(this);
                 var index = $el.index();
@@ -71,19 +61,14 @@
                 return false;
             });
 
-            // City select
             $(DOM.content).on('click', '.city-pane a', function(){
                 var $el      = $(this);
                 var pane     = $el.closest('.city-pane');
                 var index    = pane.index();
                 var item     = {id:$el.data('id'),address:$el.text()};
                 var val;
-
-                // set status
                 pane.find('.active').removeClass('active');
                 $el.addClass('active');
-
-                // Reset selected items;
                 self.items               = self.items.slice(0, index);
                 self.items[index++]      = item;
                 val                      = self.setContent(index, item.id).getVal(null);
@@ -92,18 +77,12 @@
                 if($.isFunction(self.options.callback)){
                     self.options.callback.call(self, item, index);
                 }
-
                 return false;
             });
 
             return self;
         },
 
-        /**
-         * Sync val
-         * @param   {String}    val
-         * @return  {CitySelector}
-         */
         sync: function(val){
             var self = this;
             var $el  = self.$el;
@@ -112,10 +91,6 @@
             return self;
         },
 
-        /**
-         * Unmounts the bind event
-         * @return  {CitySelector}
-         */
         unbind: function(){
             var self = this;
             var DOM  = self.DOM;
@@ -124,12 +99,6 @@
             return self;
         },
 
-        /**
-         * Get selected value
-         * @param    {String}       separator
-         * @param    {String|null}  [type]        null-get All id | address
-         * @return   {String|Array}
-         */
         getVal: function(separator, type){
             var self = this;
             var val;
@@ -147,18 +116,11 @@
             return separator === null ? val : val.join(separator);
         },
 
-        /**
-         * Set values
-         * @param   {String|Array}  val
-         * @param   {String}        [placeholder]
-         * @retrun  {CitySelector}
-         */
         setVal: function(val, placeholder){
             var self    = this;
             var DOM     = self.DOM;
             var panes   = $('.city-pane', DOM.content);
             var $el;
-
             if(val == ''){
                 self.sync('');
                 self.items  = [];
@@ -177,15 +139,9 @@
                     }
                 }
             }
-
             return self;
         },
 
-        /**
-         * Set tabs
-         * @param   {Object}    data
-         * @return  {CitySelector}
-         */
         setTabs: function(data){
             var self    = this;
             var DOM     = self.DOM;
@@ -200,10 +156,6 @@
             return self;
         },
 
-        /**
-         * Reset form
-         * @return  {CitySelector}
-         */
         reset: function(){
             var self    = this;
             var options = self.options;
@@ -211,27 +163,16 @@
             return self.setTabs(data.tabs).setContent(0).setVal(options.val);
         },
 
-        /**
-         * Set content
-         * @param   {Number}    index
-         * @param   {Number}    id
-         * @return  {CitySelector}
-         */
         setContent: function(index, id){
             var self  = this;
             var DOM   = self.DOM;
             var pane  = $('.city-pane', DOM.content);
             var $el   = pane.eq(index);
             var data, src;
-
             if(!!$el.length){
-
-                // Set state
                 pane.removeClass('active').filter(':gt('+index+')').html('');
                 $el.addClass('active');
                 $('a', DOM.tabs).removeClass('active').eq(index).addClass('active');
-
-                // Output data
                 data = CityData[self.options.country] || {};
                 data = data.content && data.content[index] || {};
                 if(typeof  data === 'string'){
@@ -263,27 +204,16 @@
                     self.outputData((id?data[id]:data), $el, index, id);
                 }
             }else{
-                // Close the drop-down
                 $(DOM.selector).removeClass('open');
             }
-
             return self;
         },
 
-        /**
-         * Output city data
-         * @param   {Object}        data
-         * @param   {HtmlElement}   element
-         * @param   {Number}        index
-         * @param   {Number}        id
-         * @return  {CitySelector}
-         */
         outputData: function(data, element, index, id){
             var self  = this;
             var $el   = $(element);
             var list  = [];
             var isStr = false;
-
             if(data){
                 $.each(data || {}, function(key, row){
                     isStr = typeof row === 'string';
@@ -297,47 +227,34 @@
                         list.push('</dd></dl>');
                     }
                 });
-
                 if(isStr){
                     list.unshift('<dl class="clearfix"><dd>');
                     list.push('</dd></dl>');
                 }
             }
-
             $el.html(list.join(''));
             if(id && !list.length){
-                // Automatic next level
                 self.setContent(index + 1, id);
             }else if(index && list.length == 3){
-                // The only quick click
                 $el.find('a:first').trigger('click');
             }
-
             return self;
         },
 
-        /**
-         * Simplize address
-         * @param   {String}    address
-         * @param   {String}    index
-         * @return  {String}
-         */
         simplize: function(address, index){
             var simple = this.options.simple;
             address    = address || '';
-
             if(!simple){
                 return address;
             }else if($.isFunction(simple)){
                 return simple.call(this, address, type);
             }
-
             switch(index){
                 case 0:
                     return address.replace(/省|市|自治区|[壮回]族|维吾尔|特别行政区/g, '');
                 case 1:
                     return address.replace(/自治[州县]|[地林]区|[市盟县]|(?:回|藏|土家|苗|黎|布依|侗|蒙古|羌|彝|哈尼|白|傣|景颇|傈僳|朝鲜|壮)族|蒙古|哈萨克|特别行政区/g, '');
-                case 2: // 伊宁、临夏 有问题
+                case 2:
                     return address.length > 2 ? address.substring(0, 2) + address.substring(2).replace(/自治[县旗]|新区|[市县旗区]|(?:满|蒙古|回|达斡尔|哈萨克|克|朝鲜|畲|土家|苗|瑶|侗|壮|各|仫佬|毛南|羌|彝|藏|仡佬|布依|水|傣|哈尼|纳西|拉祜|佤|布朗|独龙|普米|白|怒|傈僳|裕固|保安|东乡|撒拉|土)族|群岛|行政委员会|塔吉克|锡伯|哈萨克|蒙古|特别行政区/g, '') : address;
                 case 3:
                     return address.replace(/办事处|地区/g, '');
@@ -346,10 +263,6 @@
             }
         },
 
-        /**
-         * Get HtmlElement
-         * @return  {object}    DOM
-         */
         getDom: function(){
             var $el      = this.$el;
             var width    = $el.css('width');
@@ -366,20 +279,12 @@
             return DOM;
         },
 
-        /**
-         * Set the country
-         * @param   {String} country
-         * @return  {CitySelector}
-         */
         setCountry: function(country){
             var self    = this;
             self.country = country;
             return self.reset();
         },
 
-        /**
-         * Destroy the object
-         */
         destroy: function(){
             var self    = this;
             var $el     = self.$el;
@@ -390,8 +295,6 @@
         }
     });
 
-    // CITYSELECTOR PLUGIN DEFINITION
-    // ========================
     function Plugin(option){
         var param = [].slice.call(arguments,1);
         return this.each(function(){
@@ -411,9 +314,6 @@
     var old = $.fn.citySelector;
     $.fn.citySelector             = Plugin;
     $.fn.citySelector.Constructor = CitySelector;
-
-    // CITYSELECTOR NO CONFLICT
-    // ==================
     $.fn.citySelector.noConflict = function(){
         $.fn.citySelector = old;
         return this;
