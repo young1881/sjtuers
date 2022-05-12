@@ -1,6 +1,5 @@
 from django.test import TestCase
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
-from requests import Session
 
 
 class TestModels(TestCase):
@@ -100,4 +99,3 @@ class TestAjaxPost(TestCase):
         }
         response = self.client.post("/index/refactor_countdown/", data=countdown_data)
         self.assertEqual(response.status_code, 200)
-
