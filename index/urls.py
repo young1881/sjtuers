@@ -11,8 +11,8 @@ urlpatterns = [
     path('color_wallpaper/', ajax.color_wallpaper, name="color_wallpaper"),
     path('simple_mode/', ajax.simple_mode, name="simple_mode"),
     path('refactor_countdown/', ajax.refactor_countdown, name="refactor_countdown"),
-    path('bar', views.ChartView_can.as_view(), name='can_index'),
-    path('can_index', views.IndexView_can.as_view(), name='can_index'),
-    path('lib_bar', views.ChartView_lib.as_view(), name='lib_index'),
-    path('lib_index', views.IndexView_lib.as_view(), name='lib_index')
+    path('bar', views.ChartViewCanteen.as_view(), name='can_index'),
+    path('can_index', views.IndexViewCanteen.as_view(), name='can_index'),
+    path('lib_bar', views.ChartViewLibrary.as_view(), name='lib_index'),
+    path('lib_index', views.IndexViewLibrary.as_view(), name='lib_index')
 ]

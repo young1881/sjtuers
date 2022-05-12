@@ -1,24 +1,29 @@
 from django.shortcuts import render
-import asyncio
-import json
-from lxml import etree
-from urllib.parse import quote
-import aiohttp
-import time
-import datetime
-import requests
+from django.http import HttpResponse
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
 from .initialize_site import initialize_site
-from functools import wraps
+
+import requests
+import asyncio
+import aiohttp
+import json
+import time
+import datetime
+
+from lxml import etree
+from urllib.parse import quote
 from asyncio.proactor_events import _ProactorBasePipeTransport
-from django.http import HttpResponse, HttpResponseRedirect
-from .models import Site, SimpleMode
-from random import randrange
-from django.http import HttpResponse
+from functools import wraps
 from rest_framework.views import APIView
 from pyecharts.charts import Bar
 from pyecharts import options as opts
 from pyecharts.options.global_options import ThemeType
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
+}
+
 
 def index_view(request):
     request_time = time.time()
@@ -32,8 +37,6 @@ def index_view(request):
         'bilibili',
         'corona',
         'poem',
-        'canteen',
-        'lib',
     ]
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
@@ -45,15 +48,9 @@ def index_view(request):
         'https://tophub.today/n/mproPpoq6O',
         'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
         'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
-        'https://v1.jinrishici.com/all.json',
-        'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
-        'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
+        'https://v1.jinrishici.com/all.json'
     ]
     urls_names = dict(zip(urls, names))
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
     responses = {}
 
     # 异步编程
@@ -117,7 +114,7 @@ def index_view(request):
         countdown_flag = Countdown.objects.filter(user=jaccount)
         print(f"countdown_flag:{countdown_flag}")
         countdown_flag = Countdown.objects.filter(user=jaccount)[0]
-        
+
         countdown = compute_countdown(countdown_flag.date_name, countdown_flag.year,
                                       countdown_flag.month, countdown_flag.day)
     except:
@@ -179,11 +176,6 @@ def get_html(response):
     return response
 
 
-def lib(response):
-    data = json.loads(response[12:-2], strict=False)['numbers']
-    return data
-
-
 def jwc(response):
     html = get_html(response)
     tree = etree.HTML(html)
@@ -225,6 +217,7 @@ def bilibli(response):
         dic['view'] = bilibili_json[i]['stat']['view']
         bilibili.append(dic)
     return bilibili
+
 
 # def weibo(response):
 #     data = get_json(response)['list']
@@ -287,34 +280,6 @@ def zhihu(response):
         zhihu_dict.append(zhihu_item)
     return zhihu_dict
 
-# def weibo(response):
-#     data = get_json(response)['list']
-#     weibo_dict = []
-#     for i in range(5):
-#         name = data[i]['name']
-#         name = str(i + 1) + ' ' + name
-#         if len(name.encode('utf-8')) > 46:
-#             name = cut_str(name, 44) + '...'
-#         url = data[i]['url']
-#         hot = data[i]['hot']
-#         weibo_item = {'name': name, 'url': url, 'hot': hot}
-#         weibo_dict.append(weibo_item)
-#     return weibo_dict
-#
-#
-# def zhihu(response):
-#     data = get_json(response)['list']
-#     zhihu_dict = []
-#     for i in range(5):
-#         name = data[i]['query']
-#         name = str(i + 1) + ' ' + name
-#         if len(name.encode('utf-8')) > 55:
-#             name = cut_str(name, 53) + "..."
-#         url = data[i]['url']
-#         zhihu_item = {'name': name, 'url': url}
-#         zhihu_dict.append(zhihu_item)
-#     return zhihu_dict
-
 
 def weather(response):
     data = get_html(response)
@@ -361,11 +326,8 @@ def weather(response):
     }
     return weather_dict
 
+
 def canteen():
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
     url = 'https://canteen.sjtu.edu.cn/CARD/Ajax/Place'
     session = requests.session()
     response = session.get(url=url, headers=headers).text
@@ -373,17 +335,38 @@ def canteen():
 
 
 def lib():
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
     url = 'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson'
     session = requests.session()
     response = session.get(url=url, headers=headers).text
     data = json.loads(response[12:-2], strict=False)['numbers']
     return data
 
-# 可视化
+
+def corona(response):
+    return get_json(response)['data']["diseaseh5Shelf"]
+
+
+def poem(response):
+    return get_json(response)
+
+
+def jac(request):
+    token = request.session['token']
+    access_token = token['access_token']
+    requests.packages.urllib3.disable_warnings()
+    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}', verify=False)
+    return result.json()
+
+
+def compute_countdown(date_name, year, month, day):
+    d1 = datetime.date.today()
+    d2 = datetime.date(year, month, day)
+    interval = d2 - d1
+    countdown = {'date_name': date_name, "interval": interval.days}
+    return countdown
+
+
+# pyecharts配置
 def response_as_json(data):
     json_str = json.dumps(data)
     response = HttpResponse(
@@ -415,89 +398,76 @@ def json_error(error_string="error", code=500, **kwargs):
 
 JsonResponse = json_response
 JsonError = json_error
+canteen = canteen()
+lib = lib()
+
 
 # 餐厅
 def can_bar() -> Bar:
-
     c = (
         Bar()
-        .add_xaxis(["一餐", "一餐清真","二餐", "三餐", "三餐清真","四餐", "五餐", "哈乐","玉兰苑"])
-        .add_yaxis("已取餐量", [canteen()[0]['Seat_u'],canteen()[1]['Seat_u'],canteen()[2]['Seat_u'],canteen()[3]['Seat_u'],canteen()[4]['Seat_u'],canteen()[5]['Seat_u'],canteen()[6]['Seat_u'],canteen()[7]['Seat_u'],canteen()[8]['Seat_u']],
-                   category_gap="30%"
-                   # stack='stack1'
-                   )
-        .add_yaxis("供应总量",[canteen()[0]['Seat_s'],canteen()[1]['Seat_s'],canteen()[2]['Seat_s'],canteen()[3]['Seat_s'],canteen()[4]['Seat_s'],canteen()[5]['Seat_s'],canteen()[6]['Seat_s'],canteen()[7]['Seat_s'],canteen()[8]['Seat_s']],
-                   category_gap="30%"
-                   # stack='stack1'
-                   )
-        # rotate 旋转角度
-        .set_global_opts(xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-30, interval=0,font_size=10)),
-                         yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(font_size=7)))
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-
-        # .reversal_axis()
-        .dump_options_with_quotes()
+            .add_xaxis(["一餐", "一餐清真", "二餐", "三餐", "三餐清真", "四餐", "五餐", "哈乐", "玉兰苑"])
+            .add_yaxis("已取餐量",
+                       [canteen[0]['Seat_u'], canteen[1]['Seat_u'], canteen[2]['Seat_u'],
+                        canteen[3]['Seat_u'], canteen[4]['Seat_u'], canteen[5]['Seat_u'],
+                        canteen[6]['Seat_u'], canteen[7]['Seat_u'], canteen[8]['Seat_u']],
+                       category_gap="30%"
+                       )
+            .add_yaxis("供应总量",
+                       [canteen[0]['Seat_s'], canteen[1]['Seat_s'], canteen[2]['Seat_s'],
+                        canteen[3]['Seat_s'], canteen[4]['Seat_s'], canteen[5]['Seat_s'],
+                        canteen[6]['Seat_s'], canteen[7]['Seat_s'], canteen[8]['Seat_s']],
+                       category_gap="30%"
+                       )
+            # rotate 旋转角度
+            .set_global_opts(
+            xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-30, interval=0, font_size=10)),
+            yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(font_size=7)))
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+            # .reversal_axis()
+            .dump_options_with_quotes()
     )
     return c
+
 
 def lib_bar() -> Bar:
     b = (
         Bar(init_opts=opts.InitOpts(theme=ThemeType.LIGHT))
-        .add_xaxis(["图书馆主馆", "李政道图书馆","包玉刚图书馆", "徐汇社科馆"])
-        .add_yaxis("在馆人数", [lib()[0]['inCounter'],lib()[1]['inCounter'],lib()[2]['inCounter'],lib()[3]['inCounter']],
-                    category_gap="30%",
-                    stack='stack1'
-                   )
-        .add_yaxis("可容纳人数", [lib()[0]['max'],lib()[1]['max'],lib()[2]['max'],lib()[3]['max']],
-                   category_gap="30%",
-                   stack='stack1'
-                   )
-        .set_global_opts(xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-20, interval=0,font_size=11)))
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        # .set_series_opts(label_opts=opts.LabelOpts(position='right', font_size = 16)
-        .dump_options_with_quotes()
+            .add_xaxis(["图书馆主馆", "李政道图书馆", "包玉刚图书馆", "徐汇社科馆"])
+            .add_yaxis("在馆人数", [lib[0]['inCounter'], lib[1]['inCounter'], lib[2]['inCounter'], lib[3]['inCounter']],
+                       category_gap="30%", stack='stack1'
+                       )
+            .add_yaxis("可容纳人数", [lib[0]['max'], lib[1]['max'], lib[2]['max'], lib[3]['max']],
+                       category_gap="30%",
+                       stack='stack1'
+                       )
+            .set_global_opts(
+            xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-20, interval=0, font_size=11)))
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+            # .set_series_opts(label_opts=opts.LabelOpts(position='right', font_size = 16)
+            .dump_options_with_quotes()
     )
     return b
 
-class ChartView_can(APIView):
+
+class ChartViewCanteen(APIView):
     def get(self, request, *args, **kwargs):
         return JsonResponse(json.loads(can_bar()))
 
-class IndexView_can(APIView):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse(content=open("./templates/can_index.html").read())
 
-class ChartView_lib(APIView):
+class IndexViewCanteen(APIView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(content=open("./templates/canteen.html").read())
+
+
+class ChartViewLibrary(APIView):
     def get(self, request, *args, **kwargs):
         return JsonResponse(json.loads(lib_bar()))
-#
-class IndexView_lib(APIView):
+
+
+class IndexViewLibrary(APIView):
     def get(self, request, *args, **kwargs):
-        return HttpResponse(content=open("./templates/lib_index.html").read())
-
-
-def corona(response):
-    return get_json(response)['data']["diseaseh5Shelf"]
-
-
-def poem(response):
-    return get_json(response)
-
-
-def jac(request):
-    token = request.session['token']
-    access_token = token['access_token']
-
-    result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}', verify=False)
-    return result.json()
-
-
-def compute_countdown(date_name, year, month, day):
-    d1 = datetime.date.today()
-    d2 = datetime.date(year, month, day)
-    interval = d2 - d1
-    countdown = {'date_name': date_name, "interval": interval.days}
-    return countdown
+        return HttpResponse(content=open("./templates/library.html").read())
 
 
 def silence_event_loop_closed(func):
@@ -508,6 +478,7 @@ def silence_event_loop_closed(func):
         except RuntimeError as e:
             if str(e) != 'Event loop is closed':
                 raise
+
     return wrapper
 
 
