@@ -3,9 +3,9 @@ $(function () {
         data: [
             { name: '百度', img: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=' },
             { name: '谷歌', img: 'https://files.codelife.cc/itab/search/google.svg', url: 'https://www.google.com/search?q=' },
-            { name: '必应', img: 'https://files.codelife.cc/itab/search/bing.svg', url: 'https://www.so.com/s?q=' },
+            { name: '必应', img: 'https://files.codelife.cc/itab/search/bing.svg', url: 'https://cn.bing.com/search?q=' },
             { name: '搜狗', img: 'https://files.codelife.cc/itab/search/sougou.svg', url: 'https://www.sogou.com/web?query=' },
-            { name: '360', img: 'https://files.codelife.cc/itab/search/360.svg', url: 'https://www.sogou.com/web?query=' },
+            { name: '360', img: 'https://files.codelife.cc/itab/search/360.svg', url: 'https://www.so.com/s?q=' },
             { name: 'StackOverflow', img: 'https://files.codelife.cc/itab/search/stackoverflow.svg', url: 'https://stackoverflow.com/nocaptcha?s=' },
             { name: '知乎', img: 'https://files.codelife.cc/itab/search/zhihu.svg', url: 'https://www.zhihu.com/search?q=' },
             { name: '有道', img: 'https://dict.youdao.com/favicon.ico', url: 'https://dict.youdao.com/w/eng/' },
