@@ -1,13 +1,11 @@
+from urllib.parse import quote
 from django.shortcuts import render
 import requests
 from lxml import etree
+from index.views import get_city, headers
 
 
 def get_html(url):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
-
     session = requests.Session()
     session.trust_env = False
     response = session.get(url=url, headers=headers)
@@ -17,7 +15,8 @@ def get_html(url):
 
 
 def weather_view(request):
-    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + '闵行'
+    city = get_city(request)
+    url = "http://wthrcdn.etouch.cn/WeatherApi?city=" + quote(city)
     data = get_html(url)
     parser = etree.XMLParser(resolve_entities=False, strip_cdata=False, recover=True, ns_clean=True)
     XML_tree = etree.fromstring(data.encode(), parser=parser)
@@ -55,10 +54,10 @@ def weather_view(request):
             'date': '昨天',
             'high': XML_tree.xpath('//high_1/text()')[0][-3:-1],
             'low': XML_tree.xpath('//low/text()')[0][-3:-1],
-            'type' : XML_tree.xpath('//type_1/text()')[0]
+            'type': XML_tree.xpath('//type_1/text()')[0]
         },
         'forecast': forecast_dic,
-        'index' : index_dic,
+        'index': index_dic,
     }
 
     return render(request, 'weather.html', weather)

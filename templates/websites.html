@@ -69,12 +69,9 @@
 
 {% block weather %}
 {% from '_includes/forecast_list.html' import forecast_list %}
-    <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="../static/js/city-selector.data.js"></script>
-    <script type="text/javascript" src="../static/js/city-selector.js"></script>
     <div class="weather" id="weather">
-        <div class="card">
-            <div class="today">
+        <div class="weather_card">
+            <div class="today_weather">
                 <div class="today_city">
                     <p class="city" id="currentcity">{{ weather.city }}</p>
                     <div class="edit" id="edit"></div>
@@ -102,8 +99,6 @@
             </div>
         </div>
     </div>
-    <script src="https://kit.fontawesome.com/80275103ba.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../static/js/weather-widget.js"></script>
 {% endblock %}
 
 
@@ -179,7 +174,7 @@
 
 {% block tools %}
     <div class="tools" id="tools">
-        <div class="card">
+        <div class="tool_card">
             <button class="tool_btn active">疫情</button>
             <button class="tool_btn">图书馆</button>
             <button class="tool_btn">食堂</button>
