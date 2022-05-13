@@ -13,7 +13,7 @@
     /*align-items: center;*/
 }
 
-.tools .card {
+.tools .tool_card {
     justify-content: space-around;
     width: 281px;
     padding: 20px;
@@ -29,13 +29,13 @@
     backdrop-filter: blur(4px);
 }
 
-.tools .card:hover {
+.tools .tool_card:hover {
     box-shadow: inset -6px -6px 10px rgba(255, 255, 255, 0.5),
     inset 6px 6px 20px rgba(0, 0, 0, 0.05);
     transition: 0.2s;
 }
 
-.tools .card .tool_btn{
+.tools .tool_card .tool_btn{
     display: inline-block;
     padding: 5px 10px;
     margin-bottom: 10px;
@@ -47,12 +47,12 @@
     border-width: 0;
 }
 
-.tools .card .tool_btn.active{
+.tools .tool_card .tool_btn.active{
     background-color: rgba(255, 255, 255, 0.2);
     opacity: 1;
 }
 
-.tools .card .toolBox .tool{
+.tools .tool_card .toolBox .tool{
     /*background-color: purple;*/
     font-size: 9px;
     line-height: 200%;
@@ -60,11 +60,11 @@
     flex-wrap: wrap;
 }
 
-.tools .card .toolBox .tool ul{
+.tools .tool_card .toolBox .tool ul{
     list-style: none;
 }
 
-.tools .card .toolBox .tool.show{
+.tools .tool_card .toolBox .tool.show{
     color: white;
     line-height: 200%;
     /*background-color: black;*/
@@ -74,18 +74,18 @@
     flex-wrap: wrap;
 }
 
-.tools .card .toolBox .tool.show ul{
+.tools .tool_card .toolBox .tool.show ul{
     list-style: none;
 }
 
-.tools .card .toolBox a {
+.tools .tool_card .toolBox a {
     margin-top: 10px;
     color: white;
     font-size: 9px;
     text-decoration: none;
 }
 
-.tools .card .toolBox button {
+.tools .tool_card .toolBox button {
     display: inline-block;
     padding: 10px 20px;
     margin-top: 5px;
@@ -100,21 +100,21 @@
     transition: 0.2s;
 }
 
-.tools .card .toolBox button:hover {
+.tools .tool_card .toolBox button:hover {
     box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.5),
     inset 4px 4px 10px rgba(0, 0, 0, .1);
     transition: 0.2s;
 }
 
-.tools .card .toolBox a:hover span {
+.tools .tool_card .toolBox a:hover span {
     display: block;
     text-decoration: none;
     transform: scale(0.98);
     transition: 0.2s;
 }
 
-.tools .card:hover .imgBox,
-.tools .card:hover .toolBox {
+.tools .tool_card:hover .imgBox,
+.tools .tool_card:hover .toolBox {
     transform: scale(0.98);
     transition: 0.2s;
 }
@@ -142,7 +142,7 @@
     font-weight: 900;
 }
 
-.data_box  .today{
+.data_box  .today_corona{
     font-size: 14px;
     font-weight: 700;
 }

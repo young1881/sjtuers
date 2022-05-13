@@ -1,7 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Site, SimpleMode, User, Wallpaper, Countdown
-from .initialize_site import initialize_site
 import urllib.request
 
 import requests
@@ -15,10 +13,6 @@ from lxml import etree
 from urllib.parse import quote
 from asyncio.proactor_events import _ProactorBasePipeTransport
 from functools import wraps
-from rest_framework.views import APIView
-from pyecharts.charts import Bar
-from pyecharts import options as opts
-from pyecharts.options.global_options import ThemeType
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -306,21 +300,6 @@ def weather(response):
     return weather_dict
 
 
-def canteen():
-    url = 'https://canteen.sjtu.edu.cn/CARD/Ajax/Place'
-    session = requests.session()
-    response = session.get(url=url, headers=headers).text
-    return get_json(response)
-
-
-def lib():
-    url = 'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson'
-    session = requests.session()
-    response = session.get(url=url, headers=headers).text
-    data = json.loads(response[12:-2], strict=False)['numbers']
-    return data
-
-
 def corona(response):
     return get_json(response)['data']["diseaseh5Shelf"]
 
@@ -360,108 +339,30 @@ def get_city(request):
     return city
 
 
-# pyecharts配置
-def response_as_json(data):
-    json_str = json.dumps(data)
-    response = HttpResponse(
-        json_str,
-        content_type="application/json",
-    )
-    response["Access-Control-Allow-Origin"] = "*"
-    return response
-
-
-def json_response(data, code=200):
-    data = {
-        "code": code,
-        "msg": "success",
-        "data": data,
-    }
-    return response_as_json(data)
-
-
-def json_error(error_string="error", code=500, **kwargs):
-    data = {
-        "code": code,
-        "msg": error_string,
-        "data": {}
-    }
-    data.update(kwargs)
-    return response_as_json(data)
-
-
-JsonResponse = json_response
-JsonError = json_error
-canteen = canteen()
-lib = lib()
-
-
-# 餐厅
-def can_bar() -> Bar:
-    c = (
-        Bar()
-            .add_xaxis(["一餐", "一餐清真", "二餐", "三餐", "三餐清真", "四餐", "五餐", "哈乐", "玉兰苑"])
-            .add_yaxis("已取餐量",
-                       [canteen[0]['Seat_u'], canteen[1]['Seat_u'], canteen[2]['Seat_u'],
-                        canteen[3]['Seat_u'], canteen[4]['Seat_u'], canteen[5]['Seat_u'],
-                        canteen[6]['Seat_u'], canteen[7]['Seat_u'], canteen[8]['Seat_u']],
-                       category_gap="30%"
-                       )
-            .add_yaxis("供应总量",
-                       [canteen[0]['Seat_s'], canteen[1]['Seat_s'], canteen[2]['Seat_s'],
-                        canteen[3]['Seat_s'], canteen[4]['Seat_s'], canteen[5]['Seat_s'],
-                        canteen[6]['Seat_s'], canteen[7]['Seat_s'], canteen[8]['Seat_s']],
-                       category_gap="30%"
-                       )
-            # rotate 旋转角度
-            .set_global_opts(
-            xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-30, interval=0, font_size=10)),
-            yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(font_size=7)))
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            # .reversal_axis()
-            .dump_options_with_quotes()
-    )
-    return c
-
-
-def lib_bar() -> Bar:
-    b = (
-        Bar(init_opts=opts.InitOpts(theme=ThemeType.LIGHT))
-            .add_xaxis(["图书馆主馆", "李政道图书馆", "包玉刚图书馆", "徐汇社科馆"])
-            .add_yaxis("在馆人数", [lib[0]['inCounter'], lib[1]['inCounter'], lib[2]['inCounter'], lib[3]['inCounter']],
-                       category_gap="30%", stack='stack1'
-                       )
-            .add_yaxis("可容纳人数", [lib[0]['max'], lib[1]['max'], lib[2]['max'], lib[3]['max']],
-                       category_gap="30%",
-                       stack='stack1'
-                       )
-            .set_global_opts(
-            xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-20, interval=0, font_size=11)))
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            # .set_series_opts(label_opts=opts.LabelOpts(position='right', font_size = 16)
-            .dump_options_with_quotes()
-    )
-    return b
-
-
-class ChartViewCanteen(APIView):
-    def get(self, request, *args, **kwargs):
-        return JsonResponse(json.loads(can_bar()))
-
-
-class IndexViewCanteen(APIView):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse(content=open("./templates/canteen.html").read())
-
-
-class ChartViewLibrary(APIView):
-    def get(self, request, *args, **kwargs):
-        return JsonResponse(json.loads(lib_bar()))
-
-
-class IndexViewLibrary(APIView):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse(content=open("./templates/library.html").read())
+def initialize_site(user):
+    Site.objects.create(site_name='Canvas',site_url='https://oc.sjtu.edu.cn/', site_src='../static/img/site_icon/在线课程.png', user=user)
+    Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/site_icon/教学信息.png', user=user)
+    Site.objects.create(site_name='学生事务', site_url='https://affairs.sjtu.edu.cn/', site_src='../static/img/site_icon/学生事务.png', user=user)
+    Site.objects.create(site_name='交我办', site_url='https://my.sjtu.edu.cn/', site_src='../static/img/site_icon/交我办.png', user=user)
+    Site.objects.create(site_name='交大官网', site_url='https://www.sjtu.edu.cn/', site_src='../static/img/site_icon/官网.png', user=user)
+    Site.objects.create(site_name='研究生院', site_url='https://www.gs.sjtu.edu.cn/', site_src='../static/img/site_icon/研究生网.png', user=user)
+    Site.objects.create(site_name='交大邮箱', site_url='https://mail.sjtu.edu.cn/', site_src='../static/img/site_icon/邮箱.png', user=user)
+    Site.objects.create(site_name='交大云盘', site_url='https://jbox.sjtu.edu.cn/', site_src='../static/img/site_icon/交大云盘.png', user=user)
+    Site.objects.create(site_name='水源社区', site_url='https://shuiyuan.sjtu.edu.cn/', site_src='../static/img/site_icon/水源.png', user=user)
+    Site.objects.create(site_name='䇹政项目', site_url='https://chuntsung.sjtu.edu.cn/', site_src='../static/img/site_icon/䇹政.png', user=user)
+    Site.objects.create(site_name='创新实践', site_url='https://uitp.sjtu.edu.cn/', site_src='../static/img/site_icon/大创.png', user=user)
+    Site.objects.create(site_name='教学楼', site_url='https://ids.sjtu.edu.cn/', site_src='../static/img/site_icon/教学楼.png', user=user)
+    Site.objects.create(site_name='图书馆', site_url='https://www.lib.sjtu.edu.cn/', site_src='../static/img/site_icon/图书馆.png', user=user)
+    Site.objects.create(site_name='选课社区', site_url='https://course.sjtu.plus/', site_src='../static/img/site_icon/选课社区.png', user=user)
+    Site.objects.create(site_name='github', site_url='https://github.com/', site_src='https://files.codelife.cc/itab/search/github.svg', user=user)
+    Site.objects.create(site_name='bilibili', site_url='https://bilibili.com/', site_src='https://files.codelife.cc/itab/search/bilibili.svg', user=user)
+    Site.objects.create(site_name='知乎', site_url='https://www.zhihu.com/', site_src='https://files.codelife.cc/itab/search/zhihu.svg', user=user)
+    Site.objects.create(site_name='豆瓣', site_url='https://www.douban.com/', site_src='https://files.codelife.cc/itab/search/douban.svg', user=user)
+    Site.objects.create(site_name='淘宝', site_url='https://www.taobao.com/', site_src='https://www.taobao.com/favicon.ico', user=user)
+    Site.objects.create(site_name='爱奇艺', site_url='https://www.iqiyi.com/', site_src='https://www.iqiyi.com/favicon.ico', user=user)
+    Site.objects.create(site_name='一个木函', site_url='https://web.woobx.cn/', site_src='https://web.woobx.cn/favicon.ico', user=user)
+    Site.objects.create(site_name='百度', site_url='https://www.baidu.com/', site_src='https://www.baidu.com/favicon.ico', user=user, is_active=False)
+    Site.objects.create(site_name='搜狗', site_url='https://www.sogou.com/', site_src='https://www.sogou.com/favicon.ico', user=user, is_active=False)
 
 
 def silence_event_loop_closed(func):

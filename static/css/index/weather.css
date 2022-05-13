@@ -1,8 +1,8 @@
 .weather {
     /*background-color: purple;*/
-    width: 20%;
+    width: 21.5%;
     height: 20%;
-    top: 38%;
+    top: 35%;
     left: 6.8%;
     display: flex;
     position: absolute;
@@ -13,7 +13,7 @@
     /*align-items: center;*/
 }
 
-.weather .card {
+.weather .weather_card {
     width: 320px;
     height: 160px;
     margin: 10px;
@@ -29,13 +29,13 @@
     z-index: 1;
 }
 
-.weather .card:hover {
+.weather .weather_card:hover {
     box-shadow: inset -6px -6px 10px rgba(255, 255, 255, 0.5),
     inset 6px 6px 20px rgba(0, 0, 0, 0.05);
     transition: box-shadow .2s ease-out;
 }
 
-.today {
+.today_weather {
     position: relative;
     float: left;
     text-align: center;
@@ -48,7 +48,7 @@
     display: inline;
 }
 
-.weather .card .forecast {
+.weather .weather_card .forecast {
     position: relative;
     left: 46%;
 }
@@ -154,6 +154,6 @@
     min-height: 27.2px;
 }
 
-div {
+.weather div {
     box-sizing: border-box;
 }
