@@ -68,22 +68,36 @@
 {% endblock %}
 
 {% block weather %}
+{% from '_includes/forecast_list.html' import forecast_list %}
     <div class="weather" id="weather">
-        <div id="he-plugin-standard"></div>
-        <script>
-            WIDGET = {
-                "CONFIG": {
-                    "layout": "1",
-                    "width": "400",
-                    "height": "150",
-                    "background": "1",
-                    "dataColor": "FFFFFF",
-                    "borderRadius": "40",
-                    "key": "07f20b95a1414be7944ee81ce02bf842"
-                }
-            }
-        </script>
-        <script src="https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0"></script>
+        <div class="weather_card">
+            <div class="today_weather">
+                <div class="today_city">
+                    <p class="city" id="currentcity">{{ weather.city }}</p>
+                    <div class="edit" id="edit"></div>
+                </div>
+                <div class="today_info">
+                    <i id="day0_icon"></i>
+                    <p class="type" id="day0_type">{{ weather.forecast.day0.type }}</p>
+                    <p class="T_current" id="day0_temp">当前 {{ weather.wendu }}℃<br>今日 {{ weather.forecast.day0.low }}~{{ weather.forecast.day0.high }}℃</p>
+                </div>
+            </div>
+            <div class="forecast" id="forecast">
+                <ul>
+                    <li>
+                        {% for day in weather.forecast %}
+                            {% if loop.first == false and loop.last == false %}
+                                {{ forecast_list(day, weather.forecast[day]) }}
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                </ul>
+            </div>
+            <div class="citywindow" id="citywindow" style="display: none;">
+                <button id="getVal">确定</button>
+                <div style="width: 110px; height: 20px;" id="cityselect" data-role="cityselector">上海市 上海市 闵行区</div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -160,9 +174,8 @@
 
 {% block tools %}
     <div class="tools" id="tools">
-        <div class="card">
+        <div class="tool_card">
             <button class="tool_btn active">疫情</button>
-            <button class="tool_btn">校车</button>
             <button class="tool_btn">图书馆</button>
             <button class="tool_btn">食堂</button>
             <div class="toolBox">
@@ -179,13 +192,10 @@
                     </div>
                 </div>
                 <div class="tool">
-                    校车信息
+                    <iframe frameborder=0 src="lib_index" width="100%" height="300"></iframe>
                 </div>
                 <div class="tool">
-                    <div id="bar"></div>
-                </div>
-                <div class="tool">
-                    <div id="bar"></div>
+                    <iframe frameborder=0 src="can_index" width="100%" height="300"></iframe>
                 </div>
             </div>
         </div>

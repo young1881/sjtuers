@@ -1,17 +1,159 @@
 .weather {
     /*background-color: purple;*/
-    width: 20%;
+    width: 21.5%;
     height: 20%;
-    top: 38%;
-    left: 7.5%;
+    top: 35%;
+    left: 6.8%;
     display: flex;
     position: absolute;
-    border-radius: 40px;
     /*居中图标*/
-    /*justify-content: space-around;*/
+    /*justify-info: space-around;*/
     /*自动换行*/
     flex-wrap: wrap;
     /*align-items: center;*/
-    box-shadow: -6px -6px 20px rgba(255, 255, 255, 0.7),
+}
+
+.weather .weather_card {
+    width: 320px;
+    height: 160px;
+    margin: 10px;
+    padding: 20px 10px;
+    /*background: #ebf5fc;*/
+    border-radius: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    box-shadow: -6px -6px 20px rgba(255, 255, 255, 1),
     6px 6px 20px rgba(0, 0, 0, .1);
+    transition: box-shadow .2s ease-out;
+    color: #ffffff;
+    z-index: 1;
+}
+
+.weather .weather_card:hover {
+    box-shadow: inset -6px -6px 10px rgba(255, 255, 255, 0.5),
+    inset 6px 6px 20px rgba(0, 0, 0, 0.05);
+    transition: box-shadow .2s ease-out;
+}
+
+.today_weather {
+    position: relative;
+    float: left;
+    text-align: center;
+    justify-content: center;
+    left: 8%;
+}
+
+#today_icon {
+    font-size: 40px;
+    display: inline;
+}
+
+.weather .weather_card .forecast {
+    position: relative;
+    left: 46%;
+}
+
+#day0_icon {
+    font-size: 32px;
+    display: inline-block;
+    margin-top: 12px;
+}
+
+.type {
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: super;
+    margin-left: 10px;
+}
+
+.forecast ul {
+    list-style-type: none;
+    margin: 5px;
+    text-align: justify;
+    position: absolute;
+    width: max-content;
+}
+
+.forecast ul li {
+    display: inline-block;
+    text-align: center;
+    justify-content: center;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    position: relative;
+    min-width: 34px;
+}
+
+.forecast ul li:hover {
+    background-color: rgba(0, 0, 0, 0.18);
+    transform: scale(0.95);
+    transition: 0.2s;
+    cursor: pointer;
+    color: antiquewhite;
+}
+
+.forecast ul li i {
+    font-size: 20px;
+}
+
+.forecast ul li p {
+    font-size: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.edit {
+    width: 20px;
+    height: 20px;
+    background: url("../../img/edit.png") no-repeat;
+    display: inline-block;
+    opacity: 0.9;
+    vertical-align: middle;
+}
+
+.edit:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.1s ease-in 0s;
+}
+
+.city {
+    font-size: 20px;
+    display: inline;
+}
+
+.T_current {
+    font-size: 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.city:hover,
+#day0_icon:hover,
+.type:hover,
+.T_current:hover {
+    cursor: pointer;
+    color: antiquewhite;
+    transition: 0.2s;
+}
+
+#getVal {
+    margin-left: 110px;
+    font-size: 10px;
+    position: absolute;
+}
+
+.today_info {
+    float: left;
+    margin-top: -5px
+}
+
+.today_city {
+    min-height: 27.2px;
+}
+
+.weather div {
+    box-sizing: border-box;
 }

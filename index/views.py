@@ -1,21 +1,28 @@
 from django.shortcuts import render
+from .models import Site, SimpleMode, User, Wallpaper, Countdown
+import urllib.request
+
+import requests
 import asyncio
-import json
-from lxml import etree
-from urllib.parse import quote
 import aiohttp
+import json
 import time
 import datetime
-import requests
-from .models import Site, SimpleMode, User, Wallpaper, Countdown
-from .initialize_site import initialize_site
-from functools import wraps
+
+from lxml import etree
+from urllib.parse import quote
 from asyncio.proactor_events import _ProactorBasePipeTransport
+from functools import wraps
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
+}
 
 
 def index_view(request):
     request_time = time.time()
-    city = '闵行'
+    city = get_city(request)
     names = [
         'jwc',
         'jnews',
@@ -25,8 +32,6 @@ def index_view(request):
         'bilibili',
         'corona',
         'poem',
-        'canteen',
-        'lib',
     ]
     urls = [
         'https://jwc.sjtu.edu.cn/xwtg/tztg.htm',
@@ -38,15 +43,9 @@ def index_view(request):
         'https://tophub.today/n/mproPpoq6O',
         'https://api.bilibili.com/x/web-interface/popular?ps=5&pn=1',
         'https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf',
-        'https://v1.jinrishici.com/all.json',
-        'https://canteen.sjtu.edu.cn/CARD/Ajax/Place',
-        'https://zgrstj.lib.sjtu.edu.cn/cp?callback=CountPerson',
+        'https://v1.jinrishici.com/all.json'
     ]
     urls_names = dict(zip(urls, names))
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62',
-    }
     responses = {}
 
     # 异步编程
@@ -110,7 +109,7 @@ def index_view(request):
         countdown_flag = Countdown.objects.filter(user=jaccount)
         print(f"countdown_flag:{countdown_flag}")
         countdown_flag = Countdown.objects.filter(user=jaccount)[0]
-        
+
         countdown = compute_countdown(countdown_flag.date_name, countdown_flag.year,
                                       countdown_flag.month, countdown_flag.day)
     except:
@@ -172,11 +171,6 @@ def get_html(response):
     return response
 
 
-def lib(response):
-    data = json.loads(response[12:-2], strict=False)['numbers']
-    return data
-
-
 def jwc(response):
     html = get_html(response)
     tree = etree.HTML(html)
@@ -218,6 +212,7 @@ def bilibli(response):
         dic['view'] = bilibili_json[i]['stat']['view']
         bilibili.append(dic)
     return bilibili
+
 
 # def weibo(response):
 #     data = get_json(response)['list']
@@ -280,34 +275,6 @@ def zhihu(response):
         zhihu_dict.append(zhihu_item)
     return zhihu_dict
 
-# def weibo(response):
-#     data = get_json(response)['list']
-#     weibo_dict = []
-#     for i in range(5):
-#         name = data[i]['name']
-#         name = str(i + 1) + ' ' + name
-#         if len(name.encode('utf-8')) > 46:
-#             name = cut_str(name, 44) + '...'
-#         url = data[i]['url']
-#         hot = data[i]['hot']
-#         weibo_item = {'name': name, 'url': url, 'hot': hot}
-#         weibo_dict.append(weibo_item)
-#     return weibo_dict
-#
-#
-# def zhihu(response):
-#     data = get_json(response)['list']
-#     zhihu_dict = []
-#     for i in range(5):
-#         name = data[i]['query']
-#         name = str(i + 1) + ' ' + name
-#         if len(name.encode('utf-8')) > 55:
-#             name = cut_str(name, 53) + "..."
-#         url = data[i]['url']
-#         zhihu_item = {'name': name, 'url': url}
-#         zhihu_dict.append(zhihu_item)
-#     return zhihu_dict
-
 
 def weather(response):
     data = get_html(response)
@@ -325,32 +292,10 @@ def weather(response):
         forecast_dic[day_name]['type'] = forecast_list[i].xpath('.//type/text()')[0]
     forecast_dic['day0']['date'] = '今天'
 
-    index_list = XML_tree.xpath('//zhishus/zhishu')
-    index_dic = {}
-    for i in range(len(index_list)):
-        index_name = 'index' + str(i + 1)
-        index_dic[index_name] = {}
-        index_dic[index_name]['name'] = index_list[i].xpath('./name/text()')[0]
-        index_dic[index_name]['value'] = index_list[i].xpath('./value/text()')[0]
-        index_dic[index_name]['detail'] = index_list[i].xpath('./detail/text()')[0]
-
     weather_dict = {
         'city': XML_tree.xpath('//city/text()')[0],
-        'updatetime': XML_tree.xpath('//updatetime/text()')[0],
-        'fengli': XML_tree.xpath('//fengli/text()')[0],
         'wendu': XML_tree.xpath('//wendu/text()')[0],
-        'shidu': XML_tree.xpath('//shidu/text()')[0],
-        'fengxiang': XML_tree.xpath('//fengxiang/text()')[0],
-        'sunrise': XML_tree.xpath('//sunrise_1/text()')[0],
-        'sunset': XML_tree.xpath('//sunset_1/text()')[0],
-        'yesterday': {
-            'date': '昨天',
-            'high': XML_tree.xpath('//high_1/text()')[0][-3:-1],
-            'low': XML_tree.xpath('//low/text()')[0][-3:-1],
-            'type': XML_tree.xpath('//type_1/text()')[0]
-        },
         'forecast': forecast_dic,
-        'index': index_dic,
     }
     return weather_dict
 
@@ -366,7 +311,7 @@ def poem(response):
 def jac(request):
     token = request.session['token']
     access_token = token['access_token']
-
+    requests.packages.urllib3.disable_warnings()
     result = requests.get(f'https://api.sjtu.edu.cn/v1/me/profile?access_token={access_token}', verify=False)
     return result.json()
 
@@ -379,6 +324,47 @@ def compute_countdown(date_name, year, month, day):
     return countdown
 
 
+def get_city(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        user_ip = request.META.get('HTTP_X_FORWARDED_FOR')
+    else:
+        user_ip = request.META.get('REMOTE_ADDR')
+    url = 'http://ip-api.com/json/' + user_ip + '?lang=zh-CN&fields=city'
+    response = urllib.request.urlopen(url)
+    html = json.loads(response.read())
+    try:
+        city = html["city"]
+    except Exception as e:
+        city = '闵行'
+    return city
+
+
+def initialize_site(user):
+    Site.objects.create(site_name='Canvas',site_url='https://oc.sjtu.edu.cn/', site_src='../static/img/site_icon/在线课程.png', user=user)
+    Site.objects.create(site_name='教学信息', site_url='https://i.sjtu.edu.cn/', site_src='../static/img/site_icon/教学信息.png', user=user)
+    Site.objects.create(site_name='学生事务', site_url='https://affairs.sjtu.edu.cn/', site_src='../static/img/site_icon/学生事务.png', user=user)
+    Site.objects.create(site_name='交我办', site_url='https://my.sjtu.edu.cn/', site_src='../static/img/site_icon/交我办.png', user=user)
+    Site.objects.create(site_name='交大官网', site_url='https://www.sjtu.edu.cn/', site_src='../static/img/site_icon/官网.png', user=user)
+    Site.objects.create(site_name='研究生院', site_url='https://www.gs.sjtu.edu.cn/', site_src='../static/img/site_icon/研究生网.png', user=user)
+    Site.objects.create(site_name='交大邮箱', site_url='https://mail.sjtu.edu.cn/', site_src='../static/img/site_icon/邮箱.png', user=user)
+    Site.objects.create(site_name='交大云盘', site_url='https://jbox.sjtu.edu.cn/', site_src='../static/img/site_icon/交大云盘.png', user=user)
+    Site.objects.create(site_name='水源社区', site_url='https://shuiyuan.sjtu.edu.cn/', site_src='../static/img/site_icon/水源.png', user=user)
+    Site.objects.create(site_name='䇹政项目', site_url='https://chuntsung.sjtu.edu.cn/', site_src='../static/img/site_icon/䇹政.png', user=user)
+    Site.objects.create(site_name='创新实践', site_url='https://uitp.sjtu.edu.cn/', site_src='../static/img/site_icon/大创.png', user=user)
+    Site.objects.create(site_name='教学楼', site_url='https://ids.sjtu.edu.cn/', site_src='../static/img/site_icon/教学楼.png', user=user)
+    Site.objects.create(site_name='图书馆', site_url='https://www.lib.sjtu.edu.cn/', site_src='../static/img/site_icon/图书馆.png', user=user)
+    Site.objects.create(site_name='选课社区', site_url='https://course.sjtu.plus/', site_src='../static/img/site_icon/选课社区.png', user=user)
+    Site.objects.create(site_name='github', site_url='https://github.com/', site_src='https://files.codelife.cc/itab/search/github.svg', user=user)
+    Site.objects.create(site_name='bilibili', site_url='https://bilibili.com/', site_src='https://files.codelife.cc/itab/search/bilibili.svg', user=user)
+    Site.objects.create(site_name='知乎', site_url='https://www.zhihu.com/', site_src='https://files.codelife.cc/itab/search/zhihu.svg', user=user)
+    Site.objects.create(site_name='豆瓣', site_url='https://www.douban.com/', site_src='https://files.codelife.cc/itab/search/douban.svg', user=user)
+    Site.objects.create(site_name='淘宝', site_url='https://www.taobao.com/', site_src='https://www.taobao.com/favicon.ico', user=user)
+    Site.objects.create(site_name='爱奇艺', site_url='https://www.iqiyi.com/', site_src='https://www.iqiyi.com/favicon.ico', user=user)
+    Site.objects.create(site_name='一个木函', site_url='https://web.woobx.cn/', site_src='https://web.woobx.cn/favicon.ico', user=user)
+    Site.objects.create(site_name='百度', site_url='https://www.baidu.com/', site_src='https://www.baidu.com/favicon.ico', user=user, is_active=False)
+    Site.objects.create(site_name='搜狗', site_url='https://www.sogou.com/', site_src='https://www.sogou.com/favicon.ico', user=user, is_active=False)
+
+
 def silence_event_loop_closed(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
@@ -387,6 +373,7 @@ def silence_event_loop_closed(func):
         except RuntimeError as e:
             if str(e) != 'Event loop is closed':
                 raise
+
     return wrapper
 
 
