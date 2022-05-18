@@ -93,6 +93,6 @@ $('#edit').click(function () {
     this.style.display = "none";
 });
 
-$('#currentcity, #day0_icon, li, .type, .T_current').click(function () {
+$('#currentcity, #day0_icon, #forecast, .type, .T_current').click(function () {
     window.open("/weather/", "_blank");
 });
