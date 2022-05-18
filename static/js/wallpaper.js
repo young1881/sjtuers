@@ -3,6 +3,8 @@ if (wallpaper_photo_name === 'visitor.jpg' || wallpaper_css !== "") {
 } else{
     let value = 'url("' + wallpaper_photo + '")'
     $("#base_all").css("background", value);
+    $("#base_all").css("background-size", "cover");
+    $("#base_all").css("overflow", "hidden");
 }
 
 function upload_img() {
