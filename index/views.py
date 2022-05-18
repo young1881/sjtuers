@@ -250,10 +250,10 @@ def weibo(response):
     weibo_dict = []
     for i in range(len(tr_list)):
         name = tr_list[i].xpath('./td[2]/a/text()')[0]
+        url = 'https://s.weibo.com/weibo?q=%23' + name + "%23"
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 46:
             name = cut_str(name, 44) + '...'
-        url = 'https://tophub.today' + tr_list[i].xpath('./td[2]/a/@href')[0]
         hot = tr_list[i].xpath('./td[3]/text()')[0]
         weibo_item = {'name': name, 'url': url, 'hot': hot}
         weibo_dict.append(weibo_item)
@@ -267,10 +267,10 @@ def zhihu(response):
     zhihu_dict = []
     for i in range(len(tr_list)):
         name = tr_list[i].xpath('./td[@class="al"]/a/text()')[0]
+        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         name = str(i + 1) + ' ' + name
         if len(name.encode('utf-8')) > 55:
             name = cut_str(name, 53) + "..."
-        url = 'https://tophub.today' + tr_list[i].xpath('./td[@class="al"]/a/@href')[0]
         zhihu_item = {'name': name, 'url': url}
         zhihu_dict.append(zhihu_item)
     return zhihu_dict

@@ -28,21 +28,28 @@ def add_site(request):
 
     site_name = request.POST.get('site_name')
     site_url = request.POST.get('site_url')
+
+    if not site_url.startswith("http"):
+        site_url = "https://" + site_url
+    if not site_url.endswith("/"):
+        site_url = site_url + "/"
     site = Site.objects.filter(site_url=site_url, user=jaccount)
     # 取主域名
     res = urlparse(site_url)
     site_url = "https://" + str(res.netloc)
-
     if site:
+        if not site[0].is_active:
+            site[0].is_active = True
+            site[0].save()
+            return JsonResponse(1, safe=False)
         site[0].site_name = site_name
-        site[0].is_active = True
         site[0].save()
         return JsonResponse(2, safe=False)
     elif 'sjtu' in site_url:
         site_src = '../static/img/school.png'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     else:
-        site_src = site_url + '/favicon.ico'
+        site_src = site_url + 'favicon.ico'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     return JsonResponse(1, safe=False)
 
@@ -51,18 +58,18 @@ def refactor_site(request):
     jaccount = request.session['jaccount']
     site_name = request.POST.get('refactor_site_name')
     site_url = request.POST.get('refactor_site_url')
-    site = Site.objects.filter(user=jaccount, site_url=site_url)[0]
-    site.site_name = site_name
-    site.save()
+    for site in Site.objects.filter(user=jaccount, site_url=site_url):
+        site.site_name = site_name
+        site.save()
     return HttpResponse("已保存")
 
 
 def delete_site(request):
     jaccount = request.session['jaccount']
     delete_site_name = request.POST.get('delete_site_name')
-    site = Site.objects.filter(user=jaccount, site_name=delete_site_name)[0]
-    site.is_active = False
-    site.save()
+    for site in Site.objects.filter(user=jaccount, site_name=delete_site_name):
+        site.is_active = False
+        site.save()
     return HttpResponse("删除成功")
 
 
