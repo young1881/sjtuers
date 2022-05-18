@@ -38,12 +38,12 @@ def add_site(request):
     res = urlparse(site_url)
     site_url = "https://" + str(res.netloc)
     if site:
+        site[0].site_name = site_name
+        site[0].save()
         if not site[0].is_active:
             site[0].is_active = True
             site[0].save()
             return JsonResponse(1, safe=False)
-        site[0].site_name = site_name
-        site[0].save()
         return JsonResponse(2, safe=False)
     elif 'sjtu' in site_url:
         site_src = '../static/img/school.png'
