@@ -154,6 +154,6 @@
     min-height: 27.2px;
 }
 
-div {
+.weather div {
     box-sizing: border-box;
 }

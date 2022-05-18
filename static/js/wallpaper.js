@@ -1,3 +1,8 @@
+var wallpaper_username = "{{ wallpaper.username }}";
+var wallpaper_photo = '{{ wallpaper.photo_url }}';
+var wallpaper_photo_name = '{{ wallpaper.photo_name }}';
+var wallpaper_css = '{{ wallpaper.css }}';
+
 if (wallpaper_photo_name === 'visitor.jpg' || wallpaper_css !== "") {
     $("#base_all").css("background", wallpaper_css);
 } else{
