@@ -36,7 +36,7 @@ function add_site() {
             }else if (response === 0) {
                 alert("超出添加上限，请删除不需要的网址后再添加！");
             } else if (response === 2){
-                alert("该网址已存在，将其重命名！")
+                alert("该网址已存在，已将其重命名！")
             }
         },
         error: function () {

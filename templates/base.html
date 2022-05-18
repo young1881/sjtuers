@@ -30,6 +30,14 @@
         var wallpaper_photo_name = '{{ wallpaper.photo_name }}';
         var wallpaper_css = '{{ wallpaper.css }}';
     </script>
+    <script>
+    setTimeout(function(){
+        if (get_cookie("popped")==""){
+            document.cookie="popped=yes";
+            alert('点击时钟可切换简洁模式，鼠标滑动至画面最右侧开启侧边栏工具箱');
+        }
+    },2000);
+    </script>
     <title>Hello, SJTUer!</title>
 </head>
 <body>
@@ -70,6 +78,7 @@
     <script type="text/javascript" src="../static/js/weather-widget.js"></script>
     <script type="text/javascript" src="../static/js/city-selector.data.js"></script>
     <script type="text/javascript" src="../static/js/city-selector.js"></script>
+    <script type="text/javascript" src="../static/js/alert.js"></script>
 </div>
 </body>
 </html>
