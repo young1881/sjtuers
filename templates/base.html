@@ -48,7 +48,12 @@
 
     {% block countdown %} {% endblock %}
 
-
+    <script type="text/javascript">
+        var wallpaper_username = "{{ wallpaper.username }}";
+        var wallpaper_photo = '{{ wallpaper.photo_url }}';
+        var wallpaper_photo_name = '{{ wallpaper.photo_name }}';
+        var wallpaper_css = '{{ wallpaper.css }}';
+    </script>
     <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../static/js/city-selector.data.js"></script>
     <script type="text/javascript" src="../static/js/city-selector.js"></script>
