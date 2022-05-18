@@ -58,18 +58,18 @@ def refactor_site(request):
     jaccount = request.session['jaccount']
     site_name = request.POST.get('refactor_site_name')
     site_url = request.POST.get('refactor_site_url')
-    site = Site.objects.filter(user=jaccount, site_url=site_url)[0]
-    site.site_name = site_name
-    site.save()
+    for site in Site.objects.filter(user=jaccount, site_url=site_url):
+        site.site_name = site_name
+        site.save()
     return HttpResponse("已保存")
 
 
 def delete_site(request):
     jaccount = request.session['jaccount']
     delete_site_name = request.POST.get('delete_site_name')
-    site = Site.objects.filter(user=jaccount, site_name=delete_site_name)[0]
-    site.is_active = False
-    site.save()
+    for site in Site.objects.filter(user=jaccount, site_name=delete_site_name):
+        site.is_active = False
+        site.save()
     return HttpResponse("删除成功")
 
 
