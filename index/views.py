@@ -6,7 +6,6 @@ import requests
 import asyncio
 import aiohttp
 import json
-import time
 import datetime
 
 from lxml import etree
@@ -21,7 +20,6 @@ headers = {
 
 
 def index_view(request):
-    request_time = time.time()
     city = get_city(request)
     names = [
         'jwc',
@@ -50,7 +48,6 @@ def index_view(request):
 
     # 异步编程
     async def fetch(session, url):
-        print("发送请求：", url)
         async with session.get(url=url, headers=headers) as response:
             assert response.status == 200
             page_text = await response.text()
@@ -107,7 +104,6 @@ def index_view(request):
                      'css': wallpaper_flag.css}
 
         countdown_flag = Countdown.objects.filter(user=jaccount)
-        print(f"countdown_flag:{countdown_flag}")
         countdown_flag = Countdown.objects.filter(user=jaccount)[0]
 
         countdown = compute_countdown(countdown_flag.date_name, countdown_flag.year,
@@ -128,9 +124,6 @@ def index_view(request):
 
     request.session['jaccount'] = jaccount
 
-    response_time = time.time()
-    print('数据获取结束，共用时', response_time - request_time, 's')
-
     sites = Site.objects.filter(user=jaccount, is_active=True)
     locals = {
         'jwc': jwc(responses['jwc']),
@@ -148,8 +141,6 @@ def index_view(request):
         'countdown': countdown,
     }
 
-    process_time = time.time()
-    print('数据处理结束，共用时', process_time - response_time, 's')
     if request.method == 'GET':
         return render(request, 'websites.html', locals)
 
@@ -213,7 +204,7 @@ def bilibli(response):
         bilibili.append(dic)
     return bilibili
 
-
+# 从公开API获取的函数
 # def weibo(response):
 #     data = get_json(response)['list']
 #     weibo_dict = []

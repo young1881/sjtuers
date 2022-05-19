@@ -2,7 +2,7 @@
 <div class="data_box">
     <div class="property">{{ name }}</div>
     <div class="data" style="color:{{ color }}">{{ current }}</div>
-    {% if add == null %}
+    {% if add == null or add == 0%}
     <div class="today_none" style="color:{{ color }}">新增待公布</div>
     {% elif add < 0  %}
     <div class="today_corona" style="color:{{ color }}">{{ add }}</div>

@@ -6,7 +6,11 @@ from .models import Site, SimpleMode, Wallpaper, User, Countdown
 def img_upload(request):
     jaccount = request.session['jaccount']
     file_img = request.FILES['upload_file']  # 获取文件对象
-    file_name = request.FILES['upload_file'].name
+    file_name = request.FILES['upload_file'].name.strip()
+    print(file_name)
+    if file_name == "":
+        return JsonResponse(0, safe=False)
+
     wallpaper = Wallpaper.objects.filter(user=jaccount)[0]
     wallpaper.photo = file_img
     wallpaper.photo_name = file_name
@@ -26,8 +30,11 @@ def add_site(request):
     if site_count >= 28:
         return JsonResponse(0, safe=False)
 
-    site_name = request.POST.get('site_name')
-    site_url = request.POST.get('site_url')
+    site_name = request.POST.get('site_name').strip()
+    site_url = request.POST.get('site_url').strip()
+
+    if site_name == "" or site_url == "":
+        return JsonResponse(3, safe=False)
 
     if not site_url.startswith("http"):
         site_url = "https://" + site_url
@@ -56,12 +63,16 @@ def add_site(request):
 
 def refactor_site(request):
     jaccount = request.session['jaccount']
-    site_name = request.POST.get('refactor_site_name')
-    site_url = request.POST.get('refactor_site_url')
+    site_name = request.POST.get('refactor_site_name').strip()
+    site_url = request.POST.get('refactor_site_url').strip()
+
+    if site_name == "" or site_url == "":
+        return JsonResponse(0, safe=False)
+
     for site in Site.objects.filter(user=jaccount, site_url=site_url):
         site.site_name = site_name
         site.save()
-    return HttpResponse("已保存")
+    return JsonResponse(1, safe=False)
 
 
 def delete_site(request):
@@ -94,7 +105,11 @@ def color_wallpaper(request):
 
 def refactor_countdown(request):
     jaccount = request.session['jaccount']
-    date_name = request.POST.get('refactor_date_name')
+    date_name = request.POST.get('refactor_date_name').strip()
+
+    if date_name == "":
+        return JsonResponse(0, safe=False)
+
     year = request.POST.get('year')
     month = request.POST.get('month')
     day = request.POST.get('day')
@@ -108,4 +123,4 @@ def refactor_countdown(request):
     this_simple_mode = SimpleMode.objects.get(user=jaccount)
     this_simple_mode.is_active = True
     this_simple_mode.save()
-    return HttpResponse("已保存")
+    return JsonResponse(1, safe=False)

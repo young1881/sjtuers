@@ -21,7 +21,6 @@ $(document).on('click', function(event) {
 });
 
 function add_site() {
-    console.log("成功调用");
     $.ajax({
         url:'/index/add_site/',
         method:'post',
@@ -37,6 +36,8 @@ function add_site() {
                 alert("超出添加上限，请删除不需要的网址后再添加！");
             } else if (response === 2){
                 alert("该网址已存在，已将其重命名！")
+            } else if (response === 3){
+                alert("没有检测到您的输入！")
             }
         },
         error: function () {
@@ -46,7 +47,6 @@ function add_site() {
 }
 
 function refactor_site(){
-    console.log(site_url)
     $.ajax({
         url:'/index/refactor_site/',
         method:'post',
@@ -54,9 +54,13 @@ function refactor_site(){
             "refactor_site_url": site_url,
             'csrfmiddlewaretoken': csrf_token,
         },
+        dataType: "JSON",
         success: function (response) {
-            console.log(response);
-            location.reload();
+            if (response === 1) {
+                location.reload();
+            }else if (response === 0) {
+                alert("没有检测到您的输入！")
+            }
         },
         error: function () {
             alert("请求失败，请联系管理员！")
@@ -71,7 +75,6 @@ function delete_site(){
         data: {"delete_site_name": site_name,'csrfmiddlewaretoken': csrf_token,},
         dataType: "html",
         success: function (response) {
-            console.log(response);
             delete_site_name=document.getElementById(site_name).style.display='none';
         },
         error: function () {
