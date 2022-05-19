@@ -10,8 +10,11 @@ function refactor_countdown(){
             'csrfmiddlewaretoken': csrf_token,
         },
         success: function (response) {
-            console.log(response);
-            location.reload();
+            if (response === 1) {
+                location.reload();
+            }else if (response === 0) {
+                alert("没有检测到您的输入！")
+            }
         },
         error: function () {
             alert("请求失败，请联系管理员！")

@@ -6,7 +6,7 @@
 {% from '_includes/wallpaper.html' import color_wallpaper, img_wallpaper %}
 
 {% block counter %}
-    <div class="counter" id="counter">
+    <div class="counter" id="counter" style="cursor: pointer">
         <div class="flip">
             <div class="digital front" data-number="0"></div>
             <div class="digital back" data-number="1"></div>
@@ -50,12 +50,12 @@
 {% block search %}
     <div class="search-box" id="search-box">
         <div class="search-form">
-            <div class='engine-box'>
+            <div class='engine-box' style="cursor: pointer">
                 <img class="engine" src="https://files.codelife.cc/itab/search/baidu.svg" alt="加载中">
                 <i class="fa-solid fa-caret-down" style="font-size:12px; display:flex; padding: 3px 3px;"></i>
             </div>
             <input class="search-txt" id="search-text" name="search_msg" placeholder="输入文本搜索，左侧切换引擎" onkeydown="if(event.keyCode==13) document.getElementById('search-btn').click()">
-            <div class='search-btn-box' id='search-btn'>
+            <div class='search-btn-box' id='search-btn' style="cursor: pointer">
                 <i class="fa-solid fa-magnifying-glass" class='search-btn'></i>
             </div>
         </div>
@@ -106,11 +106,11 @@
 {% block news %}
     <div class="news" id="news">
         <div class="card">
-            <button class="info_btn active">通知</button>
-            <button class="info_btn">要闻</button>
-            <button class="info_btn">微博</button>
-            <button class="info_btn">B站</button>
-            <button class="info_btn">知乎</button>
+            <button class="info_btn active" style="cursor: pointer">通知</button>
+            <button class="info_btn" style="cursor: pointer">要闻</button>
+            <button class="info_btn" style="cursor: pointer">微博</button>
+            <button class="info_btn" style="cursor: pointer">B站</button>
+            <button class="info_btn" style="cursor: pointer">知乎</button>
             <div class="infoBox">
                 <div class="info show">
                     <ul>
@@ -176,9 +176,9 @@
 {% block tools %}
     <div class="tools" id="tools">
         <div class="tool_card">
-            <button class="tool_btn active">疫情</button>
-            <button class="tool_btn">图书馆</button>
-            <button class="tool_btn">食堂</button>
+            <button class="tool_btn active" style="cursor: pointer">国内疫情</button>
+            <button class="tool_btn" style="cursor: pointer">图书馆</button>
+            <button class="tool_btn" style="cursor: pointer">食堂</button>
             <div class="toolBox">
                 <div class="tool show">
                     {{ corona_data("累计确诊", corona.chinaTotal.confirm, corona.chinaAdd.confirm, '#a31d13') }}
@@ -334,7 +334,7 @@
                     <input type="text" placeholder="网址" id="site_url" name="site_url" required="required" >
                 </div>
                 <a class = "button1" href = "javascript:void(0)" onclick = "add_site()">
-                    <input type="submit" value="完 成" id="site_submit"/>
+                    <input type="submit" value="完 成" id="site_submit" style="cursor: pointer"/>
                 </a>
                 <div class = "button2">
                     <a href = "javascript:void(0)" onclick = "closeSiteDialog()"> 取 消</a>
@@ -350,7 +350,7 @@
                  <input type="text" placeholder="网站名" id="refactor_site_name" name="refactor_site_name">
             </div>
             <a class = "button1" href = "javascript:void(0)" onclick = "refactor_site()">
-                <input type="submit" value="修 改" id="site_submit"/>
+                <input type="submit" value="修 改" id="site_submit" style="cursor: pointer"/>
             </a>
             <div class = "button2">
                 <a href = "javascript:void(0)" onclick = "closeRefactorDialog()">取 消</a>
@@ -378,7 +378,7 @@
 
             <div class = "button1">
                 <a  href = "javascript:void(0)" onclick = "refactor_countdown()">
-                    <input type="submit" value="修 改" id="site_submit"/>
+                    <input type="submit" value="修 改" id="site_submit" style="cursor: pointer"/>
                 </a>
             </div>
 
