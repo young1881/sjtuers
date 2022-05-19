@@ -43,7 +43,7 @@ def add_site(request):
     site = Site.objects.filter(site_url=site_url, user=jaccount)
     # 取主域名
     res = urlparse(site_url)
-    site_url = "https://" + str(res.netloc)
+    site_url_main = "https://" + str(res.netloc) + "/"
     if site:
         site[0].site_name = site_name
         site[0].save()
@@ -56,7 +56,7 @@ def add_site(request):
         site_src = '../static/img/school.png'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     else:
-        site_src = site_url + 'favicon.ico'
+        site_src = site_url_main + 'favicon.ico'
         Site.objects.create(user=user, site_name=site_name, site_url=site_url, site_src=site_src)
     return JsonResponse(1, safe=False)
 
