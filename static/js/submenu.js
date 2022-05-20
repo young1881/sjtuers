@@ -31,7 +31,7 @@ function add_site() {
         dataType: "JSON",
         success: function (response) {
             if (response === 1) {
-                location.reload();
+                window.open('/index/','_self');
             }else if (response === 0) {
                 alert("超出添加上限，请删除不需要的网址后再添加！");
             } else if (response === 2){
@@ -57,7 +57,7 @@ function refactor_site(){
         dataType: "JSON",
         success: function (response) {
             if (response === 1) {
-                location.reload();
+                window.open('/index/','_self');
             }else if (response === 0) {
                 alert("没有检测到您的输入！")
             }

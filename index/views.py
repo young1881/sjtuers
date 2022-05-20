@@ -123,26 +123,62 @@ def index_view(request):
         print("except!")
 
     request.session['jaccount'] = jaccount
-
     sites = Site.objects.filter(user=jaccount, is_active=True)
+
+    # 对爬取内容进行获取，如果由于获取数据结构变化而导致不能正常获取，则获取信息为报错信息
+    try:
+        jwc_data = jwc(responses['jwc'])
+    except Exception as e:
+        jwc_data = [{"title": "教务处信息获取失败，请联系管理员！", "url": ""}]
+    try:
+        jnews_data = jnews(responses['jnews'])
+    except Exception as e:
+        jnews_data = [{"title": "交大新闻信息获取失败，请联系管理员！", "url": ""}]
+    try:
+        weather_data = weather(responses['weather'])
+    except Exception as e:
+        weather_data = ["天气信息获取失败，请联系管理员！"]
+    try:
+        weibo_data = weibo(responses['weibo'])
+    except Exception as e:
+        weibo_data = [{"name": "微博信息获取失败，请联系管理员！", "url": "", "hot": ""}]
+    try:
+        zhihu_data = zhihu(responses['zhihu'])
+    except Exception as e:
+        zhihu_data = [{"name": "知乎信息获取失败，请联系管理员！", "url": ""}]
+    try:
+        bilibili_data = bilibli(responses['bilibili'])
+    except Exception as e:
+        zhihu_data = [{"title": "bilibili信息获取失败，请联系管理员！", "url": "", "view": ""}]
+    try:
+        corona_data = corona(responses['corona'])
+    except Exception as e:
+        corona_data = {'lastUpdateTime': '疫情数据获取失败，请联系管理员',
+                       'chinaTotal': {'dead': "Error", 'importedCase': "Error", 'heal': "Error", 'nowConfirm': "Error",
+                                      'noInfectH5': "Error", 'confirm': "Error", 'suspect': "Error"},
+                       'chinaAdd': {'dead': 0, 'importedCase': 0, 'heal': 0, 'nowConfirm': 0,
+                                      'noInfectH5': 0, 'confirm': 0, 'suspect': 0}}
+    try:
+        poem_data = poem(responses['poem'])
+    except Exception as e:
+        poem_data = {'content': "诗句信息获取失败，请联系管理员！", 'origin': '', 'author': '', 'category': ''}
+
     locals = {
-        'jwc': jwc(responses['jwc']),
-        'jnews': jnews(responses['jnews']),
-        'weather': weather(responses['weather']),
-        'weibo': weibo(responses['weibo']),
-        'zhihu': zhihu(responses['zhihu']),
-        'bilibili': bilibli(responses['bilibili']),
-        'corona': corona(responses['corona']),
-        'poem': poem(responses['poem']),
+        'jwc': jwc_data,
+        'jnews': jnews_data,
+        'weather': weather_data,
+        'weibo': weibo_data,
+        'zhihu': zhihu_data,
+        'bilibili': bilibili_data,
+        'corona': corona_data,
+        'poem': poem_data,
         'sites': sites,
         'jac': result,
         'simple_mode': simple_mode,
         "wallpaper": wallpaper,
         'countdown': countdown,
     }
-
-    if request.method == 'GET':
-        return render(request, 'websites.html', locals)
+    return render(request, 'websites.html', locals)
 
 
 # 按字符实际长度截取，一个汉字长度为2，一个字母/数字长度为1
@@ -197,8 +233,8 @@ def bilibli(response):
     bilibili = []
     for i in range(5):
         dic = {'title': str(i + 1) + ' ' + bilibili_json[i]['title']}
-        if len(dic['title'].encode("utf-8")) > 50:
-            dic['title'] = cut_str(dic['title'], 48) + '...'
+        if len(dic['title'].encode("utf-8")) > 46:
+            dic['title'] = cut_str(dic['title'], 44) + '...'
         dic['url'] = bilibili_json[i]['short_link']
         dic['view'] = bilibili_json[i]['stat']['view']
         bilibili.append(dic)
@@ -292,7 +328,9 @@ def weather(response):
 
 
 def corona(response):
-    return get_json(response)['data']["diseaseh5Shelf"]
+    data = get_json(response)['data']["diseaseh5Shelf"]
+    del data["areaTree"]
+    return data
 
 
 def poem(response):
