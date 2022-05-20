@@ -20,7 +20,7 @@ function upload_img() {
         cache: false,
         success: function (data) {
             if (data === 1) {
-                location.reload();
+                window.open('/index/','_self');
             }else if (data === 0) {
                 alert("上传失败");
             }

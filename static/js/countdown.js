@@ -11,7 +11,7 @@ function refactor_countdown(){
         },
         success: function (response) {
             if (response === 1) {
-                location.reload();
+                window.open('/index/','_self');
             }else if (response === 0) {
                 alert("没有检测到您的输入！")
             }
