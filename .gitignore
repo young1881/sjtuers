@@ -2,6 +2,7 @@ node_modules/
 .idea/
 /static-files/
 media/wallpaper/
+db.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
